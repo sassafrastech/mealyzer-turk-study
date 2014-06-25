@@ -8,6 +8,8 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
+gem 'rturk'
+gem 'turkee', :git => 'https://github.com/aantix/turkee.git', branch: 'master'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'

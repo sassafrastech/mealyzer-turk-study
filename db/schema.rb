@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140625174748) do
+ActiveRecord::Schema.define(version: 20140627132812) do
+
+  create_table "meals", force: true do |t|
+    t.string   "name",           default: "Meal"
+    t.text     "food_locations"
+    t.text     "food_options"
+    t.text     "food_nutrition"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "turkee_imported_assignments", force: true do |t|
     t.string   "assignment_id"
@@ -53,5 +62,14 @@ ActiveRecord::Schema.define(version: 20140625174748) do
     t.integer  "hit_duration"
     t.integer  "expired"
   end
+
+  create_table "users", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email"
 
 end

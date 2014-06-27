@@ -9,6 +9,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'rturk'
+gem "paperclip", "~> 4.1"
 gem 'turkee', :git => 'https://github.com/aantix/turkee.git', branch: 'master'
 
 group :development, :test do

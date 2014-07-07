@@ -7,6 +7,9 @@ class TagsController < ApplicationController
   def create
     # create new meal coordinates
     Rails.logger.debug(params.inspect)
+
+    # Create a new answer for the user
+    # add user and meal id
     Answer.create(params)
     # verify if correct
     @meal.correct(params)

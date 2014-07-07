@@ -2,6 +2,17 @@
   img {
     width: 500px;
   }
-
-
+  /* hide the text pop up except the delete button */
+  .annotorious-popup {
+    visibility: hidden;
+    .annotorious-popup-buttons {
+      visibility: visible;
+      .annotorious-popup-button-delete {
+        margin-top: -40px;
+      }
+      .annotorious-popup-button-edit {
+        visibility: hidden;
+      }
+    }
+  }
 }

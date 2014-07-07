@@ -3,19 +3,21 @@
     <p>Draw a rectangle around the different food groups using your mouse.</p>
   </div>
   <%= image_tag @meal.photo, :id => "food" %>
+  <div class="row">
+    <a href="<%= tags_url %>" class="btn btn-primary">Next</a>
+  </div>
 </div>
 
 <script>
-  $.noConflict();
-  jQuery('document').ready(function() {
+  $('document').ready(function() {
     anno.makeAnnotatable(document.getElementById('food'));
     anno.addHandler('onSelectionCompleted', function(event) {
-      jQuery('.annotorious-editor-text').val('Add description');
-      jQuery('.annotorious-editor-button-save').simulate("click");
+      $('.annotorious-editor-text').val('Add description');
+      $('.annotorious-editor-button-save').simulate("click");
     });
 
     anno.addHandler('onMouseOverItem', function(event) {
-      jQuery('.annotorious-popup').hide();
+      //jQuery('.annotorious-popup').hide();
     });
 
   });

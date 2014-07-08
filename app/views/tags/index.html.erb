@@ -2,23 +2,15 @@
   <div class="instructions">
     <p>Draw a rectangle around the different food groups using your mouse.</p>
   </div>
-  <%= image_tag @meal.photo, :id => "food" %>
+  <%= image_tag @meal.photo, :id => "food", :data => {:id => @meal.id } %>
   <div class="row">
-    <a href="<%= tags_url %>" class="btn btn-primary">Next</a>
+    <div class="col-md-4">
+      <a href="<%= tags_url %>" class="btn next btn-primary">Next</a>
+    </div>
   </div>
 </div>
 
-<script>
-  $('document').ready(function() {
-    anno.makeAnnotatable(document.getElementById('food'));
-    anno.addHandler('onSelectionCompleted', function(event) {
-      $('.annotorious-editor-text').val('Add description');
-      $('.annotorious-editor-button-save').simulate("click");
-    });
 
-    anno.addHandler('onMouseOverItem', function(event) {
-      //jQuery('.annotorious-popup').hide();
-    });
-
-  });
-</script>
+<%= javascript_doc_ready do %>
+  new Mealyzer.Views.TagsView({el: '.tags'});
+<% end %>

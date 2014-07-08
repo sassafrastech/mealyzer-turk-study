@@ -19,5 +19,5 @@
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink
-//= require backbone/mealyzer_study
+//= require backbone/mealyzer
 //= require_tree .

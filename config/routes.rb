@@ -4,6 +4,6 @@ MealyzerStudy::Application.routes.draw do
 
   root 'home#index'
   resources :meals
-  resources :tags, :only => :index
+  resources :tags
 
 end

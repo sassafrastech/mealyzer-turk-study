@@ -5,7 +5,7 @@ namespace :db do
       next if photo == '.' or photo == '..'
       photo_path, meal, meal_id = nil
       photo_path = File.basename(photo)[0]
-      meal_id = File.basename(photo_path, '.*') #filename without extension
+      meal_id = File.basename(photo_path, '.*')
       meal = Meal.find(meal_id)
       raise "could not find meal with id #{meal_id}" if meal.nil?
 

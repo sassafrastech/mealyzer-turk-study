@@ -1,20 +1,20 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'mealyzer'
+set :application, 'mealyzer-study'
+
+#set :repo_url, 'git@example.com:me/my_repo.git'
 set :repo_url, 'git@github.com:hooverlunch/mealyzer.git'
-set :branch, 'staging'
-set :tmp_dir, "#{fetch(:home)}/tmp"
-set :scm, "git"
 
-# Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+set :use_sudo, false
 
-# Default deploy_to directory is /var/www/my_app
-# set :deploy_to, '/var/www/my_app'
+# set rails env to stage name
+set :rails_env, -> {fetch(:stage)}
 
-# Default value for :scm is :git
-# set :scm, :git
+set :deploy_to, -> {"/home/tomsmyth/webapps/rails4/mealyzer_study"}
+
+# needed to avoid execution permission errors
+set :tmp_dir, -> {"/home/tomsmyth/tmp"}
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -23,62 +23,54 @@ set :scm, "git"
 # set :log_level, :debug
 
 # Default value for :pty is false
-# set :pty, true
+set :pty, true
 
 # Default value for :linked_files is []
-# set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/database.yml config/railsenv}
 
 # Default value for linked_dirs is []
-# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{public/system public/uploads}
 
 # Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, {
+  path: "$PATH:$HOME/bin:$HOME/webapps/rails4/bin",
+  gem_home: "$HOME/webapps/rails4/gems",
+  pgoptions: "'-c statement_timeout=0'"
+}
 
-# Default value for keep_releases is 5
-# set :keep_releases, 5
+# This is so that both staging and production can have crontab entries.
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
 
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
+      execute "/home/tomsmyth/webapps/rails4/bin/restart"
     end
   end
 
   after :publishing, :restart
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+  desc "Make sure local git is in sync with remote."
+  task :check_revision do
+    on roles(:app), in: :sequence, wait: 1 do
+      unless `git rev-parse #{fetch(:branch)}` == `git rev-parse origin/#{fetch(:branch)}`
+        puts "FATAL: Local '#{fetch(:branch)}' branch HEAD is not the same as origin."
+        exit
+      end
     end
   end
 
-end
+  before :starting, :check_revision
 
-desc 'Check that we can access everything'
-task :check_write_permissions do
-  on roles(:all) do |host|
-    if test("[ -w #{fetch(:deploy_to)} ]")
-      info "#{fetch(:deploy_to)} is writable on #{host}"
-    else
-      error "#{fetch(:deploy_to)} is not writable on #{host}"
-    end
-  end
-end
+  # after :restart, :clear_cache do
+  #   on roles(:web), in: :groups, limit: 3, wait: 10 do
+  #     # Here we can do anything such as:
+  #     # within release_path do
+  #     #   execute :rake, 'cache:clear'
+  #     # end
+  #   end
+  # end
 
-# lib/capistrano/tasks/agent_forwarding.rake
-desc "Check if agent forwarding is working"
-task :forwarding do
-  on roles(:all) do |h|
-    if test("env | grep SSH_AUTH_SOCK")
-      info "Agent forwarding is up to #{h}"
-    else
-      error "Agent forwarding is NOT up to #{h}"
-    end
-  end
 end

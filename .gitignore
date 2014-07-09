@@ -18,3 +18,5 @@
 config/initializers/turkee.rb
 
 .DS_Store
+
+database.yml

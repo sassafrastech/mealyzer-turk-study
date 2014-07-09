@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140707185108) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "answers", force: true do |t|
     t.integer "user_id"
     t.integer "meal_id"
@@ -21,8 +24,8 @@ ActiveRecord::Schema.define(version: 20140707185108) do
     t.text    "food_nutrition"
   end
 
-  add_index "answers", ["meal_id"], name: "index_answers_on_meal_id"
-  add_index "answers", ["user_id"], name: "index_answers_on_user_id"
+  add_index "answers", ["meal_id"], name: "index_answers_on_meal_id", using: :btree
+  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
 
   create_table "meals", force: true do |t|
     t.string   "name",               default: "Meal"
@@ -46,8 +49,8 @@ ActiveRecord::Schema.define(version: 20140707185108) do
     t.integer  "result_id"
   end
 
-  add_index "turkee_imported_assignments", ["assignment_id"], name: "index_turkee_imported_assignments_on_assignment_id", unique: true
-  add_index "turkee_imported_assignments", ["turkee_task_id"], name: "index_turkee_imported_assignments_on_turkee_task_id"
+  add_index "turkee_imported_assignments", ["assignment_id"], name: "index_turkee_imported_assignments_on_assignment_id", unique: true, using: :btree
+  add_index "turkee_imported_assignments", ["turkee_task_id"], name: "index_turkee_imported_assignments_on_turkee_task_id", using: :btree
 
   create_table "turkee_studies", force: true do |t|
     t.integer  "turkee_task_id"
@@ -57,7 +60,7 @@ ActiveRecord::Schema.define(version: 20140707185108) do
     t.datetime "updated_at"
   end
 
-  add_index "turkee_studies", ["turkee_task_id"], name: "index_turkee_studies_on_turkee_task_id"
+  add_index "turkee_studies", ["turkee_task_id"], name: "index_turkee_studies_on_turkee_task_id", using: :btree
 
   create_table "turkee_tasks", force: true do |t|
     t.string   "hit_url"
@@ -85,6 +88,6 @@ ActiveRecord::Schema.define(version: 20140707185108) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

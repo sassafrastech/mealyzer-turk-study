@@ -1,0 +1,39 @@
+<div class="matches">
+  <div class="row">
+    <div class="col-md-10">
+      <h3>Instructions</h3>
+      <p>In each photo below, a box containing  one food item will be highlighted. Next to it, you will see a description of this item and its ingredients identified by you or other Turkers. Your job is to match each of these ingredients to the four food groups. These food groups include carbohydrates, fats, protein, and fiber. You need to map each ingredient to one food group.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= image_tag @meal.photo %>
+      <% #DRAW Rectangle %>
+    </div>
+    <div class="col-md-5">
+      <h3><%= @meal.food_options %></h3>
+      <%= simple_form_for @answer do |f| %>
+        <h3><%= @meal.name %></h3>
+        <table>
+          <tr><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+          <tr class="groups">
+            <td></td>
+            <% Meal::GROUPS.each do |h| %>
+              <td><%= h %></td>
+            <% end %>
+          </tr>
+          <% ["chicken", "honey", "oil"].each do |g| %>
+            <tr>
+              <td><label><%= g %></label></td>
+              <% Meal::GROUPS.each do |h| %>
+                <td>
+                  <%= check_box_tag h %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>

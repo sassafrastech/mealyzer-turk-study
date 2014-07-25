@@ -1,0 +1,20 @@
+.matches {
+  .col-md-6 {
+    margin: 10px;
+  }
+  img {
+    width: 500px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  form, table {
+    display: inline-block;
+    border-spacing: 10px;
+    border-collapse: separate;
+
+    tr.groups {
+      border-bottom: 1px solid gray;
+    }
+  }
+}

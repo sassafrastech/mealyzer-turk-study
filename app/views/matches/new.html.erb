@@ -6,6 +6,7 @@
     </div>
   </div>
   <div class="row">
+  <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
       <%= image_tag @meal.photo %>
       <% #DRAW Rectangle %>
@@ -14,7 +15,9 @@
       <h3><%= @meal.food_options %></h3>
 
       <%= simple_form_for @match_answer do |f| %>
-        <h3><%= @meal.rand_component.keys[0] %></h3>
+        <h3><%= @meal.sample_component.name %></h3>
+        <%= f.hidden_field :meal_id, :value => @meal.id %>
+        <%= f.hidden_field :user_id, :value => 12 %>
         <table>
           <tr><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
           <tr class="groups">
@@ -23,11 +26,12 @@
               <td><%= h %></td>
             <% end %>
           </tr>
-          <% @meal.rand_component.values[0].each do |g| %>
+          <% @meal.sample_component.items.each do |food_item| %>
             <tr>
-              <td><label><%= g %></label></td>
-              <% Meal::GROUPS.each do |h| %>
-                <td class="cb"><%= check_box_tag h %></td>
+              <td><label><%= food_item %></label></td>
+              <% Meal::GROUPS.each do |nutrition| %>
+                <td class="cb">
+                 <%= check_box_tag "match_answer[food_groups][#{@meal.sample_component.name}][#{food_item}][]", nutrition, @meal.answer_in_meal?(@match_answer, food_item, nutrition) %>
               <% end %>
             </tr>
           <% end %>

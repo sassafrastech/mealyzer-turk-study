@@ -3,5 +3,5 @@ MealyzerStudy::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   root 'home#index'
-  resources :meals, :tags, :matches, :answers
+  resources :meals, :tags, :matches, :match_answers
 end

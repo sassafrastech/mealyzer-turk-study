@@ -6,14 +6,15 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
       <%= image_tag @meal.photo %>
       <% #DRAW Rectangle %>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
       <h3><%= @meal.food_options %></h3>
-      <%= simple_form_for @answer do |f| %>
-        <h3><%= @meal.name %></h3>
+
+      <%= simple_form_for @match_answer do |f| %>
+        <h3><%= @meal.rand_component.keys[0] %></h3>
         <table>
           <tr><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
           <tr class="groups">
@@ -22,17 +23,17 @@
               <td><%= h %></td>
             <% end %>
           </tr>
-          <% ["chicken", "honey", "oil"].each do |g| %>
+          <% @meal.rand_component.values[0].each do |g| %>
             <tr>
               <td><label><%= g %></label></td>
               <% Meal::GROUPS.each do |h| %>
-                <td>
-                  <%= check_box_tag h %>
-                </td>
+                <td class="cb"><%= check_box_tag h %></td>
               <% end %>
             </tr>
           <% end %>
         </table>
+        <br/>
+        <%= f.submit :submit, :class => "btn btn-primary" %>
       <% end %>
     </div>
   </div>

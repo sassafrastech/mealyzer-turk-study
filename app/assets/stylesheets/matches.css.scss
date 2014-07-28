@@ -2,8 +2,13 @@
   .col-md-6 {
     margin: 10px;
   }
+
+  h3 {
+    margin-top: 0px;
+  }
+
   img {
-    width: 500px;
+    width: 400px;
     display: inline-block;
     vertical-align: top;
   }
@@ -15,6 +20,20 @@
 
     tr.groups {
       border-bottom: 1px solid gray;
+    }
+  }
+
+  table {
+    table-layout: fixed;
+    width: 500px;
+
+    tr.groups td {
+      width: 50px;
+      text-align: center;
+    }
+
+    td.cb {
+      text-align: center;
     }
   }
 }

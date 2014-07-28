@@ -1,7 +1,7 @@
 class MatchesController < ApplicationController
 
   def new
-    @answer = Answer.new
+    @match_answer = MatchAnswer.new
     @meal = Meal.first
   end
 

@@ -18,4 +18,8 @@ class Meal < ActiveRecord::Base
     food_components[name]
   end
 
+  def location_for_component(name)
+    food_locations[name]
+  end
+
 end

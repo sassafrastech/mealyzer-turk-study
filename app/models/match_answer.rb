@@ -20,6 +20,10 @@ class MatchAnswer < ActiveRecord::Base
     meal.items_for_component(component_name)
   end
 
+  def location
+    meal.location_for_component(component_name)
+  end
+
   private
 
   # make sure all food groups are accounted for in answer

@@ -24,9 +24,8 @@ class TagsController < ApplicationController
 
   private
     def answer_params
-      params[:answer].merge!(:user_id => 1)
       Rails.logger.debug(params.inspect)
-      params.require(:answer).permit(:meal_id, :food_locations, :user_id)
+      params.require(:answer).permit(:meal_id, :food_locations)
     end
 
 

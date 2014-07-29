@@ -8,17 +8,16 @@
   <div class="row">
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
-      <%= image_tag @meal.photo %>
+      <%= image_tag @match_answer.meal.photo %>
       <% #DRAW Rectangle %>
     </div>
     <div class="col-md-6">
-      <h3><%= @meal.food_options %></h3>
+      <h3><%= @match_answer.meal.food_options %></h3>
 
       <%= simple_form_for @match_answer do |f| %>
-        <h3><%= @match_answer.sample_component.name %></h3>
-        <%= f.hidden_field :meal_id, :value => @meal.id %>
-        <%= f.hidden_field :user_id, :value => 12 %>
-        <%= f.hidden_field :sample_component, :value => @match_answer.sample_component.to_json %>
+        <h3><%= @match_answer.component_name %></h3>
+        <%= f.hidden_field :meal_id %>
+        <%= f.hidden_field :component_name %>
         <table>
           <tr><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
           <tr class="groups">
@@ -27,12 +26,12 @@
               <td><%= h %></td>
             <% end %>
           </tr>
-          <% @match_answer.sample_component.items.each do |food_item| %>
+          <% @match_answer.items.each do |item| %>
             <tr>
-              <td><label><%= food_item %></label></td>
-              <% Meal::GROUPS.each do |nutrition| %>
+              <td><label><%= item %></label></td>
+              <% Meal::GROUPS.each do |group| %>
                 <td class="cb">
-                 <%= check_box_tag "match_answer[food_groups][#{@match_answer.sample_component.name}][#{food_item}][]", nutrition, @match_answer.cb_checked?(food_item, nutrition) %>
+                 <%= check_box_tag "match_answer[food_groups][#{item}][]", group, @match_answer.item_has_group?(item, group) %>
               <% end %>
             </tr>
           <% end %>

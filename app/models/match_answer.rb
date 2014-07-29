@@ -1,33 +1,32 @@
 class MatchAnswer < ActiveRecord::Base
 
   serialize :food_groups, JSON
-  serialize :sample_component, JSON
 
   validate :food_groups_exist
 
-  # make sure all food groups are accounted for in answer
-  def food_groups_exist
-    # Need to parse into object, b/c haven't saved yet
-    fg = JSON.parse(food_groups)
-    sc = JSON.parse(sample_component)
-    if sc['items'].length != fg.values[0].keys.length
-      errors.add(:food_groups, "must be accounted for")
-    end
+  belongs_to :meal
+
+  def self.build_for_random_meal
+    meal = Meal.random
+    new :meal => meal, :component_name => meal.sample_component_name
   end
 
-  def cb_checked?(food_item, nutrition)
-    if food_groups.nil?
-      return false
-    end
+  def item_has_group?(item, group)
+    return false if food_groups.nil?
+    (food_groups[item] || []).include?(group)
+  end
 
-    fg = JSON.parse(food_groups)
-    if fg[sample_component.name].nil? || fg[sample_component.name][food_item].nil?
-      return false
-    else
-      fg = JSON.parse(food_groups)
-      fg[sample_component.name][food_item].include?(nutrition)
-    end
+  def items
+    meal.items_for_component(component_name)
+  end
 
+  private
+
+  # make sure all food groups are accounted for in answer
+  def food_groups_exist
+    if items.sort != food_groups.keys.sort
+      errors.add(:food_groups, "must be accounted for")
+    end
   end
 
 end

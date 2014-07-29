@@ -10,10 +10,12 @@ class Meal < ActiveRecord::Base
     Meal.first(:offset => rand(Meal.count))
   end
 
-  def sample_component
-    mc = food_components.slice(food_components.keys.sample)
-    @sample_component ||= MealComponent.new(mc.keys[0], mc.values[0])
+  def sample_component_name
+    food_components.keys.sample
   end
 
+  def items_for_component(name)
+    food_components[name]
+  end
 
 end

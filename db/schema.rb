@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140725223345) do
+ActiveRecord::Schema.define(version: 20140729132449) do
 
   create_table "match_answers", force: true do |t|
     t.integer  "meal_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140725223345) do
     t.text     "food_groups"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "sample_component"
   end
 
   add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id"

@@ -15,9 +15,10 @@
       <h3><%= @meal.food_options %></h3>
 
       <%= simple_form_for @match_answer do |f| %>
-        <h3><%= @meal.sample_component.name %></h3>
+        <h3><%= @match_answer.sample_component.name %></h3>
         <%= f.hidden_field :meal_id, :value => @meal.id %>
         <%= f.hidden_field :user_id, :value => 12 %>
+        <%= f.hidden_field :sample_component, :value => @match_answer.sample_component.to_json %>
         <table>
           <tr><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
           <tr class="groups">
@@ -26,12 +27,12 @@
               <td><%= h %></td>
             <% end %>
           </tr>
-          <% @meal.sample_component.items.each do |food_item| %>
+          <% @match_answer.sample_component.items.each do |food_item| %>
             <tr>
               <td><label><%= food_item %></label></td>
               <% Meal::GROUPS.each do |nutrition| %>
                 <td class="cb">
-                 <%= check_box_tag "match_answer[food_groups][#{@meal.sample_component.name}][#{food_item}][]", nutrition, @meal.answer_in_meal?(@match_answer, food_item, nutrition) %>
+                 <%= check_box_tag "match_answer[food_groups][#{@match_answer.sample_component.name}][#{food_item}][]", nutrition, @match_answer.cb_checked?(food_item, nutrition) %>
               <% end %>
             </tr>
           <% end %>

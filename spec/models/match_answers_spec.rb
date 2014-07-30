@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'pp'
 
 describe MatchAnswer do
   context "after match answer has been submitted" do
@@ -22,8 +23,8 @@ describe MatchAnswer do
     end
 
     it "should return correct community answers" do
-      MatchAnswerSummarizer.new("1", "honey chicken")
-
+      ms = MatchAnswerSummarizer.new("1", "honey chicken")
+      expect(ms.summary["honey"][["fat"]]).to be(3)
     end
 
   end

@@ -1,6 +1,7 @@
 class MatchAnswer < ActiveRecord::Base
 
   serialize :food_groups, JSON
+  serialize :food_groups_update, JSON
 
   validate :food_groups_exist
 

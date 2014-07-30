@@ -1,0 +1,67 @@
+<div class="matches">
+  <div class="row">
+    <div class="col-md-10">
+      <h3>Instructions</h3>
+      <p>In each photo below, a box containing  one food item will be highlighted. Next to it, you will see a description of this item and its ingredients identified by you or other Turkers. Your job is to match each of these ingredients to the four food groups. These food groups include carbohydrates, fats, protein, and fiber. You need to map each ingredient to one food group.</p>
+    </div>
+  </div>
+  <div class="row">
+  <%= render partial: "shared/flash_messages", flash: flash %>
+    <div class="col-md-5">
+      <%= image_tag @match_answer.meal.photo, :id => "photo" %>
+      <% #DRAW Rectangle %>
+    </div>
+    <div class="col-md-6">
+      <h3><%= @match_answer.meal.food_options %></h3>
+
+      <%= simple_form_for @match_answer do |f| %>
+        <h4>Other Turkers provided their answers as well. Continue with yours or select one you think is best. </h4>
+        <h5><%= @match_answer.component_name %></h5>
+        <%= f.hidden_field :meal_id %>
+        <%= f.hidden_field :component_name %>
+        <%= f.hidden_field :id %>
+        <table>
+          <tr>
+            <td></td>
+            <td>What is it made of?</td>
+            <td colspan="3">What food group does it belong to?</td>
+          </tr>
+          <tr class="groups">
+            <td></td><td></td>
+            <% Meal::GROUPS.each do |h| %>
+              <td><%= h %></td>
+            <% end %>
+            <td>Summary</td>
+          </tr>
+
+          <% @summarizer.summary.each do |item, group_avg_pair| %>
+            <% group_avg_pair.each do |group_arr, avg| %>
+              <tr class="<%= 'your_answer' if my_answer?(group_arr, item) %>">
+                <td><%= radio_button_tag "match_answer[food_groups_update][#{item.to_sym}]", group_arr %></td>
+                <td><%= item %></td>
+                <% Meal::GROUPS.each do |group| %>
+                  <td>
+                    <% if group_arr.include?(group) %>
+                      <span class='glyphicon glyphicon-ok'></span>
+                    <% end %>
+                  </td>
+                <% end %>
+                <td><%=  my_answer?(group_arr, item) ? "Your Answer, #{avg-1} agreed " : "#{avg} answers" %></td>
+              </tr>
+            <% end %>
+            <tr><td><hr/></td></tr>
+            <td></td>
+
+          <% end %>
+        </table>
+        <br/>
+        <%= f.submit :submit, :class => "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_doc_ready do %>
+  new Mealyzer.Views.MatchesView({el: '.matches', geometry: <%= @match_answer.location.to_json.html_safe %>, name: "<%= @match_answer.component_name %>", source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>"});
+<% end %>
+

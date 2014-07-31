@@ -10,7 +10,6 @@ class MatchesController < ApplicationController
     @match_answer = MatchAnswer.create(answer_params)
     if @match_answer.valid?
       @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
-      pp @summary
       render :edit
     else
       flash[:error] = "All food items must be matched to at least one group"
@@ -22,11 +21,14 @@ class MatchesController < ApplicationController
     update_params = params.require(:match_answer).permit!
     @match_answer = MatchAnswer.find(update_params[:id])
     @match_answer.food_groups_update = update_params[:food_groups_update]
+    @match_answer.build_answers_changed!
+    @match_answer.save
 
-    if @match_answer.save
+    if @match_answer.valid?
       render :update
     else
-      # cannot be blank TODO
+      @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
+      flash[:error] = "You must make a selection for all food items"
       render :edit
     end
   end

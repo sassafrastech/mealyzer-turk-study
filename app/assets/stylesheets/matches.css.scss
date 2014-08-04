@@ -1,0 +1,54 @@
+.matches {
+  .col-md-6 {
+    margin: 10px;
+  }
+
+  h3 {
+    margin-top: 0px;
+  }
+
+  img {
+    width: 400px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .btn-primary {
+    margin-top: 25px;
+  }
+
+  form, table {
+    display: inline-block;
+    border-collapse: separate;
+
+    tr.groups {
+      border-bottom: 1px solid gray;
+    }
+  }
+
+  table {
+    table-layout: fixed;
+    width: 500px;
+    font-size: 12px;
+
+    td {
+      padding: 5px;
+      text-align: center;
+    }
+
+    tr.groups td {
+      width: 50px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    tr.your_answer {
+      background-color: #FFF8DA;
+    }
+
+    td.cb {
+      text-align: center;
+    }
+  }
+}

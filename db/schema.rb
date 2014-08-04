@@ -11,21 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140707185108) do
+ActiveRecord::Schema.define(version: 20140731135510) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "answers", force: true do |t|
-    t.integer "user_id"
-    t.integer "meal_id"
-    t.text    "food_locations", default: "none"
-    t.text    "food_names"
-    t.text    "food_nutrition"
+  create_table "match_answers", force: true do |t|
+    t.integer  "meal_id"
+    t.string   "user_id"
+    t.text     "food_groups"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "component_name"
+    t.text     "food_groups_update"
+    t.text     "answers_changed"
   end
 
-  add_index "answers", ["meal_id"], name: "index_answers_on_meal_id", using: :btree
-  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
+  add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id"
 
   create_table "meals", force: true do |t|
     t.string   "name",               default: "Meal"
@@ -38,7 +37,19 @@ ActiveRecord::Schema.define(version: 20140707185108) do
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
+    t.text     "food_components"
   end
+
+  create_table "tag_answers", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "meal_id"
+    t.text     "food_locations"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tag_answers", ["meal_id"], name: "index_tag_answers_on_meal_id"
+  add_index "tag_answers", ["user_id"], name: "index_tag_answers_on_user_id"
 
   create_table "turkee_imported_assignments", force: true do |t|
     t.string   "assignment_id"

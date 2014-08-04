@@ -7,6 +7,6 @@ class CreateMatchAnswers < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :match_answer, :meal_id
+    add_index :match_answers, :meal_id
   end
 end

@@ -1,8 +1,11 @@
 class MatchAnswer < ActiveRecord::Base
 
   serialize :food_groups, JSON
+  serialize :food_groups_update, JSON
+  serialize :answers_changed, JSON
 
   validate :food_groups_exist
+  validate :food_groups_updated
 
   belongs_to :meal
 
@@ -24,12 +27,27 @@ class MatchAnswer < ActiveRecord::Base
     meal.location_for_component(component_name)
   end
 
+  def build_answers_changed!
+    answers = {}
+    food_groups.each do |item, group_arr|
+        answers[item] = ((food_groups_update[item]) == group_arr.join(" "))
+    end
+    self.answers_changed = answers
+  end
+
   private
 
   # make sure all food groups are accounted for in answer
   def food_groups_exist
     if items.sort != food_groups.keys.sort
       errors.add(:food_groups, "must be accounted for")
+    end
+  end
+
+  def food_groups_updated
+    return true if (answers_changed.nil? || answers_changed.empty?)
+    if food_groups_update.nil? || (food_groups.keys.length != self.food_groups_update.keys.length)
+      errors.add(:food_groups_update, "must be accounted for")
     end
   end
 

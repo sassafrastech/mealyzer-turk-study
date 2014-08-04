@@ -1,4 +1,4 @@
-class AddFoodGroupsUpdateToMatchAnswer < ActiveRecord::Migration
+class AddFoodGroupsUpdateToMatchAnswers < ActiveRecord::Migration
   def change
     add_column :match_answers, :food_groups_update, :text
   end

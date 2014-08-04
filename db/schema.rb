@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140731135510) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "match_answers", force: true do |t|
     t.integer  "meal_id"
     t.string   "user_id"
@@ -24,7 +27,7 @@ ActiveRecord::Schema.define(version: 20140731135510) do
     t.text     "answers_changed"
   end
 
-  add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id"
+  add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id", using: :btree
 
   create_table "meals", force: true do |t|
     t.string   "name",               default: "Meal"
@@ -48,8 +51,8 @@ ActiveRecord::Schema.define(version: 20140731135510) do
     t.datetime "updated_at"
   end
 
-  add_index "tag_answers", ["meal_id"], name: "index_tag_answers_on_meal_id"
-  add_index "tag_answers", ["user_id"], name: "index_tag_answers_on_user_id"
+  add_index "tag_answers", ["meal_id"], name: "index_tag_answers_on_meal_id", using: :btree
+  add_index "tag_answers", ["user_id"], name: "index_tag_answers_on_user_id", using: :btree
 
   create_table "turkee_imported_assignments", force: true do |t|
     t.string   "assignment_id"

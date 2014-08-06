@@ -14,7 +14,7 @@
     <div class="col-md-6">
       <h3><%= @match_answer.meal.food_options %></h3>
 
-      <%= simple_form_for(@match_answer) do |f| %>
+      <%= simple_form_for @match_answer do |f| %>
         <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well.</div>
         <p>Below you can see your own answers and answers by other Turkers. Think carefully
         about the answers. You can decide to stay with your own, choose answers by others, or revise you own answers.</p>

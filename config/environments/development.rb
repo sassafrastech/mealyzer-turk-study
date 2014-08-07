@@ -28,4 +28,10 @@ MealyzerStudy::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  config.use_ssl = true
+  config.ssl_port = 3001
+
+  config.action_dispatch.default_headers['X-Frame-Options'] = "ALLOW-FROM https://workersandbox.mturk.com"
+
 end

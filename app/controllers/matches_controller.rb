@@ -1,7 +1,9 @@
 require 'pp'
 class MatchesController < ApplicationController
+  force_ssl
 
   def new
+    @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
     @match_answer = MatchAnswer.build_for_random_meal
   end
 
@@ -22,6 +24,8 @@ class MatchesController < ApplicationController
     @match_answer = MatchAnswer.find(update_params[:id])
     @match_answer.food_groups_update = update_params[:food_groups_update]
     @match_answer.build_answers_changed!
+    # send this to mturk
+
     @match_answer.save
 
     if @match_answer.valid?

@@ -21,3 +21,4 @@ config/initializers/turkee.rb
 
 config/database.yml
 
+.ssl

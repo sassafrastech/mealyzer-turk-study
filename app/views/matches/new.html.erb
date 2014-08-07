@@ -31,13 +31,13 @@
               <td><label><%= item %></label></td>
               <% Meal::GROUPS.each do |group| %>
                 <td class="cb">
-                 <%= check_box_tag "match_answer[food_groups][#{item}][]", group, @match_answer.item_has_group?(item, group) %>
+                 <%= check_box_tag "match_answer[food_groups][#{item}][]", group, @match_answer.item_has_group?(item, group), :disabled => @disabled %>
               <% end %>
             </tr>
           <% end %>
         </table>
         <br/>
-        <%= f.submit :submit, :class => "btn btn-primary" %>
+        <%= f.submit :submit, :class => "btn btn-primary", :disabled => @disabled %>
       <% end %>
     </div>
   </div>

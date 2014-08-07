@@ -20,6 +20,7 @@ gem 'turkee', :git => 'https://github.com/aantix/turkee.git', branch: 'master'
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'sqlite3'
+  gem 'thin'
 end
 
 group :doc do

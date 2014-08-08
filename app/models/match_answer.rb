@@ -4,10 +4,13 @@ class MatchAnswer < ActiveRecord::Base
   serialize :food_groups_update, JSON
   serialize :answers_changed, JSON
 
+  delegate :condition, to: :user
+
   validate :food_groups_exist
   validate :food_groups_updated
 
   belongs_to :meal
+  belongs_to :user
 
   def self.build_for_random_meal
     meal = Meal.random

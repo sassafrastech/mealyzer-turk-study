@@ -22,9 +22,7 @@ class User < ActiveRecord::Base
     elsif
       self.condition = random_condition
     end
-
   end
-
 
   def random_condition
     1.upto(NUM_CONDITIONS) do |c|

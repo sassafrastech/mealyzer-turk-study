@@ -26,6 +26,10 @@
     }
   }
 
+  div.my_answer {
+    background-color: #FFF8DA;
+  }
+
   table {
     table-layout: fixed;
     width: 500px;
@@ -49,6 +53,11 @@
 
     td.cb {
       text-align: center;
+    }
+
+    td.community {
+      text-align: left;
+      font-weight: bold;
     }
   }
 }

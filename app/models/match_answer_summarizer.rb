@@ -19,7 +19,6 @@ class MatchAnswerSummarizer
       @summary[item] ||= {}
       @summary[item][groups] ||= 0
       @summary[item][groups] += 1
-
     end
 
     def build_summary

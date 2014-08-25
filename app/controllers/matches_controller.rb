@@ -1,14 +1,9 @@
 class MatchesController < ApplicationController
-  force_ssl
 
   def new
-    @user = User.new
-    # if user has accepted the HIT, then actually create a user
     @user = User.create(params.permit(:assignmentId, :workerId, :hitId)) if params[:assignmentId]
-    # disable fields if user hasn't accepted the hit
     @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-    @match_answer = MatchAnswer.build_for_random_meal
-    @match_answer.user_id = @user.id
+    @match_answer = MatchAnswer.build_for_random_meal(@user)
   end
 
   def create

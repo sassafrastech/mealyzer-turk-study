@@ -1,14 +1,14 @@
 class User < ActiveRecord::Base
-  before_create :generate_condition
+  before_create :choose_condition
 
   MAX_CONDITION = 100
   MIN_CONDITION = 5
 
-  CONDITIONS = [1,2,3,4,5,6,7]
+  NUM_CONDITIONS = 7
 
   private
 
-  def generate_condition
+  def choose_condition
     # first need to make sure we have a min number of #1
     if User.where("condition = ?", 1).count < MIN_CONDITION
       self.condition = 1
@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
 
   def random_condition
-    CONDITIONS.each do |c|
+    1.upto(NUM_CONDITIONS) do |c|
       return c if User.where(condition: c).count < MAX_CONDITION
     end
     return nil

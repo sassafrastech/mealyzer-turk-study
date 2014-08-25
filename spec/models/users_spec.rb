@@ -12,7 +12,7 @@ describe User do
 
   context "all of condition 1 has been filled" do
     before do
-      #create five users of condition 1
+      # Create five users of condition 1
       User::MIN_CONDITION.times do |u|
         User.create
       end
@@ -26,7 +26,7 @@ describe User do
 
   context "all of condition 1 and 2 have been filled" do
     before do
-      #create five users of condition 1
+      # Create five users of condition 1
       (User::MIN_CONDITION * 2).times do |u|
         User.create
       end

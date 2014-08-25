@@ -12,9 +12,10 @@ class MatchAnswer < ActiveRecord::Base
   belongs_to :meal
   belongs_to :user
 
-  def self.build_for_random_meal
+  def self.build_for_random_meal(user)
+    user_id = user.id unless user.nil?
     meal = Meal.random
-    new :meal => meal, :component_name => meal.sample_component_name
+    new(:meal => meal, :component_name => meal.sample_component_name)
   end
 
   def item_has_group?(item, group)

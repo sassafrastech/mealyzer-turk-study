@@ -1,10 +1,13 @@
 class MatchAnswer < ActiveRecord::Base
 
+  MAX_TESTS = 10
+
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
   serialize :answers_changed, JSON
 
   delegate :condition, to: :user
+  delegate :num_tests, to: :user
 
   validate :food_groups_exist
   validate :food_groups_updated
@@ -37,6 +40,15 @@ class MatchAnswer < ActiveRecord::Base
         answers[item] = ((food_groups_update[item]) == group_arr.join(" "))
     end
     self.answers_changed = answers
+  end
+
+  def increment_tests!
+    self.user.num_tests = self.user.num_tests + 1
+    self.user.save
+  end
+
+  def max_tests?
+    num_tests >= MAX_TESTS
   end
 
   private

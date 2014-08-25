@@ -15,7 +15,7 @@ class MatchAnswer < ActiveRecord::Base
   def self.build_for_random_meal(user)
     user_id = user.id unless user.nil?
     meal = Meal.random
-    new(:meal => meal, :component_name => meal.sample_component_name)
+    new(:meal => meal, :component_name => meal.sample_component_name, :user_id => user_id)
   end
 
   def item_has_group?(item, group)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140731135510) do
+ActiveRecord::Schema.define(version: 20140807143530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20140731135510) do
   end
 
   add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id", using: :btree
+  add_index "match_answers", ["user_id"], name: "index_match_answers_on_user_id", using: :btree
 
   create_table "meals", force: true do |t|
     t.string   "name",               default: "Meal"
@@ -96,12 +97,12 @@ ActiveRecord::Schema.define(version: 20140731135510) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "name"
-    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "workerId"
+    t.string   "assignmentId"
+    t.string   "hitId"
+    t.integer  "condition"
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

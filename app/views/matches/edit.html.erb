@@ -23,54 +23,8 @@
         <%= f.hidden_field :meal_id %>
         <%= f.hidden_field :component_name %>
         <%= f.hidden_field :user_id %>
-        <div class="my_answer">
-          <table>
-            <tr><td class="community" colspan=4>Your Answer:</td></tr>
-            <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
-            <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
-            <% @match_answer.food_groups.each do |k, v| %>
-              <tr><td></td><td><%= k %></td>
-              <% Meal::GROUPS.each do |group| %>
-                <td>
-                  <% if v.include?(group) %>
-                    <span class='glyphicon glyphicon-ok'></span>
-                  <% end %>
-                </td>
-              <% end %>
-              </tr>
-            <% end %>
-            <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= @summarizer.summary %></td></tr>
-          </table>
-        </div>
 
-
-        <% # list of other community answers %>
-        <% @summarizer.summary.each do |item, group_avg_pair| %>
-          <% # if my answer, skip %>
-          <div class="community_answer">
-            <table>
-              <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
-                <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %><td>Summary</td></tr>
-                <% group_avg_pair.each do |group_arr, avg| %>
-                  <tr class="<%= 'your_answer' if my_answer?(group_arr, item) %>">
-                    <% if @match_answer.condition == 3 %>
-                      <td><%= radio_button_tag "match_answer[food_groups_update][#{item.to_sym}]", group_arr %></td>
-                    <% end %>
-                    <td><%= item %></td>
-                    <% Meal::GROUPS.each do |group| %>
-                      <td>
-                        <% if group_arr.include?(group) %>
-                          <span class='glyphicon glyphicon-ok'></span>
-                        <% end %>
-                      </td>
-                    <% end %>
-                    <td><%=  my_answer?(group_arr, item) ? "Your Answer, #{avg-1} agreed " : "#{avg} answers" %></td>
-                  </tr>
-                <% end %>
-                <td></td>
-              </table>
-            </div>
-          <% end %>
+        <%= render "condition_#{@match_answer.condition}" %>
 
         <br/>
         <%= f.submit :submit, :class => "btn btn-primary" %>

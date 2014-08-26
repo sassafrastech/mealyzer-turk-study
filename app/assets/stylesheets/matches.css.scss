@@ -60,4 +60,17 @@
       font-weight: bold;
     }
   }
+
+  table.even, table.odd {
+    width: 100%;
+    border: 1px #EEE solid;
+  }
+
+  table.even {
+    background-color: white;
+  }
+
+  table.odd {
+    background-color: #EEE;
+  }
 }

@@ -57,8 +57,10 @@ class MatchesController < ApplicationController
         redirect_to new_match_answer_url
       when 2
         @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
-        #render :edit
+        render :edit
       when 3
+        @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
+        render :edit
       when 4
       when 5
       when 6

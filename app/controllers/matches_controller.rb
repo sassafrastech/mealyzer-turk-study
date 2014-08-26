@@ -44,7 +44,6 @@ class MatchesController < ApplicationController
     end
   end
 
-
   private
 
   def render_by_condition

@@ -6,8 +6,8 @@ class MatchesController < ApplicationController
     # Only create the user if they have accepted task and there is no user already
     @disabled = true
     @user = if session[:current_user_id]
-     @disabled = false
-     User.find(session[:current_user_id])
+      @disabled = false
+      User.find(session[:current_user_id])
     elsif params[:assignmentId]
       @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
       User.create(params.permit(:assignmentId, :workerId, :hitId))
@@ -18,7 +18,10 @@ class MatchesController < ApplicationController
   def create
     answer_params = params.require(:match_answer).permit!
     @match_answer = MatchAnswer.create(answer_params)
-    session[:current_user_id] = @match_answer.user.id
+
+    @user = User.find(@match_answer.user_id)
+    session[:current_user_id] = @user.id
+
     if @match_answer.valid?
       render_by_condition
     else
@@ -49,10 +52,9 @@ class MatchesController < ApplicationController
   def render_by_condition
     @match_answer.increment_tests!
 
-    if !@match_answer.max_tests?
+    if !@user.max_tests?
       case @match_answer.condition
       when 1
-        @match_answer.user
         redirect_to new_match_answer_url
       when 2
         @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)

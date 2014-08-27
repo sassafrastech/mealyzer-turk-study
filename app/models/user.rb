@@ -6,6 +6,18 @@ class User < ActiveRecord::Base
 
   NUM_CONDITIONS = 7
 
+  MAX_TESTS = 10
+
+  def max_tests?
+    num_tests >= MAX_TESTS
+  end
+
+  # move to user
+  def increment_tests!
+    self.user.num_tests = self.user.num_tests + 1
+    self.user.save
+  end
+
   private
 
   def choose_condition

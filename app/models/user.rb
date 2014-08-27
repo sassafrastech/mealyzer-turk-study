@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
 
   # move to user
   def increment_tests!
-    self.user.num_tests = self.user.num_tests + 1
-    self.user.save
+    self.num_tests += 1
+    self.save
   end
 
   private

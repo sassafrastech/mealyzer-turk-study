@@ -4,10 +4,11 @@ class MatchAnswer < ActiveRecord::Base
   serialize :food_groups_update, JSON
   serialize :answers_changed, JSON
 
-  delegate :condition, :num_tests to: :user
+  delegate :condition, :num_tests, to: :user
 
   validate :food_groups_exist
   validate :food_groups_updated
+  validate :explanation_when_updated
 
   belongs_to :meal
   belongs_to :user
@@ -33,7 +34,7 @@ class MatchAnswer < ActiveRecord::Base
 
   def build_answers_changed!
     answers = {}
-    # if food groups wasn't changed
+    # if food groups is empty
     if food_groups_update.nil?
       return
     end
@@ -47,8 +48,10 @@ class MatchAnswer < ActiveRecord::Base
 
   # make sure all food groups are accounted for in answer
   def food_groups_exist
-    if items.sort != food_groups.keys.sort
-      errors.add(:food_groups, "must be accounted for")
+    if food_groups.nil?
+      errors.add(:food_groups, "cannot be empty")
+    else
+       errors.add(:food_groups, "must be accounted for") if items.sort != food_groups.keys.sort
     end
   end
 
@@ -59,4 +62,13 @@ class MatchAnswer < ActiveRecord::Base
     end
   end
 
+  def explanation_when_updated
+    pp "validating explanation when updated: food_groups_update and result is: #{food_groups_update == food_groups}"
+    pp "explanation.nil?: #{explanation.nil?}"
+    if (food_groups_update == food_groups) && explanation.nil?
+      errors.add(:explanation, "is required when you change your answer")
+    end
+  end
+
 end
+

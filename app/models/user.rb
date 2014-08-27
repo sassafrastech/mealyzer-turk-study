@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   NUM_CONDITIONS = 7
 
-  MAX_TESTS = 10
+  MAX_TESTS = 1
 
   def max_tests?
     num_tests >= MAX_TESTS

@@ -38,17 +38,26 @@ class MatchesController < ApplicationController
   def update
     update_params = params.require(:match_answer).permit!
     @match_answer = MatchAnswer.find(params[:id])
+    @user = User.find(@match_answer.user_id)
 
     update_by_condition(update_params)
 
     if @match_answer.valid?
-      redirect_to new_match_answer_path
+      if @user.max_tests?
+        redirect_to completed_match_answer_path(@match_answer)
+      else
+        redirect_to new_match_answer_path
+      end
     else
       flash[:error] = @match_answer.errors.full_messages.to_sentence
       # save updated answers to show again
       @match_answer.save :validate => false
       redirect_to edit_match_answer_path
     end
+  end
+
+  def completed
+    @match_answer = MatchAnswer.find(params[:id])
   end
 
   private
@@ -68,24 +77,19 @@ class MatchesController < ApplicationController
 
   def render_by_condition_for_create
     @user.increment_tests!
-
-    if !@user.max_tests?
-      case @match_answer.condition
-      when 1
-        redirect_to new_match_answer_url
-      when 2..3
-        redirect_to edit_match_answer_path(@match_answer)
-      when 4
-      when 5
-      when 6
-      when 7
-      else
-        Rails.logger.debug("in case else")
-      end
+    case @match_answer.condition
+    when 1
+      redirect_to new_match_answer_url
+    when 2..3
+      redirect_to edit_match_answer_path(@match_answer)
+    when 4
+    when 5
+    when 6
+    when 7
     else
-      # Render thank you screen and submit to MT
-      render :update
+      Rails.logger.debug("in case else")
     end
+
   end
 
 end

@@ -2,7 +2,6 @@ class MatchAnswer < ActiveRecord::Base
 
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
-  serialize :answers_changed, JSON
 
   delegate :condition, :num_tests, to: :user
 
@@ -33,15 +32,14 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   def build_answers_changed!
-    answers = {}
-    # if food groups is empty
-    if food_groups_update.nil?
-      return
-    end
+    self.changed_answer = false
+
+    return if food_groups_update.nil?
+
     food_groups.each do |item, group_arr|
-        answers[item] = ((food_groups_update[item]) == group_arr.join(" "))
+      self.changed_answer = true if food_groups_update[item].join(" ") != group_arr.join(" ")
     end
-    self.answers_changed = answers
+
   end
 
   private
@@ -56,7 +54,7 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   def food_groups_updated
-    return true if (answers_changed.nil? || answers_changed.empty?)
+    return if (changed_answer.nil?)
     if food_groups_update.nil? || (food_groups.keys.length != self.food_groups_update.keys.length)
       errors.add(:food_groups_update, "must be accounted for")
     end
@@ -65,7 +63,7 @@ class MatchAnswer < ActiveRecord::Base
   def explanation_when_updated
     pp "validating explanation when updated: food_groups_update and result is: #{food_groups_update == food_groups}"
     pp "explanation.nil?: #{explanation.nil?}"
-    if (food_groups_update == food_groups) && explanation.nil?
+    if (changed_answer == true) && (explanation.nil? || explanation.empty?)
       errors.add(:explanation, "is required when you change your answer")
     end
   end

@@ -56,12 +56,10 @@ class MatchesController < ApplicationController
     case @match_answer.condition
 
     when 3
-      pp "updating food grups update to #{params[:food_groups]}"
       @match_answer.food_groups_update = params[:food_groups]
       @match_answer.explanation = params[:explanation]
       @match_answer.build_answers_changed!
       @match_answer.save
-
     else
 
     end

@@ -34,7 +34,7 @@ class MatchAnswer < ActiveRecord::Base
   def build_answers_changed!
     self.changed_answer = false
 
-    return if food_groups_update.nil?
+    return if food_groups_update.nil? || (food_groups.keys.length != food_groups_update.keys.length)
 
     food_groups.each do |item, group_arr|
       self.changed_answer = true if food_groups_update[item].join(" ") != group_arr.join(" ")
@@ -55,14 +55,12 @@ class MatchAnswer < ActiveRecord::Base
 
   def food_groups_updated
     return if (changed_answer.nil?)
-    if food_groups_update.nil? || (food_groups.keys.length != self.food_groups_update.keys.length)
-      errors.add(:food_groups_update, "must be accounted for")
+    if food_groups_update.nil? || (food_groups.keys.length != food_groups_update.keys.length)
+      errors.add(:food_groups_update, ": all food items must have a food group selected")
     end
   end
 
   def explanation_when_updated
-    pp "validating explanation when updated: food_groups_update and result is: #{food_groups_update == food_groups}"
-    pp "explanation.nil?: #{explanation.nil?}"
     if (changed_answer == true) && (explanation.nil? || explanation.empty?)
       errors.add(:explanation, "is required when you change your answer")
     end

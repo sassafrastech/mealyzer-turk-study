@@ -32,14 +32,12 @@ class MatchesController < ApplicationController
 
   def update
     update_params = params.require(:match_answer).permit!
-    @match_answer = MatchAnswer.find(update_params[:id])
-    @match_answer.food_groups_update = update_params[:food_groups_update]
-    @match_answer.build_answers_changed!
+    @match_answer = MatchAnswer.find(params[:id])
 
-    @match_answer.save
+    update_by_condition(update_params)
 
     if @match_answer.valid?
-      render :update
+      redirect_to new_match_answer_url
     else
       @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
       flash[:error] = "You must make a selection for all food items"
@@ -49,6 +47,26 @@ class MatchesController < ApplicationController
 
   private
 
+  def update_by_condition(params)
+    case @match_answer.condition
+
+    when 3
+      @match_answer.food_groups_update = params[:food_groups]
+
+      # if changed answer, update value
+      if @match_answer.food_groups_update != @match_answer.food_groups
+       @match_answer.build_answers_changed!
+      else
+       @match_answer.answers_changed = false
+      end
+
+      @match_answer.save
+
+    else
+
+    end
+  end
+
   def render_by_condition
     @match_answer.increment_tests!
 
@@ -56,10 +74,7 @@ class MatchesController < ApplicationController
       case @match_answer.condition
       when 1
         redirect_to new_match_answer_url
-      when 2
-        @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
-        render :edit
-      when 3
+      when 2..3
         @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
         render :edit
       when 4

@@ -24,7 +24,7 @@
         <%= f.hidden_field :component_name %>
         <%= f.hidden_field :user_id %>
 
-        <%= render "condition_#{@match_answer.condition}" %>
+        <%= render :partial => "condition_#{@match_answer.condition}", :locals => {:f => f} %>
 
         <br/>
         <%= f.submit :submit, :class => "btn btn-primary" %>

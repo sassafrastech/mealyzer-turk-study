@@ -4,8 +4,7 @@ class MatchAnswer < ActiveRecord::Base
   serialize :food_groups_update, JSON
   serialize :answers_changed, JSON
 
-  delegate :condition, to: :user
-  delegate :num_tests, to: :user
+  delegate :condition, :num_tests to: :user
 
   validate :food_groups_exist
   validate :food_groups_updated
@@ -34,6 +33,10 @@ class MatchAnswer < ActiveRecord::Base
 
   def build_answers_changed!
     answers = {}
+    # if food groups wasn't changed
+    if food_groups_update.nil?
+      return
+    end
     food_groups.each do |item, group_arr|
         answers[item] = ((food_groups_update[item]) == group_arr.join(" "))
     end

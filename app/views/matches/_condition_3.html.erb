@@ -1,0 +1,42 @@
+<div class="my_answer">
+  <table>
+    <tr><td class="community" colspan=4>Your Answer:</td></tr>
+    <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+    <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+    <% @match_answer.food_groups.each do |k, v| %>
+      <tr><td></td><td><%= k %></td>
+      <% Meal::GROUPS.each do |group| %>
+        <td>
+          <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
+        </td>
+      <% end %>
+      </tr>
+    <% end %>
+    <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
+  </table>
+  <h5>*If you changed your answer, please explain why:</h5>
+  <%= f.input :explanation, :label => false %>
+</div>
+
+<% # list of other community answers %>
+<% @summarizer.other_answers(@match_answer).each_with_index do |(food_groups, num_matches), index| %>
+   <div class="other_answers">
+    <table class="<%= cycle('even', 'odd') %>">
+      <tr><td class="community" colspan=4>Alternative Answer #<%= index + 1 %>:</td></tr>
+      <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+      <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+      <% food_groups.each do |k, v| %>
+        <tr><td></td><td><%= k %></td>
+        <% Meal::GROUPS.each do |group| %>
+          <td>
+            <% if v.include?(group) %>
+              <span class='glyphicon glyphicon-ok'></span>
+            <% end %>
+          </td>
+        <% end %>
+        </tr>
+      <% end %>
+      <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= num_matches %></td></tr>
+    </table>
+  </div>
+<% end %>

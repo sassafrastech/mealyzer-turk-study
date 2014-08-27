@@ -21,6 +21,10 @@
     display: inline-block;
     border-collapse: separate;
 
+    textarea {
+      width: 80%;
+    }
+
     tr.groups {
       border-bottom: 1px solid gray;
     }
@@ -28,6 +32,10 @@
 
   div.my_answer {
     background-color: #FFF8DA;
+  }
+
+  div.my_answer, div.other_answers {
+    padding: 5px;
   }
 
   table {

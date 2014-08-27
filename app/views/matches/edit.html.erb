@@ -22,29 +22,10 @@
         <h4><%= @match_answer.component_name %></h4>
         <%= f.hidden_field :meal_id %>
         <%= f.hidden_field :component_name %>
-        <%= f.hidden_field :id %>
-        <table>
-          <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+        <%= f.hidden_field :user_id %>
 
-          <% @summarizer.summary.each do |item, group_avg_pair| %>
-            <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %><td>Summary</td></tr>
-            <% group_avg_pair.each do |group_arr, avg| %>
-              <tr class="<%= 'your_answer' if my_answer?(group_arr, item) %>">
-                <td><%= radio_button_tag "match_answer[food_groups_update][#{item.to_sym}]", group_arr %></td>
-                <td><%= item %></td>
-                <% Meal::GROUPS.each do |group| %>
-                  <td>
-                    <% if group_arr.include?(group) %>
-                      <span class='glyphicon glyphicon-ok'></span>
-                    <% end %>
-                  </td>
-                <% end %>
-                <td><%=  my_answer?(group_arr, item) ? "Your Answer, #{avg-1} agreed " : "#{avg} answers" %></td>
-              </tr>
-            <% end %>
-            <td></td>
-          <% end %>
-        </table>
+        <%= render "condition_#{@match_answer.condition}" %>
+
         <br/>
         <%= f.submit :submit, :class => "btn btn-primary" %>
       <% end %>

@@ -31,7 +31,7 @@ class MatchesController < ApplicationController
       render_by_condition_for_create
     else
       flash[:error] = "All food items must be matched to at least one group"
-      render :new
+      redirect_to new_match_answer_path
     end
   end
 
@@ -42,11 +42,12 @@ class MatchesController < ApplicationController
     update_by_condition(update_params)
 
     if @match_answer.valid?
-      redirect_to new_match_answer_url
+      redirect_to new_match_answer_path
     else
-      @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
       flash[:error] = @match_answer.errors.full_messages.to_sentence
-      render :edit
+      # save updated answers to show again
+      @match_answer.save :validate => false
+      redirect_to edit_match_answer_path
     end
   end
 

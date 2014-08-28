@@ -34,8 +34,8 @@ class MatchesController < ApplicationController
     if @match_answer.valid?
       render_by_condition_for_create
     else
-      flash[:error] = "All food items must be matched to at least one group"
-      redirect_to new_match_answer_path
+      flash.now[:error] = "All food items must be matched to at least one group"
+      render :new
     end
   end
 
@@ -47,17 +47,14 @@ class MatchesController < ApplicationController
     update_by_condition(update_params)
 
     if @match_answer.valid?
-      pp "is valid in update"
+      # Check if we have done enough tests yet
       if @user.max_tests?
         redirect_to completed_match_answer_path(@match_answer)
       else
         redirect_to new_match_answer_path
       end
     else
-      pp "is not valid in update"
       flash.now[:error] = @match_answer.errors.full_messages.to_sentence
-      # save updated answers to show again
-      @match_answer.save :validate => false
       render :edit
     end
   end
@@ -76,8 +73,6 @@ class MatchesController < ApplicationController
     case @match_answer.condition
     when 4
       @match_answer.impact = params[:impact]
-    else
-
     end
     @match_answer.save
   end

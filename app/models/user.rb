@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
       self.condition = random_condition
     end
 
-    self.condition = 4
+    self.condition = 2
   end
 
   def random_condition

@@ -1,6 +1,6 @@
 class MatchAnswer < ActiveRecord::Base
 
-  # move to YML
+  # Ideally should be in YML
   IMPACT_SCORES = {1 => "Does not really change overall nutritional breakdown",
                    2 => "Has a moderate impact on the overall nutritional breakdown",
                    3 => "Has a significant impact on the overall nutritional breakdown"}
@@ -10,8 +10,7 @@ class MatchAnswer < ActiveRecord::Base
 
   delegate :condition, :num_tests, to: :user
 
-  validate :food_groups_exist
-  validate :food_groups_updated
+  validate :food_groups_exist, :food_groups_updated
   validate :explanation_when_updated, :impact_when_updated
 
   belongs_to :meal
@@ -57,8 +56,6 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   private
-
-  # make sure all food groups are accounted for in answer
   def food_groups_exist
     if food_groups.nil?
       errors.add(:food_groups, "cannot be empty")
@@ -68,7 +65,7 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   def food_groups_updated
-    return if (changed_answer.nil?)
+    return if (changed_answer.nil?) || condition == 2
     if food_groups_update.nil? || (food_groups.keys.length != food_groups_update.keys.length)
       errors.add(:food_groups_update, ": all food items must have a food group selected")
     end

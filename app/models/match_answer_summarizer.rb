@@ -29,7 +29,8 @@ class MatchAnswerSummarizer
         other_answers[a.food_groups] += 1
       end
     end
-    other_answers.sort_by {|food_groups, num| num}
+    oa = other_answers.sort_by {|food_groups, num| num}
+    oa.reverse
   end
 
   private

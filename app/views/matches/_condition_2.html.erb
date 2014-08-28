@@ -1,8 +1,6 @@
 
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well.</div>
-  <p>Below you can see your own answers and answers by other Turkers. Think carefully
-  about the answers. You can decide to stay with your own, choose answers by others, or revise you own answers.</p>
+  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well. You can compare your answers with others.</div>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>
@@ -53,5 +51,6 @@
   <% end %>
 
   <br/>
-  <%= f.submit :submit, :class => "btn btn-primary" %>
+  <%= f.submit "Next", :class => "btn btn-primary" %>
+  <br/><br/>
 <% end %>

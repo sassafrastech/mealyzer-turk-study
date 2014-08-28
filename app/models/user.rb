@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   NUM_CONDITIONS = 7
 
-  MAX_TESTS = 1
+  MAX_TESTS = 10
 
   def max_tests?
     num_tests >= MAX_TESTS
@@ -26,13 +26,13 @@ class User < ActiveRecord::Base
       self.condition = 1
     elsif User.where(condition: 2).count < MIN_CONDITION
       self.condition = 2
-    elsif User.where(condition: 6).count < MIN_CONDITION
-      self.condition = 6
+    elsif User.where(condition: 4).count < MIN_CONDITION
+      self.condition = 4
     elsif
       self.condition = random_condition
     end
 
-    self.condition = 3
+    self.condition = 4
   end
 
   def random_condition

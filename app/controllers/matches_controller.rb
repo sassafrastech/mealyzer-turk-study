@@ -17,6 +17,16 @@ class MatchesController < ApplicationController
 
   def edit
     @match_answer = MatchAnswer.find(params[:id])
+
+    # build evaluation copy
+    if @match_answer.condition == 4
+      @match_answer = MatchAnswer.deep_copy(@match_answer)
+      @match_answer.evaluating_id = MatchAnswer.random.id
+      @evaluating = MatchAnswer.find(@match_answer.evaluating_id)
+      @match_answer.food_groups = @evaluating.food_groups
+      @match_answer.meal_id = @evaluating.meal_id
+
+    end
     @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
   end
 
@@ -83,6 +93,7 @@ class MatchesController < ApplicationController
     when 2..3
       redirect_to edit_match_answer_path(@match_answer)
     when 4
+      redirect_to edit_match_answer_path(@match_answer)
     when 5
     when 6
     when 7

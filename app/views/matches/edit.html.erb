@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-10">
       <h3>Instructions</h3>
-      <p>In each photo below, a box containing  one food item will be highlighted. Next to it, you will see a description of this item and its ingredients identified by you or other Turkers. Your job is to match each of these ingredients to the four food groups. These food groups include carbohydrates, fats, protein, and fiber. You need to map each ingredient to one food group.</p>
+      <p>In each photo below, a box containing one food item will be highlighted. Next to it, you will see a description of this item and its ingredients identified by you or other Turkers. Your job is to match each of these ingredients to the four food groups. These food groups include carbohydrates, fats, protein, and fiber. You need to map each ingredient to one food group.</p>
     </div>
   </div>
   <div class="row">
@@ -13,22 +13,9 @@
     </div>
     <div class="col-md-6">
       <h3><%= @match_answer.meal.food_options %></h3>
+      <%= pp "condition #{@match_answer.condition}" %>
+      <%= render :partial => "condition_#{@match_answer.condition}" %>
 
-      <%= simple_form_for @match_answer do |f| %>
-        <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well.</div>
-        <p>Below you can see your own answers and answers by other Turkers. Think carefully
-        about the answers. You can decide to stay with your own, choose answers by others, or revise you own answers.</p>
-        <br/>
-        <h4><%= @match_answer.component_name %></h4>
-        <%= f.hidden_field :meal_id %>
-        <%= f.hidden_field :component_name %>
-        <%= f.hidden_field :user_id %>
-
-        <%= render :partial => "condition_#{@match_answer.condition}", :locals => {:f => f} %>
-
-        <br/>
-        <%= f.submit :submit, :class => "btn btn-primary" %>
-      <% end %>
     </div>
   </div>
 </div>

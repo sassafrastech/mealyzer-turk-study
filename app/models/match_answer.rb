@@ -1,5 +1,9 @@
 class MatchAnswer < ActiveRecord::Base
 
+  IMPACT_SCORES = {1 => "Does not really change overall nutritional breakdown",
+                   2 => "Has a moderate impact on the overall nutritional breakdown",
+                   3 => "Has a significant impact on the overall nutritional breakdown"}
+
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
 
@@ -16,6 +20,10 @@ class MatchAnswer < ActiveRecord::Base
     user_id = user.id unless user.nil?
     meal = Meal.random
     new(:meal => meal, :component_name => meal.sample_component_name, :user_id => user_id)
+  end
+
+  def self.random
+    MatchAnswer.first(:offset => rand(MatchAnswer.count))
   end
 
   def item_has_group?(item, group)

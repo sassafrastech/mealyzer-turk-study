@@ -12,7 +12,7 @@ class MatchAnswer < ActiveRecord::Base
 
   validate :food_groups_exist
   validate :food_groups_updated
-  validate :explanation_when_updated
+  validate :explanation_when_updated, :impact_when_updated
 
   belongs_to :meal
   belongs_to :user
@@ -77,6 +77,12 @@ class MatchAnswer < ActiveRecord::Base
   def explanation_when_updated
     if (changed_answer == true) && (explanation.nil? || explanation.empty?)
       errors.add(:explanation, "is required when you change your answer")
+    end
+  end
+
+  def impact_when_updated
+    if user.condition == 4 && changed_answer == true && impact.nil?
+      errors.add(:impact, "is missing, please make a selection")
     end
   end
 

@@ -47,16 +47,18 @@ class MatchesController < ApplicationController
     update_by_condition(update_params)
 
     if @match_answer.valid?
+      pp "is valid in update"
       if @user.max_tests?
         redirect_to completed_match_answer_path(@match_answer)
       else
         redirect_to new_match_answer_path
       end
     else
-      flash[:error] = @match_answer.errors.full_messages.to_sentence
+      pp "is not valid in update"
+      flash.now[:error] = @match_answer.errors.full_messages.to_sentence
       # save updated answers to show again
       @match_answer.save :validate => false
-      redirect_to edit_match_answer_path
+      render :edit
     end
   end
 
@@ -77,7 +79,6 @@ class MatchesController < ApplicationController
     else
 
     end
-
     @match_answer.save
   end
 

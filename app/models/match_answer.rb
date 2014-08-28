@@ -1,5 +1,6 @@
 class MatchAnswer < ActiveRecord::Base
 
+  # move to YML
   IMPACT_SCORES = {1 => "Does not really change overall nutritional breakdown",
                    2 => "Has a moderate impact on the overall nutritional breakdown",
                    3 => "Has a significant impact on the overall nutritional breakdown"}
@@ -24,6 +25,11 @@ class MatchAnswer < ActiveRecord::Base
 
   def self.random
     MatchAnswer.first(:offset => rand(MatchAnswer.count))
+  end
+
+  def self.copy_for_eval(obj, user)
+    MatchAnswer.create(:meal_id => obj.meal_id, :user_id => user.id, :food_groups => obj.food_groups,
+      :component_name => obj.component_name, :evaluating_id => obj.id)
   end
 
   def item_has_group?(item, group)

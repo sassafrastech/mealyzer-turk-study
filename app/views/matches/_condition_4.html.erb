@@ -1,19 +1,20 @@
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well.</div>
-  <p>Below you can see your own answers and answers by other Turkers. Think carefully
-  about the answers. You can decide to stay with your own, choose answers by others, or revise you own answers.</p>
+  <div class="alert alert-success" role="alert">Thank you! Now take a look at an answer from another Turker</div>
+  <p>Now take a look at another image. Here other Turkers already provided their answers. Think about whether
+  this answer is correct or not. If you agree with this answer, simply submit it again. </p>
+  <p> If you disagree with it, please change it to correct the mistake. Please explain what was incorrect in the original answer. Also please think about what kind of impact this error has on the overall nutritional assessment.</p>
   <br/>
-  <h4><%= @evaluating.component_name %></h4>
+  <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>
   <%= f.hidden_field :component_name %>
   <%= f.hidden_field :user_id %>
 
   <div class="my_answer">
     <table>
-      <tr><td class="community" colspan=4>Your Answer:</td></tr>
+      <tr><td class="community" colspan=4>Another Turker's Answer:</td></tr>
       <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
       <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
-      <% current_food_groups = @evaluating.food_groups %>
+      <% current_food_groups = @match_answer.food_groups %>
       <% current_food_groups.each do |k, v| %>
         <tr><td></td><td><%= k %></td>
         <% Meal::GROUPS.each do |group| %>
@@ -23,9 +24,8 @@
         <% end %>
         </tr>
       <% end %>
-      <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
     </table>
-    <h5>*If you changed your answer, please explain why:</h5>
+    <h5>*Please explain each change you made in the answer:</h5>
     <%= f.input :explanation, :label => false %>
     <br/>
     <div class="impact">

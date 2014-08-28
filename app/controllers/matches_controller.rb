@@ -17,8 +17,7 @@ class MatchesController < ApplicationController
 
   def edit
     @match_answer = MatchAnswer.find(params[:id])
-
-    # build evaluation copy
+    # Build evaluation copy
     if @match_answer.condition == 4
       @match_answer = MatchAnswer.copy_for_eval(MatchAnswer.random, @match_answer.user)
     end
@@ -68,16 +67,18 @@ class MatchesController < ApplicationController
   private
 
   def update_by_condition(params)
-    case @match_answer.condition
+    @match_answer.food_groups_update = params[:food_groups]
+    @match_answer.explanation = params[:explanation]
+    @match_answer.build_answers_changed!
 
-    when 3
-      @match_answer.food_groups_update = params[:food_groups]
-      @match_answer.explanation = params[:explanation]
-      @match_answer.build_answers_changed!
-      @match_answer.save
+    case @match_answer.condition
+    when 4
+      @match_answer.impact = params[:impact]
     else
 
     end
+
+    @match_answer.save
   end
 
   def render_by_condition_for_create

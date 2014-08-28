@@ -31,7 +31,7 @@
     <div class="impact">
       <h5>*What do you think is the impact of the change you made on the overall nutritional assessment?</h5>
       <% MatchAnswer::IMPACT_SCORES.each do |k, v| %>
-        <%= radio_button_tag "match_answer[impact][#{k}][]", k %>
+        <%= radio_button_tag "match_answer[impact]", k %>
         <label><%= v %></label>
         <br/>
       <% end %>

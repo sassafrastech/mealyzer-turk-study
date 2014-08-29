@@ -11,6 +11,8 @@ class MatchesController < ApplicationController
     elsif params[:assignmentId]
       @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
       User.create(params.permit(:assignmentId, :workerId, :hitId))
+    else
+      @user = User.create
     end
     @match_answer = MatchAnswer.build_for_random_meal(@user)
   end

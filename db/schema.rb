@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140731135510) do
+ActiveRecord::Schema.define(version: 20140825153404) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "match_answers", force: true do |t|
     t.integer  "meal_id"
@@ -24,7 +27,8 @@ ActiveRecord::Schema.define(version: 20140731135510) do
     t.text     "answers_changed"
   end
 
-  add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id"
+  add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id", using: :btree
+  add_index "match_answers", ["user_id"], name: "index_match_answers_on_user_id", using: :btree
 
   create_table "meals", force: true do |t|
     t.string   "name",               default: "Meal"
@@ -48,8 +52,8 @@ ActiveRecord::Schema.define(version: 20140731135510) do
     t.datetime "updated_at"
   end
 
-  add_index "tag_answers", ["meal_id"], name: "index_tag_answers_on_meal_id"
-  add_index "tag_answers", ["user_id"], name: "index_tag_answers_on_user_id"
+  add_index "tag_answers", ["meal_id"], name: "index_tag_answers_on_meal_id", using: :btree
+  add_index "tag_answers", ["user_id"], name: "index_tag_answers_on_user_id", using: :btree
 
   create_table "turkee_imported_assignments", force: true do |t|
     t.string   "assignment_id"
@@ -93,12 +97,13 @@ ActiveRecord::Schema.define(version: 20140731135510) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "name"
-    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "workerId"
+    t.string   "assignmentId"
+    t.string   "hitId"
+    t.integer  "condition"
+    t.integer  "num_tests",    default: 0
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
 
   # move to user
   def increment_tests!
-    self.user.num_tests = self.user.num_tests + 1
-    self.user.save
+    self.num_tests += 1
+    self.save
   end
 
   private
@@ -26,8 +26,8 @@ class User < ActiveRecord::Base
       self.condition = 1
     elsif User.where(condition: 2).count < MIN_CONDITION
       self.condition = 2
-    elsif User.where(condition: 6).count < MIN_CONDITION
-      self.condition = 6
+    elsif User.where(condition: 4).count < MIN_CONDITION
+      self.condition = 4
     elsif
       self.condition = random_condition
     end

@@ -1,6 +1,7 @@
-
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well. You can compare your answers with others.</div>
+  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well.</div>
+  <p>Below you can see your own answers and answers by other Turkers. Think carefully
+  about the answers. You can decide to stay with your own, choose answers by others, or revise you own answers.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>
@@ -12,19 +13,20 @@
       <tr><td class="community" colspan=4>Your Answer:</td></tr>
       <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
       <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
-      <% @match_answer.food_groups.each do |k, v| %>
+      <% current_food_groups = @match_answer.changed_answer ? @match_answer.food_groups_update : @match_answer.food_groups %>
+      <% current_food_groups.each do |k, v| %>
         <tr><td></td><td><%= k %></td>
         <% Meal::GROUPS.each do |group| %>
           <td>
-            <% if v.include?(group) %>
-              <span class='glyphicon glyphicon-ok'></span>
-            <% end %>
+            <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
           </td>
         <% end %>
         </tr>
       <% end %>
       <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
     </table>
+    <h5>*If you changed your answer, please explain why:</h5>
+    <%= f.input :explanation, :label => false %>
   </div>
 
   <% # list of other community answers %>
@@ -52,5 +54,4 @@
 
   <br/>
   <%= f.submit "Next", :class => "btn btn-primary" %>
-  <br/><br/>
 <% end %>

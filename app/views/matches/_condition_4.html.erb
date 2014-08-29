@@ -1,0 +1,43 @@
+<%= simple_form_for @match_answer do |f| %>
+  <div class="alert alert-success" role="alert">Thank you! Now take a look at an answer from another Turker</div>
+  <p>Now take a look at another image. Here other Turkers already provided their answers. Think about whether
+  this answer is correct or not. If you agree with this answer, simply submit it again. </p>
+  <p> If you disagree with it, please change it to correct the mistake. Please explain what was incorrect in the original answer. Also please think about what kind of impact this error has on the overall nutritional assessment.</p>
+  <br/>
+  <h4><%= @match_answer.component_name %></h4>
+  <%= f.hidden_field :meal_id %>
+  <%= f.hidden_field :component_name %>
+  <%= f.hidden_field :user_id %>
+
+  <div class="my_answer">
+    <table>
+      <tr><td class="community" colspan=4>Another Turker's Answer:</td></tr>
+      <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+      <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+      <% current_food_groups = @match_answer.changed_answer ? @match_answer.food_groups_update : @match_answer.food_groups %>
+      <% current_food_groups.each do |k, v| %>
+        <tr><td></td><td><%= k %></td>
+        <% Meal::GROUPS.each do |group| %>
+          <td>
+            <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
+          </td>
+        <% end %>
+        </tr>
+      <% end %>
+    </table>
+    <h5>*Please explain each change you made in the answer:</h5>
+    <%= f.input :explanation, :label => false %>
+    <br/>
+    <div class="impact">
+      <h5>*What do you think is the impact of the change you made on the overall nutritional assessment?</h5>
+      <% MatchAnswer::IMPACT_SCORES.each do |k, v| %>
+        <%= radio_button_tag "match_answer[impact]", k %>
+        <label><%= v %></label>
+        <br/>
+      <% end %>
+    </div>
+  </div>
+
+  <br/>
+  <%= f.submit "Next", :class => "btn btn-primary" %>
+<% end %>

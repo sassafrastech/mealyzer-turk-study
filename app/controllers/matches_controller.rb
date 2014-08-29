@@ -15,6 +15,15 @@ class MatchesController < ApplicationController
     @match_answer = MatchAnswer.build_for_random_meal(@user)
   end
 
+  def edit
+    @match_answer = MatchAnswer.find(params[:id])
+    # Build evaluation copy
+    if @match_answer.condition == 4
+      @match_answer = MatchAnswer.copy_for_eval(MatchAnswer.random, @match_answer.user)
+    end
+    @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
+  end
+
   def create
     answer_params = params.require(:match_answer).permit!
     @match_answer = MatchAnswer.create(answer_params)
@@ -23,56 +32,67 @@ class MatchesController < ApplicationController
     session[:current_user_id] = @user.id
 
     if @match_answer.valid?
-      render_by_condition
+      render_by_condition_for_create
     else
-      flash[:error] = "All food items must be matched to at least one group"
+      flash.now[:error] = "All food items must be matched to at least one group"
       render :new
     end
   end
 
   def update
     update_params = params.require(:match_answer).permit!
-    @match_answer = MatchAnswer.find(update_params[:id])
-    @match_answer.food_groups_update = update_params[:food_groups_update]
-    @match_answer.build_answers_changed!
+    @match_answer = MatchAnswer.find(params[:id])
+    @user = User.find(@match_answer.user_id)
 
-    @match_answer.save
+    update_by_condition(update_params)
 
     if @match_answer.valid?
-      render :update
+      # Check if we have done enough tests yet
+      if @user.max_tests?
+        redirect_to completed_match_answer_path(@match_answer)
+      else
+        redirect_to new_match_answer_path
+      end
     else
-      @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
-      flash[:error] = "You must make a selection for all food items"
+      flash.now[:error] = @match_answer.errors.full_messages.to_sentence
       render :edit
     end
   end
 
+  def completed
+    @match_answer = MatchAnswer.find(params[:id])
+  end
+
   private
 
-  def render_by_condition
-    @match_answer.increment_tests!
+  def update_by_condition(params)
+    @match_answer.food_groups_update = params[:food_groups]
+    @match_answer.explanation = params[:explanation]
+    @match_answer.build_answers_changed!
 
-    if !@user.max_tests?
-      case @match_answer.condition
-      when 1
-        redirect_to new_match_answer_url
-      when 2
-        @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
-        render :edit
-      when 3
-        @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
-        render :edit
-      when 4
-      when 5
-      when 6
-      when 7
-      else
-        Rails.logger.debug("in case else")
-      end
-    else
-      # Render thank you screen and submit to MT
-      render :update
+    case @match_answer.condition
+    when 4
+      @match_answer.impact = params[:impact]
     end
+    @match_answer.save
+  end
+
+  def render_by_condition_for_create
+    @user.increment_tests!
+    case @match_answer.condition
+    when 1
+      redirect_to new_match_answer_url
+    when 2..3
+      redirect_to edit_match_answer_path(@match_answer)
+    when 4
+      redirect_to edit_match_answer_path(@match_answer)
+    when 5
+    when 6
+    when 7
+    else
+      Rails.logger.debug("in case else")
+    end
+
   end
 
 end

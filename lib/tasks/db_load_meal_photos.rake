@@ -7,11 +7,14 @@ namespace :db do
       photo_path = File.basename(photo)[0]
       meal_id = File.basename(photo_path, '.*')
       meal = Meal.find(meal_id)
+      puts "found meal: #{meal.inspect}"
       raise "could not find meal with id #{meal_id}" if meal.nil?
 
       File.open(MEALS_PHOTO_PATH + photo) do |f|
+        puts "opening file: #{MEALS_PHOTO_PATH + photo}"
         meal.photo = f
         meal.save
+        puts "saved photo to meal"
         puts meal.errors.messages
       end
     end

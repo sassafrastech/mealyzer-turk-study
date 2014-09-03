@@ -7,7 +7,8 @@ namespace :db do
 
       photo_path, meal, meal_id = nil
       photo_path = File.basename(photo, '*.')
-      meal_id = File.basename(photo_path, '.*')
+      meal_id = File.basename(photo, '.*')
+      puts "looking for meal_id #{meal_id}"
       meal = Meal.find(meal_id)
       puts "found meal: #{meal.inspect}"
       raise "could not find meal with id #{meal_id}" if meal.nil?

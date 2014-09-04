@@ -1,6 +1,6 @@
 require 'pp'
 
-class MatchesController < ApplicationController
+class MatchAnswersController < ApplicationController
 
   def new
     # Only create the user if they have accepted task and there is no user already
@@ -81,6 +81,7 @@ class MatchesController < ApplicationController
 
   def render_by_condition_for_create
     @user.increment_tests!
+    Rails.logger.debug("condition: #{@match_answer.condition}")
     case @match_answer.condition
     when 1
       redirect_to new_match_answer_url

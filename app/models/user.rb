@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   MAX_CONDITION = 50
   MIN_CONDITION = 20
 
-  NUM_CONDITIONS = 7
+  NUM_CONDITIONS = 4
 
   MAX_TESTS = 10
 

@@ -8,6 +8,7 @@ class Meal < ActiveRecord::Base
 
   def self.random
     Meal.first(:offset => rand(Meal.count))
+    Meal.find(12)
   end
 
   def sample_component_name

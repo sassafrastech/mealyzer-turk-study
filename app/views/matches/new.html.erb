@@ -8,7 +8,7 @@
   <div class="row">
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
-      <%= image_tag @match_answer.meal.photo, :id => "photo" %>
+      <%= image_tag @match_answer.meal.photo, :id => "photo", :class => "annotatable" %>
       <% #DRAW Rectangle %>
     </div>
     <div class="col-md-6">
@@ -45,7 +45,13 @@
   </div>
 </div>
 
-<%= javascript_doc_ready do %>
-  new Mealyzer.Views.MatchesView({el: '.matches', geometry: <%= @match_answer.location.to_json.html_safe %>, name: "<%= @match_answer.component_name %>", source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>"});
-<% end %>
-
+<script>
+  jQuery(window).load(function(){
+    new Mealyzer.Views.MatchesView({
+      el: '.matches',
+      geometry: <%= @match_answer.location.to_json.html_safe %>,
+      name: "<%= @match_answer.component_name %>",
+      source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>"
+    });
+  });
+</script>

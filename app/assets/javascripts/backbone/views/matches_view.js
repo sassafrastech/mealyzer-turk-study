@@ -16,13 +16,11 @@ Mealyzer.Views.MatchesView = Backbone.View.extend({
         type: 'rect',
         geometry: params.geometry
       }]
-    }
+    };
 
     // add and show annotation
     anno.addAnnotation(a);
-    anno.showAnnotations(document.getElementById('photo'));
     anno.highlightAnnotation(a);
-
   },
 
 });

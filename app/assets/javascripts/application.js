@@ -21,3 +21,5 @@
 //= require backbone_datalink
 //= require backbone/mealyzer
 //= require_tree .
+
+jQuery.noConflict();

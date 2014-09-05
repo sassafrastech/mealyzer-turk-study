@@ -37,7 +37,6 @@ class User < ActiveRecord::Base
       self.condition = random_condition
     end
 
-    self.condition = 1
   end
 
   def random_condition

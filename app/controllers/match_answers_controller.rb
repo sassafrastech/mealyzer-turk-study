@@ -34,7 +34,11 @@ class MatchAnswersController < ApplicationController
     session[:current_user_id] = @user.id
 
     if @match_answer.valid?
-      render_by_condition_for_create
+      if @user.max_tests?
+        redirect_to completed_match_answer_path(@match_answer)
+      else
+        render_by_condition_for_create
+      end
     else
       flash.now[:error] = "All food items must be matched to at least one group"
       render :new

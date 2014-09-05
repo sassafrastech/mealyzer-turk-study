@@ -27,11 +27,11 @@ class User < ActiveRecord::Base
 
   def choose_condition
     # first need to make sure we have a min number of #1
-    if User.where(condition: 1).where(num_tests: > 0).count < MIN_CONDITION
+    if User.where(condition: 1).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 1
-    elsif User.where(condition: 2).where(num_tests: > 0).count < MIN_CONDITION
+    elsif User.where(condition: 2).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 2
-    elsif User.where(condition: 4).where(num_tests: > 0).count < MIN_CONDITION
+    elsif User.where(condition: 4).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 4
     elsif
       self.condition = random_condition
@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
 
   def random_condition
     1.upto(NUM_CONDITIONS) do |c|
-      return c if User.where(condition: c).where(num_tests: > 0).count < MAX_CONDITION
+      return c if User.where(condition: c).where("num_tests > ?", 0).count < MAX_CONDITION
     end
     return nil
   end

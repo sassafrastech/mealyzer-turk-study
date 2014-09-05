@@ -30,6 +30,10 @@ class User < ActiveRecord::Base
       self.condition = 1
     elsif User.where(condition: 2).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 2
+    elsif User.where(condition: 3).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 3
+    elsif User.where(condition: 4).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 4
     else
       self.condition = random_condition
     end

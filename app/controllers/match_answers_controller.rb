@@ -34,11 +34,8 @@ class MatchAnswersController < ApplicationController
     session[:current_user_id] = @user.id
 
     if @match_answer.valid?
-      if @user.max_tests?
-        redirect_to completed_match_answer_path(@match_answer)
-      else
-        render_by_condition_for_create
-      end
+      Rails.logger.debug("MAX TESTS: #{@user.max_tests?}")
+      render_by_condition_for_create
     else
       flash.now[:error] = "All food items must be matched to at least one group"
       render :new
@@ -85,19 +82,25 @@ class MatchAnswersController < ApplicationController
 
   def render_by_condition_for_create
     @user.increment_tests!
-    Rails.logger.debug("condition: #{@match_answer.condition}")
-    case @match_answer.condition
-    when 1
-      redirect_to new_match_answer_url
-    when 2..3
-      redirect_to edit_match_answer_path(@match_answer)
-    when 4
-      redirect_to edit_match_answer_path(@match_answer)
-    when 5
-    when 6
-    when 7
+    if @user.max_tests? && @user.condition == 1
+      redirect_to completed_match_answer_path(@match_answer)
     else
-      Rails.logger.debug("in case else")
+
+      Rails.logger.debug("condition: #{@match_answer.condition}")
+      case @match_answer.condition
+      when 1
+        redirect_to new_match_answer_url
+      when 2..3
+        redirect_to edit_match_answer_path(@match_answer)
+      when 4
+        redirect_to edit_match_answer_path(@match_answer)
+      when 5
+      when 6
+      when 7
+      else
+        Rails.logger.debug("in case else")
+      end
+
     end
 
   end

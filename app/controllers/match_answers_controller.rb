@@ -1,7 +1,7 @@
 require 'pp'
 
 class MatchAnswersController < ApplicationController
-  after_action :allow_iframe, only: :embed
+  after_action :allow_amt_iframe
 
   def new
     # Only create the user if they have accepted task and there is no user already

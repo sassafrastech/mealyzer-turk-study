@@ -1,6 +1,7 @@
 require 'pp'
 
 class MatchAnswersController < ApplicationController
+  after_action :allow_iframe, only: :embed
 
   def new
     # Only create the user if they have accepted task and there is no user already
@@ -104,6 +105,14 @@ class MatchAnswersController < ApplicationController
 
     end
 
+  end
+
+  def allow_iframe
+    response.headers.except! 'X-Frame-Options'
+  end
+
+  def allow_amt_iframe
+    response.headers['X-Frame-Options'] = 'ALLOW-FROM https://workersandbox.mturk.com'
   end
 
 end

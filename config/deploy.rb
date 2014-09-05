@@ -26,7 +26,7 @@ set :tmp_dir, -> {"/home/tomsmyth/tmp"}
 set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/railsenv config/initializers/turkee.rb}
+set :linked_files, %w{config/database.yml config/railsenv config/initializers/turkee.rb.example}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{public/system public/uploads}

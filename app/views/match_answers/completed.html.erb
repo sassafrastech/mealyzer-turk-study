@@ -3,7 +3,7 @@
 <%= turkee_form_for(@match_answer, params) do |f| %>
   <h4>Click submit to finish</h4>
   <% #f.hidden_field :id %>
-  <%= f.hidden_field :assignmentId, :value => @match_answer.user.assignmentId %>
+  <%= hidden_field :assignmentId, :value => @match_answer.user.assignmentId %>
 
   <%= f.submit :submit, :class => "btn btn-primary" %>
 <% end %>

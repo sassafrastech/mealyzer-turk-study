@@ -1,13 +1,12 @@
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 20
+  MAX_CONDITION = 5
   MIN_CONDITION = 10
 
   NUM_CONDITIONS = 4
 
-  MAX_TESTS = 2
-  #Meal.all_tests.length
+  MAX_TESTS = Meal.all_tests.length
 
   def max_tests?
     num_tests >= MAX_TESTS

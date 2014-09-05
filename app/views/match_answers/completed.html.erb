@@ -1,9 +1,7 @@
 <h3>Thank you!</h3>
-
-<%= turkee_form_for(@match_answer, params) do |f| %>
+<%= turkee_form_for(@match_answer, params, {:assignment_id => @match_answer.user.assignmentId}) do |f| %>
   <h4>Click submit to finish</h4>
-  <% #f.hidden_field :id %>
-  <%= hidden_field :assignmentId, @match_answer.user.assignmentId %>
+  <input id="assignmentId" name="assignmentId" type="hidden" value="<%= @match_answer.user.assignmentId %>" />
 
   <%= f.submit :submit, :class => "btn btn-primary" %>
 <% end %>

@@ -1,12 +1,13 @@
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 50
-  MIN_CONDITION = 20
+  MAX_CONDITION = 2
+  MIN_CONDITION = 2
 
   NUM_CONDITIONS = 4
 
-  MAX_TESTS = Meal.all_tests.length
+  MAX_TESTS = 2
+  #Meal.all_tests.length
 
   def max_tests?
     num_tests >= MAX_TESTS
@@ -35,7 +36,6 @@ class User < ActiveRecord::Base
     elsif
       self.condition = random_condition
     end
-    self.condition = 4
   end
 
   def random_condition

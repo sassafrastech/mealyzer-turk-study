@@ -26,6 +26,17 @@ class MatchAnswer < ActiveRecord::Base
     MatchAnswer.first(:offset => rand(MatchAnswer.count))
   end
 
+  def self.next(user)
+    user_id = user.id unless user.nil?
+    test = user.next_test
+    if test.nil?
+      build_for_random_meal(user)
+    else
+      meal = Meal.find(test[0])
+      new(:meal => meal, :component_name => test[1], :user_id => user_id)
+    end
+  end
+
   def self.copy_for_eval(obj, user)
     MatchAnswer.create(:meal_id => obj.meal_id, :user_id => user.id, :food_groups => obj.food_groups,
       :component_name => obj.component_name, :evaluating_id => obj.id)

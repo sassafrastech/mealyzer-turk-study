@@ -14,7 +14,7 @@ class MatchAnswersController < ApplicationController
     else
       @user = User.create
     end
-    @match_answer = MatchAnswer.build_for_random_meal(@user)
+    @match_answer = MatchAnswer.next(@user)
   end
 
   def edit

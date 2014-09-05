@@ -6,10 +6,14 @@ class User < ActiveRecord::Base
 
   NUM_CONDITIONS = 4
 
-  MAX_TESTS = 10
+  MAX_TESTS = Meal.all_tests.length
 
   def max_tests?
     num_tests >= MAX_TESTS
+  end
+
+  def next_test
+    (Meal.all_tests - completed_tests).sample
   end
 
   # move to user
@@ -31,6 +35,7 @@ class User < ActiveRecord::Base
     elsif
       self.condition = random_condition
     end
+    self.condition = 4
   end
 
   def random_condition
@@ -39,5 +44,19 @@ class User < ActiveRecord::Base
     end
     return nil
   end
+
+  def completed_tests
+    completed = []
+    answers = MatchAnswer.where(:user_id => id.to_s)
+    if answers.nil?
+      return nil
+    else
+      answers.each do |a|
+        completed.push([a.meal_id, a.component_name])
+      end
+      return completed
+    end
+  end
+
 
 end

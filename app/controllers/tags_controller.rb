@@ -24,7 +24,6 @@ class TagsController < ApplicationController
 
   private
     def answer_params
-      Rails.logger.debug(params.inspect)
       params.require(:answer).permit(:meal_id, :food_locations)
     end
 

@@ -8,7 +8,20 @@ class Meal < ActiveRecord::Base
 
   def self.random
     Meal.first(:offset => rand(Meal.count))
-    Meal.find(12)
+  end
+
+  def self.all_tests
+    @all_tests ||= build_all_tests
+  end
+
+  def self.build_all_tests
+    all_tests = []
+    Meal.all.each do |meal|
+      meal.food_components.each do |k,v|
+        all_tests << [meal.id, k]
+      end
+    end
+    return all_tests
   end
 
   def sample_component_name
@@ -22,5 +35,7 @@ class Meal < ActiveRecord::Base
   def location_for_component(name)
     food_locations[name]
   end
+
+
 
 end

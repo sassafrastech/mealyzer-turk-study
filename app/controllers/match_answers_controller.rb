@@ -64,7 +64,7 @@ class MatchAnswersController < ApplicationController
 
   def completed
     @match_answer = MatchAnswer.find(params[:id])
-    reset_session
+    #reset_session
   end
 
   private

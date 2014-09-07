@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 
   def random_condition
     1.upto(NUM_CONDITIONS) do |c|
-      return c if User.where(condition: c).where("num_tests > ?", 0).count < MAX_CONDITION
+      return c if User.where(condition: c).where("num_tests > ?", 0).count <= MAX_CONDITION
     end
     return nil
   end

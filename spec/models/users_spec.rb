@@ -14,7 +14,7 @@ describe User do
     before do
       # Create five users of condition 1
       User::MIN_CONDITION.times do |u|
-        User.create
+        User.create(:num_tests => 28)
       end
     end
 
@@ -28,26 +28,26 @@ describe User do
     before do
       # Create five users of condition 1
       (User::MIN_CONDITION * 2).times do |u|
-        User.create
+        User.create(:num_tests => 28)
       end
     end
 
-    it "should create a user with condition 6" do
+    it "should create a user with condition 3" do
       u = User.create
-      expect(u.condition).to eq(6)
+      expect(u.condition).to eq(3)
     end
   end
 
-  context "after 1,2, and 6 have been filled, do the others" do
+  context "after 1,2, and 3 have been filled, do the others" do
     before do
-      (User::MIN_CONDITION * 300).times do |u|
-        User.create
+      (User::MIN_CONDITION * 3).times do |u|
+        User.create(:num_tests => 28)
       end
     end
 
     it "should create a condition that isn't 1,2, 6" do
        u = User.create
-      expect(u.condition).to_not eq(1 || 2 || 6)
+      expect(u.condition).to eq(4)
     end
   end
 

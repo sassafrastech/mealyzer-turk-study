@@ -29,9 +29,9 @@ namespace :db do
     pp "STARTING ************  there are #{match_answers.length} records"
     match_answers.each do |a|
       pp "------- looking at ma id: #{a.id}"
-      if a.food_groups_correct.nil? && !a.food_groups.blank?
+      if a.food_groups_correct.nil?
         pp "IS IT BLANK? #{a.food_groups_correct}"
-        a.food_groups_correct = Meal.find(a.meal_id).food_nutrition[a.component_name].eql?(a.food_groups)
+        a.food_groups_correct = a.meal.food_nutrition[a.component_name] == a.food_groups
         pp "Evaluating food group: #{a.food_groups}"
         pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
         pp "Food group correct? #{a.food_groups_correct}"
@@ -43,7 +43,7 @@ namespace :db do
       end
 
       if a.food_groups_update_correct.nil? && !a.food_groups_update.blank?
-        a.food_groups_update_correct = Meal.find(a.meal_id).food_nutrition[a.component_name].eql?(a.food_groups_update)
+        a.food_groups_update_correct = a.meal.food_nutrition[a.component_name] == a.food_groups_update
         pp "Evaluating food group update: #{a.food_groups_update}"
         pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
         pp "Food group correct? #{a.food_groups_update_correct}"

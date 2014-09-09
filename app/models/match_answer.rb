@@ -105,6 +105,8 @@ class MatchAnswer < ActiveRecord::Base
       self.food_groups_update_correct = meal.food_nutrition[component_name].eql?(food_groups_update)
     end
 
+    return true
+
   end
 
 end

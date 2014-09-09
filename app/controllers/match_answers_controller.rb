@@ -59,6 +59,7 @@ class MatchAnswersController < ApplicationController
       end
     else
       flash.now[:error] = @match_answer.errors.full_messages.to_sentence
+      @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
       render :edit
     end
   end

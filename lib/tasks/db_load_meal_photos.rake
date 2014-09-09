@@ -1,3 +1,4 @@
+require "pp"
 namespace :db do
   task :load_meal_photos => :environment do
     MEALS_PHOTO_PATH = "#{Rails.root}/app/assets/images/meals/"
@@ -21,5 +22,27 @@ namespace :db do
         puts meal.errors.messages
       end
     end
+  end
+
+  task :evaluate_answers => :environment do
+    match_answers = MatchAnswer.all
+    match_answers.each do |a|
+      if a.food_groups_correct.nil? && a.food_groups
+        a.food_groups_correct = Meal.find(a.meal_id).food_nutrition[a.component_name].eql?(a.food_groups)
+        pp "Evaluating food group: #{a.food_groups}"
+        pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
+        pp "Food group correct? #{a.food_groups_correct}"
+      end
+
+      if a.food_groups_update && a.food_groups_update_correct.nil?
+        a.food_groups_update_correct = Meal.find(a.meal_id).food_nutrition[a.component_name].eql?(a.food_groups_update)
+        pp "Evaluating food group update: #{a.food_groups_update}"
+        pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
+        pp "Food group correct? #{a.food_groups_update_correct}"
+      end
+      a.save :validate => false
+
+    end
+
   end
 end

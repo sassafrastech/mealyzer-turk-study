@@ -5,6 +5,8 @@ class MatchAnswer < ActiveRecord::Base
                    2 => "Has a moderate impact on the overall nutritional breakdown",
                    3 => "Has a significant impact on the overall nutritional breakdown"}
 
+  before_save :evaluate_answers
+
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
 
@@ -92,6 +94,17 @@ class MatchAnswer < ActiveRecord::Base
     if user.condition == 4 && changed_answer == true && impact.nil?
       errors.add(:impact, "is missing, please make a selection")
     end
+  end
+
+  def evaluate_answers
+    unless food_groups.nil?
+      self.food_groups_correct = meal.food_nutrition[component_name].eql?(food_groups)
+    end
+
+    unless food_groups_update.nil?
+      self.food_groups_update_correct = meal.food_nutrition[component_name].eql?(food_groups_update)
+    end
+
   end
 
 end

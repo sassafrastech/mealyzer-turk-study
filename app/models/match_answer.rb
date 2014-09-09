@@ -25,7 +25,12 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   def self.random
-    MatchAnswer.first(:offset => rand(MatchAnswer.count))
+    ma = nil
+    loop do
+      ma = MatchAnswer.first(:offset => rand(MatchAnswer.count))
+      break if !ma.food_groups.nil?
+    end
+    return ma
   end
 
   def self.next(user)
@@ -106,7 +111,6 @@ class MatchAnswer < ActiveRecord::Base
     end
 
     return true
-
   end
 
 end

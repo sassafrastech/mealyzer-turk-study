@@ -25,22 +25,36 @@ namespace :db do
   end
 
   task :evaluate_answers => :environment do
-    match_answers = MatchAnswer.all
+    match_answers = MatchAnswer.where('food_groups IS NOT NULL')
+    pp "STARTING ************  there are #{match_answers.length} records"
     match_answers.each do |a|
-      if a.food_groups_correct.blank? && !a.food_groups.blank?
+      pp "------- looking at ma id: #{a.id}"
+      if a.food_groups_correct.nil? && !a.food_groups.blank?
+        pp "IS IT BLANK? #{a.food_groups_correct}"
         a.food_groups_correct = Meal.find(a.meal_id).food_nutrition[a.component_name].eql?(a.food_groups)
         pp "Evaluating food group: #{a.food_groups}"
         pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
         pp "Food group correct? #{a.food_groups_correct}"
+        a.save :validate => false
+        pp "--------- saved ----------"
+      else
+        pp "** food groups is blank or already graded"
+        pp "---------- end -----------"
       end
 
-      if !a.food_groups_update.blank? && a.food_groups_update_correct.blank?
+      if a.food_groups_update_correct.nil? && !a.food_groups_update.blank?
         a.food_groups_update_correct = Meal.find(a.meal_id).food_nutrition[a.component_name].eql?(a.food_groups_update)
         pp "Evaluating food group update: #{a.food_groups_update}"
         pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
         pp "Food group correct? #{a.food_groups_update_correct}"
+        a.save :validate => false
+        pp "--------- saved ----------"
+      else
+        pp "** food groups update is blank or already graded"
+        pp "---------- end -----------"
+
       end
-      a.save :validate => false
+
 
     end
 

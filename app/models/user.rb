@@ -2,13 +2,12 @@ require "pp"
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 2
-  MIN_CONDITION = 2
+  MAX_CONDITION = 5
+  MIN_CONDITION = 5
 
   NUM_CONDITIONS = 4
 
-  MAX_TESTS = 2
-  #Meal.all_tests.length
+  MAX_TESTS = Meal.all_tests.length
 
   def max_tests?
     num_tests >= MAX_TESTS
@@ -39,8 +38,6 @@ class User < ActiveRecord::Base
     else
       self.condition = random_condition
     end
-
-    self.condition = 3
 
   end
 

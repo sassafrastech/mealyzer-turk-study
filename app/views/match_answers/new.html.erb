@@ -11,6 +11,11 @@
     </div>
   </div>
   <div class="row">
+  <% if !@match_answer.user.unique? && User::REQUIRE_UNIQUE %>
+    <div class="alert alert-danger" role="alert">
+      Oops! We are unable to offer you this HIT because we need unique Turkers. Thank you for your interest!
+    </div>
+  <% end %>
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
       <%= image_tag @match_answer.meal.photo, :id => "photo", :class => "annotatable" %>

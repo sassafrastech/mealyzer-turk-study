@@ -93,11 +93,8 @@ class MatchAnswersController < ApplicationController
       case @match_answer.condition
       when 1
         redirect_to new_match_answer_url
-      when 2..3
+      when 2..5
         redirect_to edit_match_answer_path(@match_answer)
-      when 4
-        redirect_to edit_match_answer_path(@match_answer)
-      when 5
       when 6
       when 7
       else

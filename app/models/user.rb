@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
 
   MAX_TESTS = Meal.all_tests.length
 
+  def unique?
+    User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil
+  end
+
   def max_tests?
     num_tests >= MAX_TESTS
   end

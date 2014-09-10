@@ -19,7 +19,7 @@ class MatchAnswersController < ApplicationController
     end
 
     # Make sure we don't have repeat turkers
-    unless @user.unique?
+    if !@user.unique? && User::REQUIRE_UNIQUE
       @disabled = true
     end
 

@@ -1,6 +1,7 @@
 
 <%= simple_form_for @match_answer do |f| %>
   <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well. You can compare your answers with others.</div>
+  <p>Below you can see your own solution and solutions by other Turkers. You can also see how many others came up with each of these solutions. Think carefully about all the solutions, the differences between them and how they compare to yours. Then look again at your own answer and think whether you still think it was correct. Make a note of it in your next job. </p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>

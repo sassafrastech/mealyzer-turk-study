@@ -51,4 +51,19 @@ describe User do
     end
   end
 
+  context "A unique user" do
+    it "should return unique is true" do
+      user = User.create
+      expect(user.unique?).to be(true)
+    end
+  end
+
+  context "A returing user should not be unique" do
+    it "should return false as unique" do
+      user = User.create(:workerId => 123, :num_tests => 28)
+      expect(user.unique?).to be(false)
+    end
+
+  end
+
 end

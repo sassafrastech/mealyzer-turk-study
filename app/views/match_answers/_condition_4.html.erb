@@ -1,8 +1,9 @@
 <%= simple_form_for @match_answer do |f| %>
   <div class="alert alert-success" role="alert">Thank you! Now take a look at an answer from another Turker</div>
-  <p>Now take a look at another image. Here other Turkers already provided their answers. Think about whether
-  this answer is correct or not. If you agree with this answer, simply submit it again. </p>
-  <p> If you disagree with it, PLEASE CHANGE it to correct the mistake. Please explain what was incorrect in the original answer. Also please think about what kind of impact this error has on the overall nutritional assessment.</p>
+  <p>Here other Turkers already provided their answers. Think about whether this answer is correct or not and why. Remember, the best answer should list ALL food groups for each of the ingredients, particularly more complex ones. If you agree with this answer, simply submit it again. If you disagree with it, please change it to correct the mistake. If you decide to change the answer, please explain what was incorrect in the original solution.</p>
+
+  <p>Also please remember, the ultimate goal is to arrive at the nutritional breakdown for this meal: estimated weight/volume of different food groups in this meal. If you made a change to the proposed solution, think about the impact of this change on the overall nutritional breakdown.
+  </p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>

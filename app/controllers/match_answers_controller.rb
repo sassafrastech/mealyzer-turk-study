@@ -6,6 +6,8 @@ class MatchAnswersController < ApplicationController
   def new
     # Only create the user if they have accepted task and there is no user already
     @disabled = true
+
+    # Reload user from session if already assigned
     @user = if session[:current_user_id]
       @disabled = false
       User.find(session[:current_user_id])
@@ -15,6 +17,12 @@ class MatchAnswersController < ApplicationController
     else
       @user = User.create
     end
+
+    # Make sure we don't have repeat turkers
+    if !@user.unique? && User::REQUIRE_UNIQUE
+      @disabled = true
+    end
+
     @match_answer = MatchAnswer.next(@user)
   end
 
@@ -35,7 +43,6 @@ class MatchAnswersController < ApplicationController
     session[:current_user_id] = @user.id
 
     if @match_answer.valid?
-      Rails.logger.debug("MAX TESTS: #{@user.max_tests?}")
       render_by_condition_for_create
     else
       flash.now[:error] = "All food items must be matched to at least one group"

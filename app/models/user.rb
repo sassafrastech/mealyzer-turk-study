@@ -2,12 +2,18 @@ require "pp"
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 5
-  MIN_CONDITION = 5
+  MAX_CONDITION = 4
+  MIN_CONDITION = 4
 
   NUM_CONDITIONS = 4
 
   MAX_TESTS = Meal.all_tests.length
+
+  REQUIRE_UNIQUE = true
+
+  def unique?
+    User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil
+  end
 
   def max_tests?
     num_tests >= MAX_TESTS

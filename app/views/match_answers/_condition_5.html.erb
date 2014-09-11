@@ -1,6 +1,7 @@
 
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well. You can compare your answers with others and see how they rated your answer.</div>
+  <div class="alert alert-success" role="alert">Thank you! We asked other Turkers what they thought about your solution and whether it was correct or incorrect. </div>
+  <p>Below you can see their answers and explanations for what they thoughts was incorrect in your solution. You can see how many other Turkers thought your solution was correct, or incorrect. Please think carefully whether you agree or disagree with these assessments and make a note of it in the next jobs.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>
@@ -32,7 +33,7 @@
               <p>Why people thought it was wrong:</p>
               <ul>
                 <% @summarizer.evaluations(@match_answer)[:explanations].each do |e| %>
-                  <li><%= e %></li>
+                  <li>"<%= e %>"</li>
                 <% end %>
               </ul>
             <% end %>
@@ -40,41 +41,6 @@
         </tr>
     </table>
   </div>
-
-  <% # list of other community answers %>
-  <% @summarizer.other_answers(@match_answer).each_with_index do |(food_groups, num_matches), index| %>
-     <div class="other_answers">
-      <table class="<%= cycle('even', 'odd') %>">
-        <tr><td class="community" colspan=4>Alternative Answer #<%= index + 1 %>:</td></tr>
-        <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
-        <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
-        <% food_groups.each do |k, v| %>
-          <tr><td></td><td><%= k %></td>
-          <% Meal::GROUPS.each do |group| %>
-            <td>
-              <% if v.include?(group) %>
-                <span class='glyphicon glyphicon-ok'></span>
-              <% end %>
-            </td>
-          <% end %>
-          </tr>
-        <% end %>
-        <tr><td colspan=6 class="community">
-        <p>What others thought of this answer:</p>
-          <p>Correct: <%# @summarizer.evaluations(@match_answer).nil? ? "Not evaluated yet" : @summarizer.evaluations(@match_answer)[:correct] %> </p>
-          <p>Incorrect: <%# @summarizer.evaluations(@match_answer).nil? ? "Not evaluated yet" : @summarizer.evaluations(@match_answer)[:incorrect] %> </p>
-            <%# if !@summarizer.evaluations(@match_answer)[:explanations].nil? %>
-              <p>Why people thought it was wrong:</p>
-              <ul>
-                <%# @summarizer.evaluations(@match_answer)[:explanations].each do |e| %>
-                  <li><%# e %></li>
-                <%# end %>
-              </ul>
-            <%# end %>
-        </td></tr>
-      </table>
-    </div>
-  <% end %>
 
   <br/>
   <%= f.submit "Next", :class => "btn btn-primary" %>

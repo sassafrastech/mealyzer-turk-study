@@ -30,12 +30,12 @@ class MatchAnswerSummarizer
       end
     end
     oa = other_answers.sort_by {|food_groups, num| num}
-    Rails.logger.debug("OTHER ANSWERS #{oa.reverse}")
+    oa.reverse
 
   end
 
   def evaluations(answer)
-    build_evaluations(answer)
+    @eval ||= build_evaluations(answer)
   end
 
   private
@@ -55,15 +55,17 @@ class MatchAnswerSummarizer
   end
 
   def build_evaluations(answer)
-    evals = {id: answer.id, correct: 0, incorrect: 0, reasons: []}
-    ma = MatchAnswer.where(:evaluating_id => answer.id)
+    evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
+    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json)
     if !ma.nil?
       ma.each do |a|
          if a.changed_answer
-          evals[:correct] += 1
-        else
           evals[:incorrect] += 1
-          evals[:explanations].push(a.explanation)
+          unless a.explanation.nil?
+            evals[:explanations].push(a.explanation)
+          end
+        else
+          evals[:correct] += 1
         end
       end
       evals[:length] = ma.length

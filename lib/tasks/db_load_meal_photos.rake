@@ -59,4 +59,15 @@ namespace :db do
     end
 
   end
+
+  task :evaluate_all_answers => :environment do
+    # get all match answers that haven't been evaluated yet
+    match_answers = MatchAnswer.where('food_groups IS NOT NULL AND food_groups_correct_all IS NULL')
+
+    match_answers.each do |a|
+      pp "evaluating answer: #{a}"
+      a.save :validate => false
+    end
+
+  end
 end

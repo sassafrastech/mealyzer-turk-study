@@ -5,11 +5,11 @@ class User < ActiveRecord::Base
   MAX_CONDITION = 4
   MIN_CONDITION = 4
 
-  NUM_CONDITIONS = 5
+  NUM_CONDITIONS = 6
 
   MAX_TESTS = Meal.all_tests.length
 
-  REQUIRE_UNIQUE = true
+  REQUIRE_UNIQUE = false
 
   def unique?
     User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil
@@ -43,6 +43,8 @@ class User < ActiveRecord::Base
       self.condition = 4
     elsif User.where(condition: 5).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 5
+    elsif User.where(condition: 6).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 6
     else
       self.condition = random_condition
     end

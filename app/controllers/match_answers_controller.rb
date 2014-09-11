@@ -79,15 +79,22 @@ class MatchAnswersController < ApplicationController
   private
 
   def update_by_condition(params)
-    @match_answer.food_groups_update = params[:food_groups]
-    @match_answer.explanation = params[:explanation]
-    @match_answer.build_answers_changed!
 
     case @match_answer.condition
+    when 3,6
+      @match_answer.food_groups_update = params[:food_groups]
+      @match_answer.explanation = params[:explanation]
+      @match_answer.build_answers_changed!
+      @match_answer.save
     when 4
+      @match_answer.food_groups_update = params[:food_groups]
+      @match_answer.explanation = params[:explanation]
+      @match_answer.build_answers_changed!
       @match_answer.impact = params[:impact]
+      @match_answer.save
+    when 5
+      # do nothing
     end
-    @match_answer.save
   end
 
   def render_by_condition_for_create
@@ -100,11 +107,8 @@ class MatchAnswersController < ApplicationController
       case @match_answer.condition
       when 1
         redirect_to new_match_answer_url
-      when 2..3
+      when 2..5
         redirect_to edit_match_answer_path(@match_answer)
-      when 4
-        redirect_to edit_match_answer_path(@match_answer)
-      when 5
       when 6
       when 7
       else

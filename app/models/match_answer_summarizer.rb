@@ -31,6 +31,11 @@ class MatchAnswerSummarizer
     end
     oa = other_answers.sort_by {|food_groups, num| num}
     oa.reverse
+
+  end
+
+  def evaluations(answer)
+    @eval ||= build_evaluations(answer)
   end
 
   private
@@ -46,6 +51,27 @@ class MatchAnswerSummarizer
       (answer.food_groups || {}).each do |item, groups|
         increment(item,groups)
       end
+    end
+  end
+
+  def build_evaluations(answer)
+    evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
+    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json)
+    if !ma.nil?
+      ma.each do |a|
+         if a.changed_answer
+          evals[:incorrect] += 1
+          unless a.explanation.nil?
+            evals[:explanations].push(a.explanation)
+          end
+        else
+          evals[:correct] += 1
+        end
+      end
+      evals[:length] = ma.length
+      return evals
+    else
+      return nil
     end
   end
 

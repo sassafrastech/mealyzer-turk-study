@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   MAX_CONDITION = 4
   MIN_CONDITION = 4
 
-  NUM_CONDITIONS = 4
+  NUM_CONDITIONS = 5
 
   MAX_TESTS = Meal.all_tests.length
 
@@ -41,6 +41,8 @@ class User < ActiveRecord::Base
       self.condition = 3
     elsif User.where(condition: 4).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 4
+    elsif User.where(condition: 5).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 5
     else
       self.condition = random_condition
     end

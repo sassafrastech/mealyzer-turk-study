@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140908185703) do
+ActiveRecord::Schema.define(version: 20140911152421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 20140908185703) do
     t.integer  "impact"
     t.boolean  "food_groups_correct"
     t.boolean  "food_groups_update_correct"
+    t.text     "food_groups_correct_all"
+    t.text     "food_groups_update_correct_all"
   end
 
   add_index "match_answers", ["evaluating_id"], name: "index_match_answers_on_evaluating_id", using: :btree

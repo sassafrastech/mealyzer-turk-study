@@ -9,6 +9,8 @@ class MatchAnswer < ActiveRecord::Base
 
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
+  serialize :food_groups_correct_all, JSON
+  serialize :food_groups_update_correct_all, JSON
 
   delegate :condition, :num_tests, to: :user
 
@@ -103,14 +105,37 @@ class MatchAnswer < ActiveRecord::Base
 
   def evaluate_answers
     unless food_groups.nil?
+      # overall assessment
       self.food_groups_correct = meal.food_nutrition[component_name].eql?(food_groups)
+
+      # individual assessment
+      self.food_groups_correct_all = individual_answers(food_groups)
     end
 
     unless food_groups_update.nil?
+      # overall assessment
       self.food_groups_update_correct = meal.food_nutrition[component_name].eql?(food_groups_update)
-    end
 
+      # individual assessment
+      self.food_groups_update_correct_all = individual_answers(food_groups_update)
+    end
     return true
+  end
+
+  def individual_answers(compare_food_groups)
+    {}.tap do |correct_all|
+      meal.food_nutrition[component_name].each do |item|
+        item = item[0]
+        correct_all[item] = {}
+        actual_groups = meal.food_nutrition[component_name][item]
+        answered_groups = compare_food_groups[item]
+        Meal::GROUPS.each do |g|
+          unless actual_groups.nil? || answered_groups.nil?
+            correct_all[item][g] = actual_groups.include?(g) == answered_groups.include?(g) ? 'correct' : 'incorrect'
+          end
+        end
+      end
+    end
   end
 
 end

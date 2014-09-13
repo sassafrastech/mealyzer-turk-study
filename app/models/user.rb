@@ -2,8 +2,8 @@ require "pp"
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 4
-  MIN_CONDITION = 4
+  MAX_CONDITION = 3
+  MIN_CONDITION = 3
 
   NUM_CONDITIONS = 6
 
@@ -50,7 +50,6 @@ class User < ActiveRecord::Base
     else
       self.condition = random_condition
     end
-
   end
 
   def random_condition

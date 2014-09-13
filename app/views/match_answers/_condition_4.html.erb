@@ -1,8 +1,8 @@
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Now take a look at an answer from another Turker</div>
-  <p>Here other Turkers already provided their answers. Think about whether this answer is correct or not and why. Remember, the best answer should list ALL food groups for each of the ingredients, particularly more complex ones. If you agree with this answer, simply submit it again. If you disagree with it, please change it to correct the mistake. If you decide to change the answer, please explain what was incorrect in the original solution.</p>
+  <div class="alert alert-success" role="alert">Thank you! Now take a look at an answer from another Turker.</div>
+  <p>Other Turkers have already provided answers for it. Here is one of them. Please tell us whether this answer is correct or not. Remember, the best answer should list ALL food groups for each of the ingredients. If you agree with this answer, simply submit it again. If you disagree with it, please change it to correct the mistake. If you decide to change the answer, <strong>please explain what was incorrect</strong> in the original solution.  </p>
 
-  <p>Also please remember, the ultimate goal is to arrive at the nutritional breakdown for this meal: estimated weight/volume of different food groups in this meal. If you made a change to the proposed solution, think about the impact of this change on the overall nutritional breakdown.
+  <p>If you decide to make a change, think about how this change impacts the overall nutritional breakdown of this meal. You may find that some changes have a significant impact (for example switching to a new food group for a main ingredient in a dish), and others may have a small impact (adding an additional food group to a small ingredient of a dish).
   </p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>

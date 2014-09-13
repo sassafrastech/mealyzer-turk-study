@@ -50,6 +50,8 @@ class User < ActiveRecord::Base
     else
       self.condition = random_condition
     end
+
+    self.study_id = STUDY_ID
   end
 
   def random_condition

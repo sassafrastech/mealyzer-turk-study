@@ -37,6 +37,8 @@ class MatchAnswersController < ApplicationController
 
   def create
     answer_params = params.require(:match_answer).permit!
+    answer_params[:user_id] = answer_params[:user_id].to_i
+    Rails.logger.debug("HAKJFKSJF  #{answer_params.inspect}")
     @match_answer = MatchAnswer.create(answer_params)
 
     @user = User.find(@match_answer.user_id)
@@ -94,6 +96,9 @@ class MatchAnswersController < ApplicationController
       @match_answer.save
     when 5
       # do nothing
+
+    when 7
+
     end
   end
 
@@ -104,6 +109,7 @@ class MatchAnswersController < ApplicationController
     else
 
       Rails.logger.debug("condition: #{@match_answer.condition}")
+      Rails.logger.debug("num tests: #{@match_answer.num_tests}")
       case @match_answer.condition
       when 1
         redirect_to new_match_answer_url
@@ -111,6 +117,13 @@ class MatchAnswersController < ApplicationController
         redirect_to edit_match_answer_path(@match_answer)
       when 6
       when 7
+        # if this is the 5th test,
+        if (@user.num_tests % 5) == 0
+          #&& (@user.num_tests != 1)
+          redirect_to edit_match_answer_path(@match_answer)
+        else
+          redirect_to new_match_answer_url
+        end
       else
         Rails.logger.debug("in case else")
       end

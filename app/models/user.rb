@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
 
   def completed_tests
     completed = []
-    answers = MatchAnswer.where(:user_id => id.to_s)
+    answers = MatchAnswer.where(:user_id => id.to_s).where(:evaluating_id => nil)
     if answers.nil?
       return nil
     else

@@ -6,13 +6,11 @@
   </div>
   <div class="row">
   <%= render partial: "shared/flash_messages", flash: flash %>
-  <% unless @match_answer.condition == 7  %>
   <%= @match_answer.num_tests %>
     <div class="col-md-5">
       <%= image_tag @match_answer.meal.photo, :id => "photo_#{@match_answer.id}_#{@match_answer.component_name}" %>
       <% #DRAW Rectangle %>
     </div>
-  <% end %>
     <div class="col-md-6">
       <h3><%= @match_answer.meal.food_options unless @match_answer.condition == 7 %></h3>
       <%= render :partial => "condition_#{@match_answer.condition}" %>
@@ -20,7 +18,6 @@
   </div>
 </div>
 
-<% unless @match_answer.condition == 7 %>
   <script>
     jQuery(window).load(function(){
       new Mealyzer.Views.MatchesView({
@@ -32,5 +29,4 @@
       });
     });
   </script>
-<% end %>
 

@@ -29,7 +29,7 @@ class MatchAnswersController < ApplicationController
     @match_answer = MatchAnswer.find(params[:id])
     # Build evaluation copy
     if @match_answer.condition == 4
-      @match_answer = MatchAnswer.copy_for_eval(MatchAnswer.random, @match_answer.user)
+      @match_answer = MatchAnswer.copy_for_eval(MatchAnswer.equivalent(@match_answer), @match_answer.user)
     end
     @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
   end
@@ -83,12 +83,12 @@ class MatchAnswersController < ApplicationController
     case @match_answer.condition
     when 3,6
       @match_answer.food_groups_update = params[:food_groups]
-      @match_answer.explanation = params[:explanation]
+      @match_answer.explanation = params[:explanation].html_safe
       @match_answer.build_answers_changed!
       @match_answer.save
     when 4
       @match_answer.food_groups_update = params[:food_groups]
-      @match_answer.explanation = params[:explanation]
+      @match_answer.explanation = params[:explanation].html_safe
       @match_answer.build_answers_changed!
       @match_answer.impact = params[:impact]
       @match_answer.save
@@ -102,29 +102,38 @@ class MatchAnswersController < ApplicationController
 
   def render_by_condition_for_create
     @user.increment_tests!
-    if @user.max_tests? && (@user.condition == 1 || @user.condition == 7)
-      redirect_to completed_match_answer_path(@match_answer)
+
+    # Pre-test, everyone gets 5
+    if @user.num_tests <= 5
+      @match_answer.task_type = "Pre-test"
+      @match_answer.save :validate => false
+      redirect_to new_match_answer_url
     else
 
-      Rails.logger.debug("condition: #{@match_answer.condition}")
-      Rails.logger.debug("num tests: #{@match_answer.num_tests}")
-      case @match_answer.condition
-      when 1
-        redirect_to new_match_answer_url
-      when 2..6
-        redirect_to edit_match_answer_path(@match_answer)
-      when 6
-      when 7
-        # if this is the 5th test
-        if (@user.num_tests % 5) == 0
-          redirect_to edit_match_answer_group_path
-        else
-          redirect_to new_match_answer_url
-        end
+      if @user.max_tests? && (@user.condition == 1 || @user.condition == 7)
+        redirect_to completed_match_answer_path(@match_answer)
       else
-        Rails.logger.debug("in case else")
-      end
 
+        Rails.logger.debug("condition: #{@match_answer.condition}")
+        Rails.logger.debug("num tests: #{@match_answer.num_tests}")
+        case @match_answer.condition
+        when 1
+          redirect_to new_match_answer_url
+        when 2..6
+          redirect_to edit_match_answer_path(@match_answer)
+        when 6
+        when 7
+          # if this is the 5th test
+          if (@user.num_tests % 5) == 0
+            redirect_to edit_match_answer_group_path
+          else
+            redirect_to new_match_answer_url
+          end
+        else
+          Rails.logger.debug("in case else")
+        end
+
+      end
     end
 
   end

@@ -5,6 +5,7 @@ class MatchAnswer < ActiveRecord::Base
                    2 => "Has a moderate impact on the overall nutritional breakdown",
                    3 => "Has a significant impact on the overall nutritional breakdown"}
 
+  before_create :increment_task_num
   before_save :evaluate_answers
 
   serialize :food_groups, JSON
@@ -48,11 +49,15 @@ class MatchAnswer < ActiveRecord::Base
 
   def self.copy_for_eval(obj, user)
     MatchAnswer.create(:meal_id => obj.meal_id, :user_id => user.id, :food_groups => obj.food_groups,
-      :component_name => obj.component_name, :evaluating_id => obj.id)
+      :component_name => obj.component_name, :evaluating_id => obj.id, :task_type => "peer assessment")
   end
 
   def self.last_five(user)
     where(user_id: user.id).order("created_at DESC").limit(5).reverse
+  end
+
+  def self.equivalent(answer)
+    where(:meal_id => answer.meal_id).where(:component_name => answer.component_name).where(:id != answer.id).sample
   end
 
   def item_has_group?(item, group)
@@ -113,6 +118,17 @@ class MatchAnswer < ActiveRecord::Base
     if user.condition == 4 && changed_answer == true && impact.nil?
       errors.add(:impact, "is missing, please make a selection")
     end
+  end
+
+  def increment_task_num
+    if user.condition == 4 && evaluating_id
+      self.task_type = "peer assessment"
+      self.task_num = user.num_tests
+    else
+      self.task_type = "regular"
+      self.task_num = user.num_tests + 1
+    end
+    return true
   end
 
   def evaluate_answers

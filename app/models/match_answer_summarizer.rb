@@ -33,12 +33,6 @@ class MatchAnswerSummarizer
     oa.reverse
   end
 
-  def last_five_answers(answer)
-    m = MatchAnswer.where(user_id: answer.user.id).joins(:user).order("created_at DESC").take(5)
-    Rails.logger.debug(m)
-    return m.reverse
-  end
-
   def evaluations(answer)
     @eval ||= build_evaluations(answer)
   end

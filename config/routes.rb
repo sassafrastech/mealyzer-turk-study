@@ -8,4 +8,6 @@ MealyzerStudy::Application.routes.draw do
     end
   end
 
+  resource :match_answer_group
+
 end

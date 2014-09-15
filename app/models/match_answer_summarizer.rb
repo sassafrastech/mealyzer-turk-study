@@ -31,7 +31,6 @@ class MatchAnswerSummarizer
     end
     oa = other_answers.sort_by {|food_groups, num| num}
     oa.reverse
-
   end
 
   def evaluations(answer)

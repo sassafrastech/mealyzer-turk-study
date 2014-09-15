@@ -51,6 +51,10 @@ class MatchAnswer < ActiveRecord::Base
       :component_name => obj.component_name, :evaluating_id => obj.id)
   end
 
+  def self.last_five(user)
+    where(user_id: user.id).order("created_at DESC").limit(5).reverse
+  end
+
   def item_has_group?(item, group)
     return false if food_groups.nil?
     (food_groups[item] || []).include?(group)
@@ -75,6 +79,12 @@ class MatchAnswer < ActiveRecord::Base
 
   end
 
+  # Copies food group answers to food_groups_update for use in review form,
+  # unless food_groups_update has already been set.
+  def init_for_review
+    self.food_groups_update ||= food_groups
+  end
+
   private
   def food_groups_exist
     if food_groups.nil?
@@ -87,12 +97,14 @@ class MatchAnswer < ActiveRecord::Base
   def food_groups_updated
     return if (changed_answer.nil?) || condition == 2
     if food_groups_update.nil? || (food_groups.keys.length != food_groups_update.keys.length)
+      # Since they messed up, reset the update value to the original.
+      self.food_groups_update = food_groups
       errors.add(:food_groups_update, ": all food items must have a food group selected")
     end
   end
 
   def explanation_when_updated
-    if (changed_answer == true) && (explanation.nil? || explanation.empty?)
+    if changed_answer && (explanation.nil? || explanation.empty?)
       errors.add(:explanation, "is required when you change your answer")
     end
   end

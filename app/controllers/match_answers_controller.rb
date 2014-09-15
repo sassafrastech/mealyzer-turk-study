@@ -1,16 +1,15 @@
 require 'pp'
 
 class MatchAnswersController < ApplicationController
-  after_action :allow_amt_iframe
 
   def new
     # Only create the user if they have accepted task and there is no user already
     @disabled = true
 
     # Reload user from session if already assigned
-    @user = if session[:current_user_id]
+    @user = if current_user
       @disabled = false
-      User.find(session[:current_user_id])
+      current_user
     elsif params[:assignmentId]
       @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
       User.create(params.permit(:assignmentId, :workerId, :hitId))
@@ -37,6 +36,7 @@ class MatchAnswersController < ApplicationController
 
   def create
     answer_params = params.require(:match_answer).permit!
+    answer_params[:user_id] = answer_params[:user_id].to_i
     @match_answer = MatchAnswer.create(answer_params)
 
     @user = User.find(@match_answer.user_id)
@@ -94,16 +94,20 @@ class MatchAnswersController < ApplicationController
       @match_answer.save
     when 5
       # do nothing
+
+    when 7
+
     end
   end
 
   def render_by_condition_for_create
     @user.increment_tests!
-    if @user.max_tests? && @user.condition == 1
+    if @user.max_tests? && (@user.condition == 1 || @user.condition == 7)
       redirect_to completed_match_answer_path(@match_answer)
     else
 
       Rails.logger.debug("condition: #{@match_answer.condition}")
+      Rails.logger.debug("num tests: #{@match_answer.num_tests}")
       case @match_answer.condition
       when 1
         redirect_to new_match_answer_url
@@ -111,20 +115,18 @@ class MatchAnswersController < ApplicationController
         redirect_to edit_match_answer_path(@match_answer)
       when 6
       when 7
+        # if this is the 5th test
+        if (@user.num_tests % 5) == 0
+          redirect_to edit_match_answer_group_path
+        else
+          redirect_to new_match_answer_url
+        end
       else
         Rails.logger.debug("in case else")
       end
 
     end
 
-  end
-
-  def allow_iframe
-    response.headers.except! 'X-Frame-Options'
-  end
-
-  def allow_amt_iframe
-    response.headers['X-Frame-Options'] = 'ALLOW-FROM https://workersandbox.mturk.com'
   end
 
 end

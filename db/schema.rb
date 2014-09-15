@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912141214) do
+ActiveRecord::Schema.define(version: 20140912215846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "match_answers", force: true do |t|
     t.integer  "meal_id"
-    t.string   "user_id"
+    t.integer  "user_id"
     t.text     "food_groups"
     t.datetime "created_at"
     t.datetime "updated_at"

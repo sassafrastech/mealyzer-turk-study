@@ -18,7 +18,7 @@
   <% end %>
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
-      <%= image_tag @match_answer.meal.photo, :id => "photo", :class => "annotatable" %>
+      <%= image_tag @match_answer.meal.photo, :id => "photo_#{@match_answer.id}", :class => "annotatable" %>
       <% #DRAW Rectangle %>
     </div>
     <div class="col-md-6">
@@ -61,7 +61,8 @@
       el: '.matches',
       geometry: <%= @match_answer.location.to_json.html_safe %>,
       name: "<%= @match_answer.component_name %>",
-      source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>"
+      source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>",
+      id: "<%= @match_answer.id %>"
     });
   });
 </script>

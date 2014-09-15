@@ -47,11 +47,14 @@ class User < ActiveRecord::Base
       self.condition = 5
     elsif User.where(condition: 6).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 6
+    elsif User.where(condition: 7).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 7
     else
       self.condition = random_condition
     end
 
     self.study_id = STUDY_ID
+
   end
 
   def random_condition

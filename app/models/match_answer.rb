@@ -125,27 +125,47 @@ class MatchAnswer < ActiveRecord::Base
       self.task_type = "peer assessment"
       self.task_num = user.num_tests
     else
-      self.task_type = "regular"
+      self.task_type = "primary"
       self.task_num = user.num_tests + 1
     end
     return true
   end
 
   def evaluate_answers
+    self.num_ingredients = food_groups.keys.length
+
     unless food_groups.nil?
       # overall assessment
       self.food_groups_correct = meal.food_nutrition[component_name].eql?(food_groups)
 
+      answers = individual_answers(food_groups)
+
       # individual assessment
-      self.food_groups_correct_all = individual_answers(food_groups)
+      self.food_groups_correct_all = answers
+
+      values = []
+      answers.values.each do |v|
+        v.each_value {|value| values.push(value)}
+      end
+
+      self.num_correct = values.select{|a| a == "correct"}.length
     end
 
     unless food_groups_update.nil?
       # overall assessment
       self.food_groups_update_correct = meal.food_nutrition[component_name].eql?(food_groups_update)
 
+      answers = individual_answers(food_groups_update)
+
       # individual assessment
-      self.food_groups_update_correct_all = individual_answers(food_groups_update)
+      self.food_groups_update_correct_all = answers
+
+      values = []
+      answers.values.each do |v|
+        v.each_value {|value| values.push(value)}
+      end
+
+      self.num_correct_update = values.select{|a| a == "correct"}.length
     end
     return true
   end

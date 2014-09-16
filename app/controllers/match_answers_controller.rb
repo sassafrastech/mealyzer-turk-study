@@ -105,7 +105,7 @@ class MatchAnswersController < ApplicationController
 
     # Pre-test, everyone gets 5
     if @user.num_tests <= 5
-      @match_answer.task_type = "Pre-test"
+      @match_answer.task_type = "pre-test"
       @match_answer.save :validate => false
       redirect_to new_match_answer_url
     else

@@ -55,6 +55,8 @@ class User < ActiveRecord::Base
 
     self.study_id = STUDY_ID
 
+    self.condition = 4
+
   end
 
   def random_condition

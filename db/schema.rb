@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140915133234) do
+ActiveRecord::Schema.define(version: 20140915202435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(version: 20140915133234) do
     t.text     "food_groups_update_correct_all"
     t.integer  "task_num"
     t.string   "task_type"
+    t.integer  "num_ingredients"
+    t.integer  "num_correct"
+    t.integer  "num_correct_update"
   end
 
   add_index "match_answers", ["evaluating_id"], name: "index_match_answers_on_evaluating_id", using: :btree

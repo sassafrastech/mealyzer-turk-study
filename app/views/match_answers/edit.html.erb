@@ -7,7 +7,7 @@
   <div class="row">
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
-      <%= image_tag @match_answer.meal.photo, :id => "photo_#{@match_answer.id}_#{@match_answer.component_name}" %>
+      <%= image_tag @match_answer.meal.photo, :id => "photo_#{@match_answer.id}_#{@match_answer.component_name.squish.downcase.tr(" ","_")}" %>
       <% #DRAW Rectangle %>
     </div>
     <div class="col-md-6">
@@ -24,7 +24,7 @@
         geometry: <%= @match_answer.location.to_json.html_safe %>,
         name: "<%= @match_answer.component_name %>",
         source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>",
-        id: "<%= '#{@match_answer.id}_{@match_answer.component_name}' %>"
+        id: '<%= "#{@match_answer.id}_#{@match_answer.component_name.squish.downcase.tr(' ', '_')}" %>'
       });
     });
   </script>

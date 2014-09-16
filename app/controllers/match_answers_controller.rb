@@ -10,15 +10,21 @@ class MatchAnswersController < ApplicationController
     @user = if current_user
       @disabled = false
       current_user
-    elsif params[:assignmentId]
+    # Check to see if user exists
+    elsif params[:workerId]
+      u = User.where(:workerId => params[:workerId]).first
       @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      User.create(params.permit(:assignmentId, :workerId, :hitId))
+      u.present? ? u : User.create(params.permit(:assignmentId, :workerId, :hitId))
+    # Else just create a new user
     else
       @user = User.create
     end
 
+    Rails.logger.debug("THIS IS THE USER: #{@user.inspect}")
+
     # Make sure we don't have repeat turkers
-    if !@user.unique? && User::REQUIRE_UNIQUE
+    if !@user.unique?
+      pp "We are totally DIABLING BECAUSE NOT UNIQUE"
       @disabled = true
     end
 

@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="row">
-  <% if !@match_answer.user.unique? && User::REQUIRE_UNIQUE %>
+  <% if !@match_answer.user.unique? %>
     <div class="alert alert-danger" role="alert">
       Oops! We are unable to offer you this HIT because we need unique Turkers. Thank you for your interest!
     </div>

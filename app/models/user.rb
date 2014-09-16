@@ -9,12 +9,22 @@ class User < ActiveRecord::Base
 
   MAX_TESTS = Meal.all_tests.length
 
-  REQUIRE_UNIQUE = false
-  STUDY_ID = "pilot3"
+  REQUIRE_UNIQUE = true
+  STUDY_ID = "pilot4"
 
   def unique?
     # should be unique across all studies
-    User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil
+    unique = (User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil)
+
+    Rails.logger.debug("NUM TESTS #{num_tests}")
+    Rails.logger.debug("Unique?? #{unique}")
+
+    if !User::REQUIRE_UNIQUE
+      return true
+    else
+      return unique || (num_tests < User::MAX_TESTS)
+    end
+
   end
 
   def max_tests?
@@ -54,8 +64,6 @@ class User < ActiveRecord::Base
     end
 
     self.study_id = STUDY_ID
-
-    self.condition = 4
 
   end
 

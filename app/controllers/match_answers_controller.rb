@@ -3,32 +3,8 @@ require 'pp'
 class MatchAnswersController < ApplicationController
 
   def new
-    # Only create the user if they have accepted task and there is no user already
-    @disabled = true
-
-    # Reload user from session if already assigned
-    @user = if current_user
-      @disabled = false
-      current_user
-    # Check to see if user exists
-    elsif params[:workerId]
-      u = User.where(:workerId => params[:workerId]).first
-      @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      u.present? ? u : User.create(params.permit(:assignmentId, :workerId, :hitId))
-    # Else just create a new user
-    else
-      @user = User.create
-    end
-
-    Rails.logger.debug("THIS IS THE USER: #{@user.inspect}")
-
-    # Make sure we don't have repeat turkers
-    if !@user.unique?
-      pp "We are totally DIABLING BECAUSE NOT UNIQUE"
-      @disabled = true
-    end
-
-    @match_answer = MatchAnswer.next(@user)
+    @disabled = false
+    @match_answer = MatchAnswer.next(current_user)
   end
 
   def edit

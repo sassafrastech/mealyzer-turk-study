@@ -12,6 +12,11 @@ class User < ActiveRecord::Base
   REQUIRE_UNIQUE = true
   STUDY_ID = "pilot4"
 
+  serialize :pre_test
+  serialize :post_test
+
+  attr_accessor :pre_test_1, :pre_test_2
+
   def unique?
     # should be unique across all studies
     unique = (User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil)
@@ -38,6 +43,12 @@ class User < ActiveRecord::Base
   # move to user
   def increment_tests!
     self.num_tests += 1
+    self.save
+  end
+
+  def assign_pre_test(answers)
+    return false if answers.nil? || answers[:pre_test_1].nil? || answers[:pre_test_2].nil?
+    self.pre_test = answers
     self.save
   end
 

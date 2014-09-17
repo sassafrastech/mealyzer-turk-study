@@ -1,0 +1,41 @@
+
+<% if !@user.unique? %>
+  <div class="alert alert-danger" role="alert">
+    Oops! We are unable to offer you this HIT because we need unique Turkers. Thank you for your interest!
+  </div>
+<% end %>
+
+<h3>Instructions</h3>
+<p>In each photo you see below, a box containing one food item will be highlighted. Next to it, you will see a description of this item, and its ingredients identified by other Turkers. Your job is to match each of these ingredients to the four food groups: protein, fat, carbohydrate, and fiber. The ingredients can be matched to one dominant food group (for example bread is mostly carbohydrate), or to several food groups simultaneously (for example milk is a carbohydrate as well as protein and fat). The ultimate goal is to arrive at the nutritional breakdown for this meal: estimated weight/volume of different food groups in this meal. This HIT is one step towards that goal.
+</p>
+
+<p>
+Once you decided on a solution, check appropriate check boxes and click “Submit” button. This HIT includes 28 matching jobs for 17 different images of meals. Most of the meals have multiple components (for example meat and a side-dish); each job will include only 1 component of a given meal. You will need to complete all 28 jobs to collect payment. Please feel free to take as much time as you need to come up with the best answer. This HIT should take 4-8 minutes.</p>
+</div>
+
+<%= image_tag("sample.png", :class => "sample") %>
+
+<%= render partial: "shared/flash_messages", flash: flash %>
+
+<h2>Before we start...</h2>
+
+<%= simple_form_for @user, method: 'put' do |f| %>
+  <%# f.hidden_field :user_id => @user.id %>
+  <ol>
+    <li>
+      <%= f.error :first, :class => 'baseError' %>
+      <label><%= I18n.t("survey.pre_test_questions.first") %></label>
+      <%= f.collection_radio_buttons(:pre_test_1, t("survey.answers_knowledge"), :first, :last, {:item_wrapper_class => 'radio'}, {:disabled => @disabled}) %>
+
+    </li>
+
+    <li>
+      <%= f.error :first, :class => 'baseError' %>
+      <label><%= I18n.t("survey.pre_test_questions.second") %></label>
+      <%= f.collection_radio_buttons(:pre_test_2, t("survey.answers_confidence"), :first, :last, {:item_wrapper_class => 'radio'}, {:disabled => @disabled}) %>
+    </li>
+  </ol>
+
+  <%= f.submit "Start", :class => "btn btn-primary", :disabled => @disabled %>
+
+<% end %>

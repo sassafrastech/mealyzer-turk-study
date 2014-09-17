@@ -42,7 +42,7 @@ class MatchAnswersController < ApplicationController
     if @match_answer.valid?
       # Check if we have done enough tests yet
       if @user.max_tests?
-        redirect_to completed_match_answer_path(@match_answer)
+        redirect_to post_test_path(@match_answer)
       else
         redirect_to new_match_answer_path
       end
@@ -51,11 +51,6 @@ class MatchAnswersController < ApplicationController
       @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
       render :edit
     end
-  end
-
-  def completed
-    @match_answer = MatchAnswer.find(params[:id])
-    reset_session
   end
 
   private
@@ -93,7 +88,7 @@ class MatchAnswersController < ApplicationController
     else
 
       if @user.max_tests? && (@user.condition == 1 || @user.condition == 7)
-        redirect_to completed_match_answer_path(@match_answer)
+        redirect_to post_test_path(@match_answer)
       else
 
         Rails.logger.debug("condition: #{@match_answer.condition}")

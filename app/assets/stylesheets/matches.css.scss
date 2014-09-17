@@ -47,6 +47,11 @@ form, table {
   label {
     font-weight: initial;
   }
+
+  ul {
+    list-style-type: none;
+    margin-bottom: 20px;
+  }
 }
 
 div.my_answer {

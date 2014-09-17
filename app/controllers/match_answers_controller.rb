@@ -3,32 +3,8 @@ require 'pp'
 class MatchAnswersController < ApplicationController
 
   def new
-    # Only create the user if they have accepted task and there is no user already
-    @disabled = true
-
-    # Reload user from session if already assigned
-    @user = if current_user
-      @disabled = false
-      current_user
-    # Check to see if user exists
-    elsif params[:workerId]
-      u = User.where(:workerId => params[:workerId]).first
-      @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      u.present? ? u : User.create(params.permit(:assignmentId, :workerId, :hitId))
-    # Else just create a new user
-    else
-      @user = User.create
-    end
-
-    Rails.logger.debug("THIS IS THE USER: #{@user.inspect}")
-
-    # Make sure we don't have repeat turkers
-    if !@user.unique?
-      pp "We are totally DIABLING BECAUSE NOT UNIQUE"
-      @disabled = true
-    end
-
-    @match_answer = MatchAnswer.next(@user)
+    @disabled = false
+    @match_answer = MatchAnswer.next(current_user)
   end
 
   def edit
@@ -66,7 +42,7 @@ class MatchAnswersController < ApplicationController
     if @match_answer.valid?
       # Check if we have done enough tests yet
       if @user.max_tests?
-        redirect_to completed_match_answer_path(@match_answer)
+        redirect_to post_test_path(@match_answer)
       else
         redirect_to new_match_answer_path
       end
@@ -75,11 +51,6 @@ class MatchAnswersController < ApplicationController
       @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
       render :edit
     end
-  end
-
-  def completed
-    @match_answer = MatchAnswer.find(params[:id])
-    reset_session
   end
 
   private
@@ -117,7 +88,7 @@ class MatchAnswersController < ApplicationController
     else
 
       if @user.max_tests? && (@user.condition == 1 || @user.condition == 7)
-        redirect_to completed_match_answer_path(@match_answer)
+        redirect_to post_test_path(@match_answer)
       else
 
         Rails.logger.debug("condition: #{@match_answer.condition}")

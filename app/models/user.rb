@@ -7,10 +7,19 @@ class User < ActiveRecord::Base
 
   NUM_CONDITIONS = 6
 
-  MAX_TESTS = Meal.all_tests.length
+  MAX_TESTS = 6
+  #Meal.all_tests.length
 
   REQUIRE_UNIQUE = true
   STUDY_ID = "pilot4"
+
+  POST_TEST_OPTION_SETS = {:level_difficulty => :answers_difficulty,  :confident => :answers_confidence, :confident_groups => :answers_confidence,
+    :feedback => :answers_agree, :future => :answers_agree, :learned => :answers_agree}
+
+  serialize :pre_test
+  serialize :post_test
+
+  attr_accessor :pre_test_1, :pre_test_2
 
   def unique?
     # should be unique across all studies
@@ -38,6 +47,18 @@ class User < ActiveRecord::Base
   # move to user
   def increment_tests!
     self.num_tests += 1
+    self.save
+  end
+
+  def assign_pre_test(answers)
+    return false if answers.nil? || answers[:pre_test_1].nil? || answers[:pre_test_2].nil?
+    self.pre_test = answers
+    self.save
+  end
+
+  def assign_post_test(answers)
+    self.post_test = answers
+    return false if answers.nil? || (answers.length < I18n.t('survey.post_test_questions').length+1)
     self.save
   end
 

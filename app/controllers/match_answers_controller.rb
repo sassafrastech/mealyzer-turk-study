@@ -87,7 +87,7 @@ class MatchAnswersController < ApplicationController
       redirect_to new_match_answer_url
     else
 
-      if @user.max_tests? && (@user.condition == 1 || @user.condition == 7)
+      if @user.max_tests? && (@user.condition == 1 || @user.condition == 7 || @user.condition == 8)
         redirect_to post_test_path(@match_answer)
       else
 
@@ -99,7 +99,7 @@ class MatchAnswersController < ApplicationController
         when 2..6
           redirect_to edit_match_answer_path(@match_answer)
         when 6
-        when 7
+        when 7,8
           # if this is the 5th test
           if (@user.num_tests % 5) == 0
             redirect_to edit_match_answer_group_path

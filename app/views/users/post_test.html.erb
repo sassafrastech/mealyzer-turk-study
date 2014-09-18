@@ -20,7 +20,7 @@
       </ul>
     <% end %>
 
-    <% for i in 1..6 do %>
+    <% for i in 1..8 do %>
       <% if @user.condition == i %>
         <li><strong><%= t("survey.condition_specific_questions").values[i-1] %></strong></li>
         <ul>

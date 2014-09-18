@@ -2,8 +2,8 @@ require "pp"
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 3
-  MIN_CONDITION = 3
+  MAX_CONDITION = 20
+  MIN_CONDITION = 20
 
   NUM_CONDITIONS = 8
 

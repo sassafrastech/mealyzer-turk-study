@@ -9,8 +9,8 @@ class User < ActiveRecord::Base
 
   MAX_TESTS = Meal.all_tests.length
 
-  REQUIRE_UNIQUE = false
-  STUDY_ID = "lena_test"
+  REQUIRE_UNIQUE = true
+  STUDY_ID = "study_1"
 
   POST_TEST_OPTION_SETS = {:level_difficulty => :answers_difficulty,  :confident => :answers_confidence, :confident_groups => :answers_confidence,
     :feedback => :answers_agree, :future => :answers_agree, :learned => :answers_agree}
@@ -64,25 +64,25 @@ class User < ActiveRecord::Base
   private
 
   def choose_condition
-    # first need to make sure we have a min number of #1
-    # if User.where(condition: 1).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 1
-    # elsif User.where(condition: 2).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 2
-    # elsif User.where(condition: 3).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 3
-    # elsif User.where(condition: 4).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 4
-    # elsif User.where(condition: 5).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 5
-    # elsif User.where(condition: 6).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 6
-    # elsif User.where(condition: 7).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    #   self.condition = 7
-    # elsif User.where(condition: 8).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-    # else
-    #   self.condition = random_condition
-    # end
+    first need to make sure we have a min number of #1
+    if User.where(condition: 1).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 1
+    elsif User.where(condition: 2).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 2
+    elsif User.where(condition: 3).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 3
+    elsif User.where(condition: 4).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 4
+    elsif User.where(condition: 5).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 5
+    elsif User.where(condition: 6).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 6
+    elsif User.where(condition: 7).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 7
+    elsif User.where(condition: 8).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+    else
+      self.condition = random_condition
+    end
 
 
     self.study_id = STUDY_ID

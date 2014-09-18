@@ -7,7 +7,7 @@
   <%= f.hidden_field :meal_id %>
   <%= f.hidden_field :component_name %>
   <%= f.hidden_field :user_id %>
-
+  <% popular = @summarizer.most_popular(@match_answer) %>
   <div class="my_answer">
     <table>
       <tr><td class="community" colspan=4>Your Answer:</td></tr>
@@ -24,7 +24,9 @@
         <% end %>
         </tr>
       <% end %>
-      <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
+      <tr><td colspan=8 class="community <%= popular == @match_answer.food_groups ? 'popular' : nil %>">
+      <strong><%= popular == @match_answer.food_groups ? 'Most popular: ' : nil %></strong>
+      Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
     </table>
   </div>
 
@@ -46,7 +48,9 @@
           <% end %>
           </tr>
         <% end %>
-        <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= num_matches %></td></tr>
+        <tr><td colspan=6 class="community <%= popular == food_groups ? 'popular' : nil %>">
+          <%= popular == food_groups ? 'Most popular: ' : nil %>
+            Other turkers who suggested this answer: <%= num_matches %></td></tr>
       </table>
     </div>
   <% end %>

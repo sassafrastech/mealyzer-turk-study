@@ -33,6 +33,15 @@ class MatchAnswerSummarizer
     oa.reverse
   end
 
+  def most_popular(answer)
+    all = other_answers(answer)
+    if all.first[1] > num_matches(answer)
+      return all.first[0]
+    else
+      return answer.food_groups
+    end
+  end
+
   def evaluations(answer)
     @eval ||= build_evaluations(answer)
   end

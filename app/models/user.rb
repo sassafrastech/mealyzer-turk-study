@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   private
 
   def choose_condition
-    first need to make sure we have a min number of #1
+    #first need to make sure we have a min number of 1
     if User.where(condition: 1).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 1
     elsif User.where(condition: 2).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION

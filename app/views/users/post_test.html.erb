@@ -22,15 +22,15 @@
 
     <% for i in 1..6 do %>
       <% if @user.condition == i %>
-        <li><strong><%= t("survey.condition_specific_questions").values[i] %></strong></li>
+        <li><strong><%= t("survey.condition_specific_questions").values[i-1] %></strong></li>
         <ul>
         <% t("survey.answers_agree").each_with_index do |response, index| %>
         <li>
           <% checked = nil %>
           <% unless @user.post_test.nil? %>
-            <% checked = (@user.post_test[t("survey.condition_specific_questions").keys[i]].to_i == index + 1) ? :checked : nil %>
+            <% checked = (@user.post_test[t("survey.condition_specific_questions").keys[i-1]].to_i == index + 1) ? :checked : nil %>
           <% end %>
-          <%= radio_button_tag("post_test[#{t('survey.condition_specific_questions').keys[i]}]", response.first, checked) %>
+          <%= radio_button_tag("post_test[#{t('survey.condition_specific_questions').keys[i-1]}]", response.first, checked) %>
           <label><%= response.last %></label>
         </li>
         <% end %>

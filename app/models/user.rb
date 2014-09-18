@@ -5,13 +5,12 @@ class User < ActiveRecord::Base
   MAX_CONDITION = 3
   MIN_CONDITION = 3
 
-  NUM_CONDITIONS = 6
+  NUM_CONDITIONS = 7
 
-  MAX_TESTS = 6
-  #Meal.all_tests.length
+  MAX_TESTS = Meal.all_tests.length
 
-  REQUIRE_UNIQUE = true
-  STUDY_ID = "pilot4"
+  REQUIRE_UNIQUE = false
+  STUDY_ID = "lena_test"
 
   POST_TEST_OPTION_SETS = {:level_difficulty => :answers_difficulty,  :confident => :answers_confidence, :confident_groups => :answers_confidence,
     :feedback => :answers_agree, :future => :answers_agree, :learned => :answers_agree}
@@ -85,6 +84,8 @@ class User < ActiveRecord::Base
     end
 
     self.study_id = STUDY_ID
+
+    self.condition = 7
 
   end
 

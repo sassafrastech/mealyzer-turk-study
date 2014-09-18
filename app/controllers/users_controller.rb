@@ -1,7 +1,7 @@
 require "pp"
 class UsersController < ApplicationController
 
-  def pre_test
+  def new
     # Only create the user if they have accepted task and there is no user already
     @disabled = true
     pp "in pretest"

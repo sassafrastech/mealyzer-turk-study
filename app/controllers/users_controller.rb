@@ -18,7 +18,11 @@ class UsersController < ApplicationController
     # Else just create a new user
     else
       @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      User.create
+      if (params[:workerId])
+        User.create(params.permit(:assignmentId, :workerId, :hitId))
+      else
+        User.create
+      end
     end
 
         # Make sure we don't have repeat turkers
@@ -26,8 +30,9 @@ class UsersController < ApplicationController
       pp "We are totally DIABLING BECAUSE NOT UNIQUE"
       @disabled = true
     end
-
-    session[:current_user_id] = @user.id
+    if @user.workerId.present?
+      session[:current_user_id] = @user.id
+    end
   end
 
   def update

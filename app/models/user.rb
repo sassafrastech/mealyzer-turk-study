@@ -80,6 +80,7 @@ class User < ActiveRecord::Base
     elsif User.where(condition: 7).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
       self.condition = 7
     elsif User.where(condition: 8).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+      self.condition = 8
     else
       self.condition = random_condition
     end

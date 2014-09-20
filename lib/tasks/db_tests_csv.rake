@@ -24,38 +24,46 @@ namespace :db do
 
   task :most_popular_for_user => :environment do
     users = User.where("condition = 2 OR condition = 3").where(:study_id => 'study_1').where('num_tests = 28')
-    pp "users #{users.inspect}"
 
     CSV.open(Rails.root.join("tmp","csv", "popular.csv"), "wb") do |csv|
 
-      csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "popular_answer",
+      csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "user_num_correct", "user_num_correct_update","popular_answer",
         "popular_num_correct", "num_ingredients", "task_num", "timestamp"]
 
       users.each do |user|
         matches = MatchAnswer.where(:user_id => user.id)
         matches.each do |match|
           row = []
-          pp "THE MATCH #{match.inspect}"
           row << match.id
           row << match.meal_id
           row << match.component_name
           row << user.id
           row << user.condition
+          row << match.num_correct
+          row << match.num_correct_update.nil? ? "N/A" : match.num_correct_update
           popular = MatchAnswerSummarizer.most_popular_at_time(match)
           if !popular.nil?
             row << popular
-            pp "The popular one: #{popular.to_json}"
             ma = MatchAnswer.where('food_groups = ?', popular.to_json).first
             row << ma.num_correct
           else
-            row << "NULL"
+            row << "N/A"
           end
           row << match.num_ingredients
           row << match.task_num
           row << match.created_at
-          pp "ROW: #{row}"
           csv << row
         end
+      end
+
+    end
+
+    task :evaluated => :environment do
+      users = User.where("condition = 5 OR condition = 6").where(:study_id => 'study_1').where('num_tests = 28')
+
+      CSV.open(Rails.root.join("tmp","csv", "evaluated.csv"), "wb") do |csv|
+        csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "user_num_correct", "user_num_correct_update",
+        "num_ingredients", "task_num", "timestamp", "evaluation_correct", "evaluated_incorrect"]
       end
 
     end

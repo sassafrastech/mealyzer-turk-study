@@ -14,7 +14,6 @@ class MatchAnswerSummarizer
       end
     end
     oa = other_answers.sort_by {|food_groups, num| num}
-    pp "OTHER ANSWERS #{oa}"
     oa.reverse
   end
 

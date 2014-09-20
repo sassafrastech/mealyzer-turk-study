@@ -40,7 +40,11 @@ namespace :db do
           row << user.id
           row << user.condition
           row << match.num_correct
-          row << match.num_correct_update.nil? ? "N/A" : match.num_correct_update
+          if match.num_correct_update.nil?
+            row << "N/A"
+          else
+              row << match.num_correct_update
+          end
           popular = MatchAnswerSummarizer.most_popular_at_time(match)
           if !popular.nil?
             row << popular
@@ -63,7 +67,8 @@ namespace :db do
 
       CSV.open(Rails.root.join("tmp","csv", "evaluated.csv"), "wb") do |csv|
         csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "user_num_correct", "user_num_correct_update",
-        "num_ingredients", "task_num", "timestamp", "evaluation_correct", "evaluated_incorrect"]
+        "num_ingredients", "task_num", "timestamp", "evaluation_received", "evaluation_received_correct", "evaluation_received_incorrect",
+        ]
       end
 
     end

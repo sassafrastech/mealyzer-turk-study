@@ -90,6 +90,23 @@ class MatchAnswer < ActiveRecord::Base
     self.food_groups_update ||= food_groups
   end
 
+
+  def individual_answers(compare_food_groups)
+    {}.tap do |correct_all|
+      meal.food_nutrition[component_name].each do |item|
+        item = item[0]
+        correct_all[item] = {}
+        actual_groups = meal.food_nutrition[component_name][item]
+        answered_groups = compare_food_groups[item]
+        Meal::GROUPS.each do |g|
+          unless actual_groups.nil? || answered_groups.nil?
+            correct_all[item][g] = actual_groups.include?(g) == answered_groups.include?(g) ? 'correct' : 'incorrect'
+          end
+        end
+      end
+    end
+  end
+
   private
   def food_groups_exist
     if food_groups.nil?
@@ -170,21 +187,6 @@ class MatchAnswer < ActiveRecord::Base
     return true
   end
 
-  def individual_answers(compare_food_groups)
-    {}.tap do |correct_all|
-      meal.food_nutrition[component_name].each do |item|
-        item = item[0]
-        correct_all[item] = {}
-        actual_groups = meal.food_nutrition[component_name][item]
-        answered_groups = compare_food_groups[item]
-        Meal::GROUPS.each do |g|
-          unless actual_groups.nil? || answered_groups.nil?
-            correct_all[item][g] = actual_groups.include?(g) == answered_groups.include?(g) ? 'correct' : 'incorrect'
-          end
-        end
-      end
-    end
-  end
 
 end
 

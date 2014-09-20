@@ -28,7 +28,7 @@ namespace :db do
     CSV.open(Rails.root.join("tmp","csv", "popular.csv"), "wb") do |csv|
 
       csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "user_num_correct", "user_num_correct_update","popular_answer",
-        "popular_num_correct", "num_correct_with_popular", "num_correct_update_with_popular" "num_ingredients", "task_num", "timestamp", "answer", "updated_answer"]
+        "popular_num_correct", "num_correct_with_popular", "num_correct_update_with_popular","num_ingredients", "task_num", "timestamp", "answer", "updated_answer"]
 
       users.each do |user|
         matches = MatchAnswer.where(:user_id => user.id)
@@ -107,7 +107,7 @@ namespace :db do
           row << match.num_ingredients
           row << match.task_num
           row << match.created_at
-          eval = match.evaluation_num
+          eval = MatchAnswerSummarizer.build_evaluations_time(answer)
           row << match.evaluation_num[0]
           row << match.evaluation_num[1]
           row << match.evaluation_right

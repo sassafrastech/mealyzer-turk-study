@@ -73,7 +73,6 @@ class MatchAnswerSummarizer
     @eval ||= build_evaluations(answer)
   end
 
-  private
   def increment(item, groups)
     @summary[item] ||= {}
     @summary[item][groups] ||= 0
@@ -109,5 +108,27 @@ class MatchAnswerSummarizer
       return nil
     end
   end
+
+    def build_evaluations_time(answer)
+    evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
+    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json).where("created_at < answer.created_at")
+    if !ma.nil?
+      ma.each do |a|
+         if a.changed_answer
+          evals[:incorrect] += 1
+          unless a.explanation.nil?
+            evals[:explanations].push(a.explanation)
+          end
+        else
+          evals[:correct] += 1
+        end
+      end
+      evals[:length] = ma.length
+      return evals
+    else
+      return nil
+    end
+  end
+
 
 end

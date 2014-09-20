@@ -119,6 +119,20 @@ class MatchAnswer < ActiveRecord::Base
     return score
   end
 
+  def compare_update_popular(popular)
+    score = 0
+    if !food_groups_update.nil?
+      food_groups_update.each do |item, groups|
+        groups.each do |g|
+          score += 1 if popular[item].include?(g)
+        end
+      end
+      return score
+    else
+      return "N/A"
+    end
+  end
+
   private
   def food_groups_exist
     if food_groups.nil?

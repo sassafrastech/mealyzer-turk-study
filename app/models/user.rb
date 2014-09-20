@@ -85,7 +85,6 @@ class User < ActiveRecord::Base
       self.condition = random_condition
     end
 
-    self.condition = 8
     self.study_id = STUDY_ID
 
   end

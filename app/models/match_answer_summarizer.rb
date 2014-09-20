@@ -109,7 +109,7 @@ class MatchAnswerSummarizer
     end
   end
 
-    def build_evaluations_time(answer)
+    def self.build_evaluations_time(answer)
     evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
     ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json).where("created_at < answer.created_at")
     if !ma.nil?

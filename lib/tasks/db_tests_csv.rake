@@ -108,9 +108,35 @@ namespace :db do
           row << match.task_num
           row << match.created_at
           eval = MatchAnswerSummarizer.build_evaluations_time(answer)
-          row << match.evaluation_num[0]
-          row << match.evaluation_num[1]
-          row << match.evaluation_right
+          row << eval[:correct]
+          row << eval[:incorrect]
+
+          # If the answer is actually right...
+          if match.num_correct == (match.num_ingredients * 4)
+            # and they say it is incorrect, they are wrong!
+            if eval[:correct] < eval[:incorrect]
+              row << "False"
+              # if they say it is right, they are right!
+            elsif eval[:correct] > eval[:incorrect]
+              row << "True"
+              # they are the same
+            else
+              row << "Same"
+            end
+            # If the answer is actually wrong...
+          else
+             # and they say it is incorrect, they are right!
+            if eval[:correct] < eval[:incorrect]
+              row << "True"
+              # if they say it is right, they are wrong!
+            elsif eval[:correct] > eval[:incorrect]
+              row << "False"
+              # they are the same
+            else
+              row << "Same"
+            end
+          end
+
           csv << row
         end
 

@@ -112,8 +112,8 @@ class MatchAnswer < ActiveRecord::Base
   def compare_popular(popular)
     score = 0
     food_groups.each do |item, groups|
-      groups.each do |g|
-        score += 1 if popular[item].include?(g)
+      Meal::GROUPS.each do |g|
+        score += 1 if groups.include?(g) == popular[item].include?(g)
       end
     end
     return score
@@ -123,8 +123,8 @@ class MatchAnswer < ActiveRecord::Base
     score = 0
     if !food_groups_update.nil?
       food_groups_update.each do |item, groups|
-        groups.each do |g|
-          score += 1 if popular[item].include?(g)
+        Meal::GROUPS.each do |g|
+          score += 1 if groups.include?(g) == popular[item].include?(g)
         end
       end
       return score

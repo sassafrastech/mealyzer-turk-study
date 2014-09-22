@@ -175,13 +175,8 @@ namespace :db do
         learning_post_update = nil
 
         if user.condition == 3
-          if food_groups_update.nil?
-            learning_post_update = MatchAnswerSummarizer.accuracy(answers_last_five)
-            row << learning_post_update
-          else
-            learning_post_update = MatchAnswerSummarizer.accuracy_updated(answers_last_five)
-            row << learning_post_update
-          end
+          learning_post_update = MatchAnswerSummarizer.accuracy_updated(answers_last_five)
+          row << learning_post_update
         else
           row << "N/A"
         end
@@ -204,13 +199,8 @@ namespace :db do
 
         learning_post_popular_update = nil
         if user.condition == 3
-          if food_groups_update.nil?
-            learning_post_popular_update = MatchAnswerSummarizer.accuracy_popular(answers_last_five)
+            learning_post_popular_update = MatchAnswerSummarizer.accuracy_popular_updated(answers_last_five)
             row << learning_post_popular_update
-          else
-            learning_post_update = MatchAnswerSummarizer.accuracy_popular_updated(answers_last_five)
-            row << learning_post_popular_update
-          end
         else
           row << "N/A"
         end

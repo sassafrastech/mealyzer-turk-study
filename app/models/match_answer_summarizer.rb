@@ -42,7 +42,7 @@ class MatchAnswerSummarizer
   def self.accuracy(answers)
     accuracy = 0
     answers.each do |a|
-      accuracy += (answer.num_correct.to_f / (answer.num_ingredients * 4))
+      accuracy += (a.num_correct.to_f / (a.num_ingredients * 4))
     end
     return accuracy
   end
@@ -50,7 +50,8 @@ class MatchAnswerSummarizer
   def self.accuracy_updated(answers)
     accuracy = 0
     answers.each do |a|
-      accuracy += (answer.num_correct_update.to_f / (answer.num_ingredients * 4))
+      correct = a.num_correct_updated.nil? ? a.num_correct : a.num_correct_updated
+      accuracy += (a.num_correct_update.to_f / (a.num_ingredients * 4))
     end
     return accuracy
   end
@@ -69,7 +70,8 @@ class MatchAnswerSummarizer
     # first fill in popular column
     score = 0
     answers.each do |a|
-      accuracy_popular = a.compare_update_popular(most_popular_at_time(a))
+      compare = a.num_correct_updated.nil? ? "compare_popular" : "compare_popular_update"
+      accuracy_popular = a.send(compare, most_popular_at_time(a))
       score += accuracy_popular.to_f / (a.num_ingredients * 4)
     end
     return score

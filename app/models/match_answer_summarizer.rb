@@ -30,6 +30,14 @@ class MatchAnswerSummarizer
     end
   end
 
+  def self.num_matches(answer)
+    num_matches = 0
+    MatchAnswer.where("meal_id = ? AND component_name = ?", answer.meal_id, answer.component_name).each do |a|
+      num_matches += 1 if answer.food_groups == a.food_groups
+    end
+    return num_matches
+  end
+
   def initialize(meal_id, component)
     @meal_id = meal_id
     @component = component
@@ -40,13 +48,14 @@ class MatchAnswerSummarizer
     @summary
   end
 
-  def self.num_matches(answer)
+  def num_matches(answer)
     num_matches = 0
     MatchAnswer.where("meal_id = ? AND component_name = ?", answer.meal_id, answer.component_name).each do |a|
       num_matches += 1 if answer.food_groups == a.food_groups
     end
     return num_matches
   end
+
 
   def other_answers(answer)
     other_answers = {}

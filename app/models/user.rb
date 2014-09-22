@@ -2,15 +2,15 @@ require "pp"
 class User < ActiveRecord::Base
   before_create :choose_condition
 
-  MAX_CONDITION = 45
-  MIN_CONDITION = 45
+  MAX_CONDITION = 40
+  MIN_CONDITION = 40
 
   NUM_CONDITIONS = 8
 
   MAX_TESTS = Meal.all_tests.length
 
   REQUIRE_UNIQUE = true
-  STUDY_ID = "study_1"
+  STUDY_ID = "study_2"
 
   POST_TEST_OPTION_SETS = {:level_difficulty => :answers_difficulty,  :confident => :answers_confidence, :confident_groups => :answers_confidence,
     :feedback => :answers_agree, :future => :answers_agree, :learned => :answers_agree}
@@ -86,6 +86,8 @@ class User < ActiveRecord::Base
     end
 
     self.study_id = STUDY_ID
+
+    self.condition = 2
 
   end
 

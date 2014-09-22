@@ -140,12 +140,90 @@ namespace :db do
 
           csv << row
         end
+      end
+    end
+  end
+
+  # Just for new conditions 2 and 3
+  task :learning_gains => :environment do
+    File.new("tmp/csv/learning_gains.csv", "w")
+
+    users = User.where("condition = 2 OR condition = 3").where(:study_id => 'study_2').where('num_tests = 28')
+
+    CSV.open(Rails.root.join("tmp","csv", "learning_gains.csv"), "wb") do |csv|
+
+      users.each do |user|
+
+        answers_first_five = MatchAnswer.where(:user_id => user.id).where('task_num < 6').limit(5).all
+        answers_last_five = MatchAnswer.where(:user_id => user.id).where('task_num > 23 AND task_num < 29').limit(5).all
+
+        csv << ["user_id", "condition", "study_id", "learning_pre", "learning_post", "learning_post_update", "learning_gains_diff", "learning_gains_diff_update", "learning_pre_popular", "learning_post_popular", "learning_gains_diff_popular"]
+
+        csv << user.id
+        csv << user.condition
+        csv << user.study_id
+
+        # learning pre
+        learning_pre = MatchAnswerSummarizer.accuracy(answers_first_five)
+        csv << learning_pre
+
+        # learning post
+        learning_post = MatchAnswerSummarizer.accuracy(answers_last_five)
+        csv << learning_post
+
+        learning_post_update = nil
+
+        if user.condition == 3
+          if food_groups_update.nil?
+            learning_post_update = MatchAnswerSummarizer.accuracy(answers_last_five)
+            csv << learning_post_update
+          else
+            learning_post_update = MatchAnswerSummarizer.accuracy_updated(answers_last_five)
+            csv << learning_post_update
+          end
+        else
+          csv << "N/A"
+        end
+
+        # learning gains diff
+        csv << learning_post - learning_pre
+
+        if learning_post_update
+          csv << learning_post_update - learning_pre
+        else
+          csv << "N/A"
+        end
+
+
+        learning_pre_popular = MatchAnswerSummarizer.accuracy_popular(answers_first_five)
+        csv << learning_pre_popular
+
+        learning_post_popular = MatchAnswerSummarizer.accuracy_popular(answers_last_five)
+        csv << learning_post_popular
+
+        learning_post_popular_update = nil
+        if user.condition == 3
+          if food_groups_update.nil?
+            learning_post_popular_update = MatchAnswerSummarizer.accuracy_popular(answers_last_five)
+            csv << learning_post_popular_update
+          else
+            learning_post_update = MatchAnswerSummarizer.accuracy_popular_updated(answers_last_five)
+            csv << learning_post_popular_update
+          end
+        else
+          csv << "N/A"
+        end
+
+        csv << learning_post_popular - learning_pre_popular
+
+        if learning_post_popular_update
+          csv << learning_post_popular_update - learning_pre_popular
+        else
+          csv << "N/A"
+        end
 
       end
-
     end
-
-
   end
 
 end

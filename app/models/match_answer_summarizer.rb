@@ -38,6 +38,44 @@ class MatchAnswerSummarizer
     return num_matches
   end
 
+  # determines accuracy of initial try
+  def self.accuracy(answers)
+    accuracy = 0
+    answers.each do |a|
+      accuracy += (answer.num_correct.to_f / (answer.num_ingredients * 4))
+    end
+    return accuracy
+  end
+
+  def self.accuracy_updated(answers)
+    accuracy = 0
+    answers.each do |a|
+      accuracy += (answer.num_correct_update.to_f / (answer.num_ingredients * 4))
+    end
+    return accuracy
+  end
+
+  def self.accuracy_popular(answers)
+    # first fill in popular column
+    score = 0
+    answers.each do |a|
+      accuracy_popular = a.compare_popular(most_popular_at_time(a))
+      score += accuracy_popular.to_f / (a.num_ingredients * 4)
+    end
+    return score
+  end
+
+  def self.accuracy_popular_updated(answers)
+    # first fill in popular column
+    score = 0
+    answers.each do |a|
+      accuracy_popular = a.compare_update_popular(most_popular_at_time(a))
+      score += accuracy_popular.to_f / (a.num_ingredients * 4)
+    end
+    return score
+
+  end
+
   def initialize(meal_id, component)
     @meal_id = meal_id
     @component = component

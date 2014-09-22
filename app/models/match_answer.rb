@@ -108,7 +108,7 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   # popular is a hash of item names to groups.
-  # Returns the total number of (item, group) pairs common to popular and self.food_groups.
+  # Returns the total score of in common to popular and self.food_groups.
   def compare_popular(popular)
     score = 0
     food_groups.each do |item, groups|

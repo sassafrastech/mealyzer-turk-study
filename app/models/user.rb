@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
 
     self.study_id = STUDY_ID
 
-    self.condition = 2
+    self.condition = 3
 
   end
 

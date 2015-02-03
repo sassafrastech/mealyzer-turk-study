@@ -219,4 +219,15 @@ namespace :db do
     end
   end
 
+  def other_answers
+
+    for i in 1..8 do
+      user = User.where(:study_id => 'study_1').where(:condition => i).first.id
+      answer = MatchAnswer.where(:user_id => user.id).first
+      pp "Condition #{i} other answers: #{MatchAnswerSummarizer.other_answers(answer).length}"
+    end
+
+
+  end
+
 end

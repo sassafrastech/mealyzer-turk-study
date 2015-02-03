@@ -50,7 +50,7 @@ class MatchAnswerSummarizer
   def self.accuracy_updated(answers)
     accuracy = 0
     answers.each do |a|
-      correct = a.num_correct_updated.nil? ? a.num_correct : a.num_correct_updated
+      correct = a.num_correct_update.nil? ? a.num_correct : a.num_correct_update
       accuracy += (a.num_correct_update.to_f / (a.num_ingredients * 4))
     end
     return accuracy
@@ -70,7 +70,7 @@ class MatchAnswerSummarizer
     # first fill in popular column
     score = 0
     answers.each do |a|
-      compare = a.num_correct_updated.nil? ? "compare_popular" : "compare_popular_update"
+      compare = a.num_correct_update.nil? ? "compare_popular" : "compare_update_popular"
       accuracy_popular = a.send(compare, most_popular_at_time(a))
       score += accuracy_popular.to_f / (a.num_ingredients * 4)
     end
@@ -97,7 +97,7 @@ class MatchAnswerSummarizer
   end
 
 
-  def other_answers(answer)
+  def self.other_answers(answer)
     other_answers = {}
     MatchAnswer.where("meal_id = ? AND component_name = ?", meal_id, component).each do |a|
       if a.food_groups != answer.food_groups

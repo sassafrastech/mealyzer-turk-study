@@ -29,7 +29,7 @@ MealyzerStudy::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  config.use_ssl = true
+  config.use_ssl = false
   config.ssl_port = 3001
 
   #config.action_dispatch.default_headers['X-Frame-Options'] = "ALLOW-FROM https://workersandbox.mturk.com"

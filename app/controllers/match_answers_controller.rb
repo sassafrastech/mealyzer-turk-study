@@ -7,7 +7,7 @@ class MatchAnswersController < ApplicationController
     @disabled = true
 
     # Reload user from session if already assigned
-    @user = if current_user
+    @user = if !current_user.nil?
       @disabled = false
       current_user
     elsif params[:assignmentId]

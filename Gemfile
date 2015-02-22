@@ -17,6 +17,7 @@ gem 'paperclip', '~> 4.1'
 gem 'simple_form'
 gem 'turkee', :git => 'https://github.com/aantix/turkee.git', branch: 'master'
 gem 'factory_girl'
+gem 'bootstrap-slider-rails'
 
 
 group :development, :test do

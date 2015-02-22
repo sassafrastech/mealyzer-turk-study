@@ -2,11 +2,10 @@ class MobileSubmissionsController < ApplicationController
   protect_from_forgery :except => :create
 
   def create
-    Rails.logger.debug("We are in create now")
-    Rails.logger.debug(params)
     uid = params.permit(:uid)
     new_params = params.permit(:other)
     Rails.logger.debug(new_params)
+
     new_params = {:uid => uid}
     Rails.logger.debug(new_params)
     mobile_submission = MobileSubmission.create(new_params)

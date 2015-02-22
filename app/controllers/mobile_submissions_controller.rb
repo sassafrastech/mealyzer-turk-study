@@ -30,4 +30,17 @@ class MobileSubmissionsController < ApplicationController
     # could send push notification here, but we will just poll currently
   end
 
+  def index
+    # get all submissions for a particular user that have not been evaluated yet
+    @submitted = MobileSubmission.where(:uid => params[:id]).where(:evaluated => nil).all
+    @evaluated = MobileSubmission.where(:uid => params[:id]).where(:evaluated => true).all
+    @all = {:submitted => @submitted, :evaluated => @evaluated}
+    Rails.logger.debug(@all)
+    respond_to do |format|
+      format.html
+      format.json { render json: @all }
+    end
+
+  end
+
 end

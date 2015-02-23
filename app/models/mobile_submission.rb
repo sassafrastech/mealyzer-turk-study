@@ -13,7 +13,6 @@ class MobileSubmission < ActiveRecord::Base
       :carbs_grade => (carbs_user - carbs_eval).abs <= THRESHOLD_CARBS,
       :fiber_grade => (fiber_user - fiber_eval).abs <= THRESHOLD_FIBER,
       :fat_grade => (fat_user - fat_eval).abs <= THRESHOLD_FAT)
-
   end
 
 end

@@ -2,10 +2,7 @@ class MobileSubmissionsController < ApplicationController
   protect_from_forgery :except => :create
 
   def create
-
-    #new_params = JSON.parse(params.require(:mobile_submission))
     params[:mobile_submission] = JSON.parse(params[:mobile_submission])
-    Rails.logger.debug(params)
     @mobile_submission = MobileSubmission.create(params.require(:mobile_submission).permit!)
 
     @mobile_submission.photo = params.permit(:file)[:file]

@@ -8,11 +8,12 @@ class MobileSubmission < ActiveRecord::Base
   validates_attachment_content_type :photo, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
   def grade!
-    protein_grade = abs(protein_user - protein_eval) <= THRESHOLD_PROTEIN
-    carbs_grade = abs(carbs_user - carbs_eval) <= THRESHOLD_CARBS
-    fiber_grade = abs(fiber_user - fiber_eval) <= THRESHOLD_FIBER
-    fat_grade = abs(fat_user - fat_eval) <= THRESHOLD_FAT
-    save!
+    Rails.logger.debug("GRADING!!!!!!!!!!!!!!!!!")
+    update_attributes(:protein_grade => (protein_user - protein_eval).abs <= THRESHOLD_PROTEIN,
+      :carbs_grade => (carbs_user - carbs_eval).abs <= THRESHOLD_CARBS,
+      :fiber_grade => (fiber_user - fiber_eval).abs <= THRESHOLD_FIBER,
+      :fat_grade => (fat_user - fat_eval).abs <= THRESHOLD_FAT)
+
   end
 
 end

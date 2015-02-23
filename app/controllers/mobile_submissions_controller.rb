@@ -2,14 +2,13 @@ class MobileSubmissionsController < ApplicationController
   protect_from_forgery :except => :create
 
   def create
-    uid = params.permit(:uid)
-    new_params = params.permit(:other)
-    Rails.logger.debug(new_params)
 
-    new_params = {:uid => uid}
-    Rails.logger.debug(new_params)
-    @mobile_submission = MobileSubmission.create(new_params)
-    @mobile_submission.photo = params.permit(:file)
+    #new_params = JSON.parse(params.require(:mobile_submission))
+    params[:mobile_submission] = JSON.parse(params[:mobile_submission])
+    Rails.logger.debug(params)
+    @mobile_submission = MobileSubmission.create(params.require(:mobile_submission).permit!)
+
+    @mobile_submission.photo = params.permit(:file)[:file]
 
     if @mobile_submission.save!
       SubmissionMailer.nutrition_request(@mobile_submission).deliver

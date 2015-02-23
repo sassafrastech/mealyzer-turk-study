@@ -26,6 +26,7 @@ class MobileSubmissionsController < ApplicationController
     @mobile_submission = MobileSubmission.find(params[:id])
     params[:mobile_submission][:evaluated] = true
     @mobile_submission.update_attributes(params.require(:mobile_submission).permit!)
+    @mobile_submission.grade!
     # could send push notification here, but we will just poll currently
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150223162611) do
+ActiveRecord::Schema.define(version: 20150224144116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20150223162611) do
     t.text     "fat_explain"
     t.text     "carbs_explain"
     t.text     "fiber_explain"
+    t.string   "photo_url"
   end
 
   create_table "tag_answers", force: true do |t|

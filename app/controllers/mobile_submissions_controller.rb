@@ -8,6 +8,9 @@ class MobileSubmissionsController < ApplicationController
     @mobile_submission.photo = params.permit(:file)[:file]
 
     if @mobile_submission.save!
+      # need to save photo url after paperclip
+      @mobile_submission.photo_url = @mobile_submission.photo.url(:medium)
+      @mobile_submission.save!
       SubmissionMailer.nutrition_request(@mobile_submission).deliver
       render :nothing => true, :status => 200, :content_type => 'text/html'
     else
@@ -36,6 +39,14 @@ class MobileSubmissionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @all }
+    end
+
+  end
+
+  def show
+    @meal = MobileSubmission.find(params[:id])
+    respond_to do |format|
+      format.json { render json: @meal}
     end
 
   end

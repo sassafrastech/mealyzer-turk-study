@@ -10,6 +10,6 @@ MealyzerStudy::Application.routes.draw do
 
   resource :match_answer_group
 
-  match 'process', to: 'process#create', via: :post
+  resources :mobile_submissions
 
 end

@@ -13,8 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require jquery
 //= require bootstrap-sprockets
+//= require bootstrap-slider
 //= require underscore
 //= require backbone
 //= require backbone_rails_sync
@@ -22,4 +22,5 @@
 //= require backbone/mealyzer
 //= require_tree .
 
-jQuery.noConflict();
+// needed to comment out, annotorious needs this so think about it later
+//jQuery.noConflict();

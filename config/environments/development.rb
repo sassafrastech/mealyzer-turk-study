@@ -1,3 +1,5 @@
+Rails.application.routes.default_url_options[:host] = 'localhost'
+
 MealyzerStudy::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -32,6 +34,19 @@ MealyzerStudy::Application.configure do
   config.use_ssl = false
   config.ssl_port = 3001
 
+  config.action_controller.asset_host = 'http://localhost:3001' # Locally
+  #config.default_url_options[:host] = "mealyzer-study.sassafras.coop"
+
   #config.action_dispatch.default_headers['X-Frame-Options'] = "ALLOW-FROM https://workersandbox.mturk.com"
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+  :address              => "smtp.webfaction.com",
+  :port                 =>  587,
+  :domain               =>  "sassafras.coop",
+  :user_name            =>  "sassafrastech",
+  :password             =>  "revolutionstartsathome",
+  :authentication       =>  :plain,
+  :enable_starttls_auto =>  true }
 
 end

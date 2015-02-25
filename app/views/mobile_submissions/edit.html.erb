@@ -1,0 +1,42 @@
+<div class="edit">
+  <h1>Mealyzer: Evaluate Mobile Submission #<%= @mobile_submission.id %></h1>
+  <h4>User id:<%= @mobile_submission.uid %></h4>
+
+  <%= image_tag(@mobile_submission.photo.url(:medium)) %>
+  <br/><br/>
+
+  <%= simple_form_for @mobile_submission do |f| %>
+    <%= f.hidden_field :evaluated %>
+
+    <div class="slider-container">
+      <label>Carbs (g):</label>
+      <input name="mobile_submission[carbs_eval]" id="carb" data-slider-id='carbSlider' type="text" data-slider-min="0" data-slider-max="80" data-slider-step="1" data-slider-value="1"/>
+      <%= f.input :carbs_explain, :label => "Carbs Explanation" %>
+    </div>
+
+    <div class="slider-container">
+      <label>Protein (oz):</label>
+      <input name="mobile_submission[protein_eval]" id="protein" data-slider-id='proteinSlider' type="text" data-slider-min="0" data-slider-max="8" data-slider-step="1" data-slider-value="1"/>
+      <%= f.input :protein_explain, :label => "Protein Explanation" %>
+    </div>
+
+    <div class="slider-container">
+      <label>Fat (ts):</label>
+      <input name="mobile_submission[fat_eval]" id="fat" data-slider-id='fatSlider' type="text" data-slider-min="0" data-slider-max="8" data-slider-step="1" data-slider-value="1"/>
+      <%= f.input :fat_explain, :label => "Fat Explanation" %>
+    </div>
+
+    <div class="slider-container">
+      <label>Fiber (g):</label>
+      <input name="mobile_submission[fiber_eval]" id="fiber" data-slider-id='fiberSlider' type="text" data-slider-min="0" data-slider-max="80" data-slider-step="1" data-slider-value="1"/>
+      <%= f.input :fiber_explain, :label => "Fiber Explanation" %>
+    </div>
+
+    <%= f.submit "Submit", :class => "btn btn-primary" %>
+    <br/><br/><br/>
+  <% end %>
+</div>
+
+<script>
+  $(document).ready(function(){new Mealyzer.Views.MobileSubmissionsView({el: '.edit'}); });
+</script>

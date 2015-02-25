@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912215846) do
+ActiveRecord::Schema.define(version: 20150224144116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,11 @@ ActiveRecord::Schema.define(version: 20140912215846) do
     t.boolean  "food_groups_update_correct"
     t.text     "food_groups_correct_all"
     t.text     "food_groups_update_correct_all"
+    t.integer  "task_num"
+    t.string   "task_type"
+    t.integer  "num_ingredients"
+    t.integer  "num_correct"
+    t.integer  "num_correct_update"
   end
 
   add_index "match_answers", ["evaluating_id"], name: "index_match_answers_on_evaluating_id", using: :btree
@@ -50,6 +55,36 @@ ActiveRecord::Schema.define(version: 20140912215846) do
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.text     "food_components"
+  end
+
+  create_table "mobile_submissions", force: true do |t|
+    t.string   "uid"
+    t.text     "description"
+    t.integer  "protein_user"
+    t.integer  "fat_user"
+    t.integer  "carbs_user"
+    t.integer  "fiber_user"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.integer  "protein_eval"
+    t.integer  "carbs_eval"
+    t.integer  "fiber_eval"
+    t.integer  "fat_eval"
+    t.boolean  "evaluated"
+    t.string   "meal"
+    t.boolean  "protein_grade"
+    t.boolean  "fat_grade"
+    t.boolean  "carbs_grade"
+    t.boolean  "fiber_grade"
+    t.text     "protein_explain"
+    t.text     "fat_explain"
+    t.text     "carbs_explain"
+    t.text     "fiber_explain"
+    t.string   "photo_url"
   end
 
   create_table "tag_answers", force: true do |t|
@@ -111,8 +146,12 @@ ActiveRecord::Schema.define(version: 20140912215846) do
     t.string   "assignmentId"
     t.string   "hitId"
     t.integer  "condition"
-    t.integer  "num_tests",    default: 0
+    t.integer  "num_tests",       default: 0
     t.string   "study_id"
+    t.text     "pre_test"
+    t.text     "post_test"
+    t.integer  "pre_test_score"
+    t.integer  "post_test_score"
   end
 
 end

@@ -57,6 +57,36 @@ ActiveRecord::Schema.define(version: 20140919194421) do
     t.text     "food_components"
   end
 
+  create_table "mobile_submissions", force: true do |t|
+    t.string   "uid"
+    t.text     "description"
+    t.integer  "protein_user"
+    t.integer  "fat_user"
+    t.integer  "carbs_user"
+    t.integer  "fiber_user"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.integer  "protein_eval"
+    t.integer  "carbs_eval"
+    t.integer  "fiber_eval"
+    t.integer  "fat_eval"
+    t.boolean  "evaluated"
+    t.string   "meal"
+    t.boolean  "protein_grade"
+    t.boolean  "fat_grade"
+    t.boolean  "carbs_grade"
+    t.boolean  "fiber_grade"
+    t.text     "protein_explain"
+    t.text     "fat_explain"
+    t.text     "carbs_explain"
+    t.text     "fiber_explain"
+    t.string   "photo_url"
+  end
+
   create_table "tag_answers", force: true do |t|
     t.integer  "user_id"
     t.integer  "meal_id"

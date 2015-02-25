@@ -22,3 +22,5 @@ config/initializers/turkee.rb
 config/database.yml
 
 .ssl
+
+public/system/mobile_submissions/photos/*

@@ -3,13 +3,28 @@
     width: 200px;
   }
 
+  form {
+    width: 400px;
+  }
+
   label {
-    display: block;
+    display: inline-block;
     font-weight: bold;
+    margin-bottom: 10px;
   }
 
   .slider-container {
     margin-bottom: 30px;
+  }
+
+  .rangeslider,
+  input[type='range'] {
+    max-width: 800px;
+    margin-bottom: 20px;
+  }
+
+  div.output {
+    display: inline-block;
   }
 
 }

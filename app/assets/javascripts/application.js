@@ -12,9 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//= require jquery.mobile
 //= require bootstrap-sprockets
-//= require bootstrap-slider
 //= require underscore
 //= require backbone
 //= require backbone_rails_sync

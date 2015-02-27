@@ -2,9 +2,6 @@ Mealyzer.Views.MatchesView = Backbone.View.extend({
 
   initialize: function(params) {
 
-    console.log(params)
-    console.log("HERE: "+"photo_"+params.id)
-
     // Make current image annotatable
     anno.makeAnnotatable(document.getElementById("photo_"+params.id));
     // hiding selection widget prevents editing

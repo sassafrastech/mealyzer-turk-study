@@ -1,6 +1,6 @@
 GIT
-  remote: https://github.com/aantix/turkee.git
-  revision: 02256566312a5a524b748bb34a353e8b2d6b3929
+  remote: https://github.com/jpdimond/turkee.git
+  revision: 6fb8ef8b06e3ab5e82486312d46b1b708913e3b7
   branch: master
   specs:
     turkee (2.0.2)
@@ -95,7 +95,8 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
-    nokogiri (1.6.2.1)
+    netrc (0.7.7)
+    nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     paperclip (4.1.1)
       activemodel (>= 3.0.0)
@@ -127,8 +128,9 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
+    rest-client (1.7.2)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rspec-core (3.0.2)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.2)

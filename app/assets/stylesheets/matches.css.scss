@@ -13,9 +13,13 @@ img {
   vertical-align: top;
 }
 
+img.sample {
+  width: 650px;
+}
+
 .btn-primary {
   margin-top: 25px;
-  margin-bottom: 10px;
+  margin-bottom: 80px;
   padding: 8px 30px;
 }
 
@@ -42,6 +46,15 @@ form, table {
 
   label {
     font-weight: initial;
+  }
+
+  ul {
+    list-style-type: none;
+    margin-bottom: 20px;
+  }
+
+  td.popular {
+    background-color: orange;
   }
 }
 

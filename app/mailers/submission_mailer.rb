@@ -3,6 +3,6 @@ class SubmissionMailer < ActionMailer::Base
 
   def nutrition_request(mobile_submission)
     @mobile_submission = mobile_submission
-    mail(to: "jpdimond@gmail.com", subject: "Mealyzer: New nutritional evaluation request")
+    mail(to: "jpdimond@gmail.com, mamykina@gmail.com", subject: "Mealyzer: New nutritional evaluation request")
   end
 end

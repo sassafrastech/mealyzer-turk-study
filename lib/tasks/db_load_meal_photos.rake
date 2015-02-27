@@ -24,41 +24,86 @@ namespace :db do
     end
   end
 
+  task :score_surveys => :environment do
+    answers = MatchAnswer.joins(:user)
+    answers.each do |a|
+
+      next if a.user.pre_test.nil? || a.user.post_test.nil?
+      puts "USER #{a.user.inspect}"
+      a.user.pre_test_score = 0
+      a.user.post_test_score = 0
+      a.user.pre_test.each do |r|
+        a.user.pre_test_score += r.last.to_i
+      end
+      a.user.post_test.each do |r|
+        a.user.post_test_score += r.last.to_i
+      end
+      puts "pre test: #{a.user.pre_test_score}\n"
+      puts "post test: #{a.user.post_test_score}"
+      pp "NOW USER IS: #{a.user.inspect}"
+      a.user.save :validate => false
+    end
+  end
+
   task :evaluate_answers => :environment do
     match_answers = MatchAnswer.where('food_groups IS NOT NULL')
     pp "STARTING ************  there are #{match_answers.length} records"
     match_answers.each do |a|
       pp "------- looking at ma id: #{a.id}"
-      if a.food_groups_correct.nil?
-        pp "IS IT BLANK? #{a.food_groups_correct}"
-        a.food_groups_correct = a.meal.food_nutrition[a.component_name] == a.food_groups
-        pp "Evaluating food group: #{a.food_groups}"
-        pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
-        pp "Food group correct? #{a.food_groups_correct}"
-        a.save :validate => false
-        pp "--------- saved ----------"
-      else
-        pp "** food groups is blank or already graded"
-        pp "---------- end -----------"
+      a.num_ingredients = a.food_groups.keys.length
+      pp "NUM ING: #{a.num_ingredients}"
+
+      a.food_groups_correct = a.meal.food_nutrition[a.component_name] == a.food_groups
+      pp "Evaluating food group: #{a.food_groups}"
+      pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
+      pp "Food group correct? #{a.food_groups_correct}"
+
+      answers = a.individual_answers(a.food_groups)
+
+      # individual assessment
+      a.food_groups_correct_all = answers
+      pp "EVALUTED: #{a.food_groups_correct_all}"
+
+      values = []
+      answers.values.each do |v|
+        v.each_value {|value| values.push(value)}
       end
 
-      if a.food_groups_update_correct.nil? && !a.food_groups_update.blank?
+      a.num_correct = values.select{|a| a == "correct"}.length
+      pp "NUM CORRECT #{a.num_correct}"
+
+
+
+      if !a.food_groups_update.blank?
         a.food_groups_update_correct = a.meal.food_nutrition[a.component_name] == a.food_groups_update
-        pp "Evaluating food group update: #{a.food_groups_update}"
-        pp "Correct answer: #{Meal.find(a.meal_id).food_nutrition[a.component_name]}"
-        pp "Food group correct? #{a.food_groups_update_correct}"
-        a.save :validate => false
-        pp "--------- saved ----------"
+
+        answers = a.individual_answers(a.food_groups_update)
+
+        # individual assessment
+        a.food_groups_update_correct_all = answers
+
+        values = []
+        answers.values.each do |v|
+          v.each_value {|value| values.push(value)}
+        end
+
+        a.num_correct_update = values.select{|a| a == "correct"}.length
+
+        pp "NUM CORRECT #{a.num_correct_update}"
       else
         pp "** food groups update is blank or already graded"
         pp "---------- end -----------"
 
       end
 
+      a.save :validate => false
+
+
 
     end
 
   end
+
 
   task :evaluate_all_answers => :environment do
     # get all match answers that haven't been evaluated yet

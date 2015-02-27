@@ -1,11 +1,12 @@
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Other Turkers provided their answers as well.</div>
-  <p>Below you can see your own solution and solutions by other Turkers. You can also see how many others came up with each of these solutions. Think carefully about all the solutions, the differences between them and how they compare to yours. Then look again at your own answer and think whether you still think it was correct. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain what you think was incorrect in your original solution. </p>
+  <div class="alert alert-success" role="alert">Thank you! Below you can see your own answer and the answers of other Turkers. </div>
+  <p>We don’t know which answer is correct, but please take time to compare your answer to the answers of others. Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>
   <%= f.hidden_field :component_name %>
   <%= f.hidden_field :user_id %>
+  <% popular = @summarizer.most_popular(@match_answer) %>
 
   <div class="my_answer">
     <table>
@@ -22,20 +23,22 @@
         <% end %>
         </tr>
       <% end %>
-      <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
+      <tr><td colspan=8 class="community <%= popular == @match_answer.food_groups ? 'popular' : nil %>">
+      <strong><%= popular == @match_answer.food_groups ? 'Most popular: ' : nil %></strong>
+      Other turkers who suggested this answer: <%= @summarizer.num_matches(@match_answer) %></td></tr>
     </table>
     <h5>*If you changed your answer, please explain why:</h5>
     <%= f.input :explanation, :label => false %>
   </div>
 
-  <% # list of other community answers %>
-  <% @summarizer.other_answers(@match_answer).each_with_index do |(food_groups, num_matches), index| %>
-     <div class="other_answers">
-      <table class="<%= cycle('even', 'odd') %>">
-        <tr><td class="community" colspan=4>Alternative Answer #<%= index + 1 %>:</td></tr>
+  <% unless popular == @match_answer.food_groups %>
+    <% most_popular = @summarizer.other_answers(@match_answer).first %>
+    <div class="other_answers">
+      <table class="odd">
+        <tr><td class="community" colspan=4>Alternative Answer:</td></tr>
         <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
         <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
-        <% food_groups.each do |k, v| %>
+        <% most_popular[0].each do |k, v| %>
           <tr><td></td><td><%= k %></td>
           <% Meal::GROUPS.each do |group| %>
             <td>
@@ -46,10 +49,12 @@
           <% end %>
           </tr>
         <% end %>
-        <tr><td colspan=6 class="community">Other turkers who suggested this answer: <%= num_matches %></td></tr>
+        <tr><td colspan=6 class="community popular">
+            Most popular: Other turkers who suggested this answer: <%= most_popular[1] %></td></tr>
       </table>
     </div>
   <% end %>
+
 
   <br/>
   <%= f.submit "Next", :class => "btn btn-primary" %>

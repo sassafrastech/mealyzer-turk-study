@@ -5,6 +5,7 @@ class MatchAnswer < ActiveRecord::Base
                    2 => "Has a moderate impact on the overall nutritional breakdown",
                    3 => "Has a significant impact on the overall nutritional breakdown"}
 
+  before_create :increment_task_num
   before_save :evaluate_answers
 
   serialize :food_groups, JSON
@@ -48,11 +49,15 @@ class MatchAnswer < ActiveRecord::Base
 
   def self.copy_for_eval(obj, user)
     MatchAnswer.create(:meal_id => obj.meal_id, :user_id => user.id, :food_groups => obj.food_groups,
-      :component_name => obj.component_name, :evaluating_id => obj.id)
+      :component_name => obj.component_name, :evaluating_id => obj.id, :task_type => "peer assessment")
   end
 
   def self.last_five(user)
     where(user_id: user.id).order("created_at DESC").limit(5).reverse
+  end
+
+  def self.equivalent(answer)
+    where(:meal_id => answer.meal_id).where(:component_name => answer.component_name).where(:id != answer.id).sample
   end
 
   def item_has_group?(item, group)
@@ -85,6 +90,49 @@ class MatchAnswer < ActiveRecord::Base
     self.food_groups_update ||= food_groups
   end
 
+
+  def individual_answers(compare_food_groups)
+    {}.tap do |correct_all|
+      meal.food_nutrition[component_name].each do |item|
+        item = item[0]
+        correct_all[item] = {}
+        actual_groups = meal.food_nutrition[component_name][item]
+        answered_groups = compare_food_groups[item]
+        Meal::GROUPS.each do |g|
+          unless actual_groups.nil? || answered_groups.nil?
+            correct_all[item][g] = actual_groups.include?(g) == answered_groups.include?(g) ? 'correct' : 'incorrect'
+          end
+        end
+      end
+    end
+  end
+
+  # popular is a hash of item names to groups.
+  # Returns the total score of in common to popular and self.food_groups.
+  def compare_popular(popular)
+    score = 0
+    food_groups.each do |item, groups|
+      Meal::GROUPS.each do |g|
+        score += 1 if groups.include?(g) == popular[item].include?(g)
+      end
+    end
+    return score
+  end
+
+  def compare_update_popular(popular)
+    score = 0
+    if !food_groups_update.nil?
+      food_groups_update.each do |item, groups|
+        Meal::GROUPS.each do |g|
+          score += 1 if groups.include?(g) == popular[item].include?(g)
+        end
+      end
+      return score
+    else
+      return "N/A"
+    end
+  end
+
   private
   def food_groups_exist
     if food_groups.nil?
@@ -115,40 +163,56 @@ class MatchAnswer < ActiveRecord::Base
     end
   end
 
+  def increment_task_num
+    if user.condition == 4 && evaluating_id
+      self.task_type = "peer assessment"
+      self.task_num = user.num_tests
+    else
+      self.task_type = "primary"
+      self.task_num = user.num_tests + 1
+    end
+    return true
+  end
+
   def evaluate_answers
+    self.num_ingredients = food_groups.keys.length
+
     unless food_groups.nil?
       # overall assessment
       self.food_groups_correct = meal.food_nutrition[component_name].eql?(food_groups)
 
+      answers = individual_answers(food_groups)
+
       # individual assessment
-      self.food_groups_correct_all = individual_answers(food_groups)
+      self.food_groups_correct_all = answers
+
+      values = []
+      answers.values.each do |v|
+        v.each_value {|value| values.push(value)}
+      end
+
+      self.num_correct = values.select{|a| a == "correct"}.length
     end
 
     unless food_groups_update.nil?
       # overall assessment
       self.food_groups_update_correct = meal.food_nutrition[component_name].eql?(food_groups_update)
 
+      answers = individual_answers(food_groups_update)
+
       # individual assessment
-      self.food_groups_update_correct_all = individual_answers(food_groups_update)
+      self.food_groups_update_correct_all = answers
+
+      values = []
+      answers.values.each do |v|
+        v.each_value {|value| values.push(value)}
+      end
+
+      self.num_correct_update = values.select{|a| a == "correct"}.length
     end
     return true
   end
 
-  def individual_answers(compare_food_groups)
-    {}.tap do |correct_all|
-      meal.food_nutrition[component_name].each do |item|
-        item = item[0]
-        correct_all[item] = {}
-        actual_groups = meal.food_nutrition[component_name][item]
-        answered_groups = compare_food_groups[item]
-        Meal::GROUPS.each do |g|
-          unless actual_groups.nil? || answered_groups.nil?
-            correct_all[item][g] = actual_groups.include?(g) == answered_groups.include?(g) ? 'correct' : 'incorrect'
-          end
-        end
-      end
-    end
-  end
 
 end
 

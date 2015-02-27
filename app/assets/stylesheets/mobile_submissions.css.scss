@@ -4,7 +4,7 @@
   }
 
   form {
-    width: 400px;
+    width: 100%;
   }
 
   label {
@@ -19,12 +19,16 @@
 
   .rangeslider,
   input[type='range'] {
-    max-width: 800px;
+    max-width: 80%;
     margin-bottom: 20px;
   }
 
   div.output {
     display: inline-block;
+  }
+
+  img {
+    width: 100%;
   }
 
 }

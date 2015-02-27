@@ -1,15 +1,15 @@
 <div class="edit" data-role="page">
-  <div data-role="header">Mealyzer</div>
-    <div role="main" class="ui-content">
-    <h1>Mealyzer: Evaluate Mobile Submission #<%= @mobile_submission.id %></h1>
-    <h4>User id:<%= @mobile_submission.uid %></h4>
+  <div role="main" class="ui-content">
+  <h1>Mealyzer: Evaluate Mobile Submission #<%= @mobile_submission.id %></h1>
+  <h4>User id:<%= @mobile_submission.uid %></h4>
 
-    <%= image_tag(@mobile_submission.photo.url(:medium)) %>
-    <br/><br/>
-
+  <br/><br/>
+  <% if @mobile_submission.evaluated? %>
+    <h2>This submission has already been evaluated!</h2>
+  <% else %>
     <%= simple_form_for @mobile_submission do |f| %>
       <%= f.hidden_field :evaluated %>
-
+      <%= image_tag(@mobile_submission.photo.url(:medium)) %>
       <div class="slider-container">
         <label>Carbs (g):</label>
         <input name="mobile_submission[carbs_eval]" type="range" min="0" max="100" value="0" data-highlight="true"/>
@@ -37,7 +37,7 @@
       <%= f.submit "Submit", :class => "btn btn-primary" %>
       <br/><br/><br/>
     <% end %>
-  </div>
+  <% end %>
 </div>
 
 

@@ -1,0 +1,53 @@
+ <p>Think again about your choices, and whether you were consistent in how you matched the different ingredients to food groups. Remember, the best answer should list ALL food groups for each of the ingredients. Do you still think your answers were correct? Developing a good “nutrition gut” takes time and experience. Reflecting on your earlier answers may help you become better at this task.
+</p>
+  <br/>
+
+<% @match_answer_group.answers.each do |answer| %>
+
+  <div class="row">
+
+    <div class="col-md-5">
+          <h4><%= answer.component_name %></h4>
+
+      <%= image_tag "#{answer.meal.photo}_#{answer.id}", :id => "photo_#{answer.id}_#{answer.component_name.squish.downcase.tr(" ","_")}" %>
+
+    <div class="my_answer">
+
+      <table>
+        <tr><td class="community" colspan="4">Your Answer:</td></tr>
+        <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+        <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+        <% answer.food_groups_update.each do |food_item, groups| %>
+          <tr><td></td><td><%= food_item %></td>
+          <% Meal::GROUPS.each do |group| %>
+            <td>
+              <% if groups.include?(group) %>
+                <span class='glyphicon glyphicon-ok'></span>
+              <% end %>
+            </td>
+          <% end %>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+    <br/><br/><br/>
+
+    <script>
+      jQuery(window).load(function(){
+        new Mealyzer.Views.MatchesView({
+          el: '.matches',
+          geometry: <%= answer.location.to_json.html_safe %>,
+          name: "<%= answer.component_name %>",
+          source: "<%= "#{request.protocol}#{request.host_with_port}#{answer.meal.photo.url}_#{answer.id}" %>",
+          id: "<%= "#{answer.id}_#{answer.component_name.squish.downcase.tr(" ","_")}" %>"
+        });
+      });
+    </script>
+    </div>
+  </div>
+
+<% end %>
+
+<%= link_to "Next", new_match_answer_path, :class => "btn btn-primary" %>
+<br/><br/><br/>
+

@@ -1,7 +1,7 @@
 
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! We asked other Turkers what they thought about your solution and whether it was correct or incorrect. </div>
-  <p>Below you can see their answers and explanations for what they thoughts was incorrect in your solution. You can see how many other Turkers thought your solution was correct, or incorrect. Please think carefully whether you agree or disagree with these assessments and make a note of it in the next jobs.</p>
+  <div class="alert alert-success" role="alert">Thank you! We asked other Turkers whether this answer was correct or not (and if not, why). </div>
+  <p>Below you can see their feedback. Please review it carefully. Remember, the best answer should list ALL food groups for each of the ingredients. Developing a good “nutrition gut” takes time and experience. The feedback provided by your fellow Turkers may help you become better at this task.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>

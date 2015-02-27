@@ -15,7 +15,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'paperclip', '~> 4.1'
 gem 'simple_form'
-gem 'turkee', :git => 'https://github.com/aantix/turkee.git', branch: 'master'
+gem 'turkee', :git => 'https://github.com/jpdimond/turkee.git', branch: 'master'
 gem 'factory_girl'
 gem 'jquery_mobile_rails'
 

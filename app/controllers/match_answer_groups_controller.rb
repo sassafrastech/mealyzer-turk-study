@@ -2,6 +2,7 @@ class MatchAnswerGroupsController < ApplicationController
 
   def edit
     @match_answer_group = MatchAnswerGroup.new(:answers => MatchAnswer.last_five(current_user))
+    @user = current_user
   end
 
   def update

@@ -1,23 +1,47 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
   hello: "Hello world"
+
+  survey:
+    pre_test_questions:
+      first: "How knowledgeable are you about food and nutrition?"
+      second: "How confident are you that you can correctly recognize what food groups different foods belong to? (e.g. carbs, fat, protein, fiber)"
+    post_test_questions:
+      level_difficulty: "For this HIT, how would you assess the level of difficulty, on average?"
+      confident: "How confident are you that your answers are correct?"
+      confident_groups: "How confident are you that you can recognize what food groups different foods belong to?"
+      feedback: "All the extra information/feedback I received while working on this HIT made it too time-consuming"
+      future: "I would like to receive this additional information/feedback in my future HITs."
+      learned: "After working on this HIT I feel I learned new things about food and nutrition."
+    condition_specific_questions:
+      1_repeat: "Repeating the task multiple times helped me get better at mapping different foods to their food groups."
+      2_other_answers: "Seeing answers submitted by other Turkers helped me get better at mapping different foods to their food groups."
+      3_revise: "Being able to revise my own answers after seeing answers by other turkers helped me get better at mapping different foods to their food groups."
+      4_evaluating: "Evaluating answers provided by other turkers helped me get better at mapping different foods to their food groups."
+      5_turker_evaluated: "Seeing whether other Turkers evaluated my answers as correct or incorrect helped me get better at mapping different foods to their food groups."
+      6_revise_evaluated: "Being able to revise my own answers after seeing whether other Turkers evaluated them as correct or incorrect helped me get better at mapping different foods to their food groups."
+      7_self: "Reviewing and revising my own answers helped me get better at mapping different foods to their food groups."
+      8_self_view: "Reviewing my own answers helped me get better at mapping different foods to their food groups."
+    answers_knowledge:
+      1: "Very knowledgeable"
+      2: "Somewhat knowledgeable"
+      3: "Neutral"
+      4: "Not very knowledgeable"
+      5: "Not at all knowledgeable"
+    answers_confidence:
+      1: "Very confident"
+      2: "Somewhat confident"
+      3: "Neutral"
+      4: "Somewhat uncertain"
+      5: "Very uncertain"
+    answers_difficulty:
+      1: "Very difficult"
+      2: "Somewhat difficult"
+      3: "Neutral"
+      4: "Somewhat easy"
+      5: "Very easy"
+    answers_agree:
+      1: "Strongly agree"
+      2: "Agree"
+      3: "Neutral"
+      4: "Disagree"
+      5: "Strongly disagree"

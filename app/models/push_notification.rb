@@ -3,8 +3,8 @@ require 'houston'
 class PushNotification
   include ActiveModel::Model
 
-  @@APN = Houston::Client.development
-  @@APN.certificate = File.read("/home/tomsmyth/webapps/rails4/mealyzer_study/shared/config/development.pem")
+  @@APN = Houston::Client.production
+  @@APN.certificate = File.read("/home/tomsmyth/webapps/rails4/mealyzer_study/shared/config/production.pem")
 
   def self.send(token)
     Rails.logger.debug("about to send token")

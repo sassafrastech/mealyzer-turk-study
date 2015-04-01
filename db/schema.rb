@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919194421) do
+ActiveRecord::Schema.define(version: 20150327182542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,7 +85,10 @@ ActiveRecord::Schema.define(version: 20140919194421) do
     t.text     "carbs_explain"
     t.text     "fiber_explain"
     t.string   "photo_url"
+    t.integer  "user_id"
   end
+
+  add_index "mobile_submissions", ["user_id"], name: "index_mobile_submissions_on_user_id", using: :btree
 
   create_table "tag_answers", force: true do |t|
     t.integer  "user_id"
@@ -152,6 +155,8 @@ ActiveRecord::Schema.define(version: 20140919194421) do
     t.text     "post_test"
     t.integer  "pre_test_score"
     t.integer  "post_test_score"
+    t.string   "token"
+    t.string   "uid"
   end
 
 end

@@ -3,6 +3,10 @@ class MobileSubmissionsController < ApplicationController
 
   def create
     params[:mobile_submission] = JSON.parse(params[:mobile_submission])
+
+    u = User.where(:uid => params[:mobile_submission][:uid]).first
+    params[:mobile_submission][:user_id] = u.id
+
     @mobile_submission = MobileSubmission.create(params.require(:mobile_submission).permit!)
 
     @mobile_submission.photo = params.permit(:file)[:file]
@@ -27,7 +31,10 @@ class MobileSubmissionsController < ApplicationController
     params[:mobile_submission][:evaluated] = true
     @mobile_submission.update_attributes(params.require(:mobile_submission).permit!)
     @mobile_submission.grade!
-    # could send push notification here, but we will just poll currently
+
+    @user = User.find(@mobile_submission.user_id)
+    Rails.logger.debug("Sending a PN using the token #{@user.token}")
+    PushNotification.send(@user.token)
   end
 
   def index

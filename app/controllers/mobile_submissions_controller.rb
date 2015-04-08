@@ -27,12 +27,14 @@ class MobileSubmissionsController < ApplicationController
   end
 
   def update
+    Rails.logger.debug("updating the evalution")
     @mobile_submission = MobileSubmission.find(params[:id])
     params[:mobile_submission][:evaluated] = true
     @mobile_submission.update_attributes(params.require(:mobile_submission).permit!)
     @mobile_submission.grade!
-
+    Rails.logger.debug("about to find the user")
     @user = User.find(@mobile_submission.user_id)
+    Rails.logger.debug("the user is #{@user}")
     Rails.logger.debug("Sending a PN using the token #{@user.token}")
     PushNotification.send(@user.token)
   end

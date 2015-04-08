@@ -34,6 +34,12 @@
         <%= f.input :fiber_explain, :label => "Fiber Explanation" %>
       </div>
 
+      <div class="slider-container">
+        <label>Calories:</label>
+        <input name="mobile_submission[calories_eval]" type="range" min="0" max="2000" value="0" data-highlight="true"/>
+        <%= f.input :calories_explain, :label => "Calories Explanation" %>
+      </div>
+
       <%= f.submit "Submit", :class => "btn btn-primary" %>
       <br/><br/><br/>
     <% end %>

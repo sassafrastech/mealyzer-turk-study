@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408173846) do
+ActiveRecord::Schema.define(version: 20150408181232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20150408173846) do
     t.string   "photo_url"
     t.integer  "user_id"
     t.integer  "calories_user"
-    t.integer  "calories_grade"
+    t.boolean  "calories_grade"
     t.text     "calories_explain"
     t.integer  "calories_eval"
   end

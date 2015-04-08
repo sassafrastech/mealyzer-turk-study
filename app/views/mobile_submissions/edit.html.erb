@@ -4,9 +4,9 @@
   <h4>User id:<%= @mobile_submission.uid %></h4>
 
   <br/><br/>
-  <% #if @mobile_submission.evaluated? %>
+  <% if @mobile_submission.evaluated? %>
     <h2>This submission has already been evaluated!</h2>
-  <% #else %>
+  <% else %>
     <%= simple_form_for @mobile_submission do |f| %>
       <%= f.hidden_field :evaluated %>
       <%= image_tag(@mobile_submission.photo.url(:medium)) %>
@@ -43,7 +43,7 @@
       <%= f.submit "Submit", :class => "btn btn-primary" %>
       <br/><br/><br/>
     <% end %>
-  <% #end %>
+  <% end %>
 </div>
 
 

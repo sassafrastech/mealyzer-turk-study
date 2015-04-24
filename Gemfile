@@ -20,6 +20,7 @@ gem 'jquery_mobile_rails'
 gem 'houston'
 gem 'devise'
 gem 'devise_token_auth'
+gem 'omniauth'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'

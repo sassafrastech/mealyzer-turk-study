@@ -88,6 +88,7 @@ GEM
     execjs (2.2.0)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
+    hashie (3.3.1)
     highline (1.6.21)
     hike (1.2.3)
     houston (2.2.3)
@@ -117,6 +118,9 @@ GEM
     netrc (0.7.7)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
+    omniauth (1.2.2)
+      hashie (>= 1.2, < 4)
+      rack (~> 1.0)
     orm_adapter (0.5.0)
     paperclip (4.1.1)
       activemodel (>= 3.0.0)
@@ -237,6 +241,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   jquery_mobile_rails
+  omniauth
   paperclip (~> 4.1)
   pg
   rails (= 4.1)

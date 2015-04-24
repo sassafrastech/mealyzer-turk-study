@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'pg'
-gem 'rails', '4.0.3'
+gem 'rails', '4.1'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'sass-rails', '>= 3.2'
 gem 'rails-backbone'
@@ -18,6 +18,8 @@ gem 'turkee', :git => 'https://github.com/jpdimond/turkee.git', branch: 'master'
 gem 'factory_girl'
 gem 'jquery_mobile_rails'
 gem 'houston'
+gem 'devise'
+gem 'devise_token_auth'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'

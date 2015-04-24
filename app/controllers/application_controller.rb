@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include DeviseTokenAuth::Concerns::SetUserByToken
   force_ssl
   after_action :allow_amt_iframe
 

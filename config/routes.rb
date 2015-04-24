@@ -1,5 +1,7 @@
 MealyzerStudy::Application.routes.draw do
 
+  devise_for :users, :controllers => { :registrations => "registrations" }
+
   root 'home#index'
   resources :meals, :tags
   resources :match_answers

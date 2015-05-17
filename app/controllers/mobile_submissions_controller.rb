@@ -1,11 +1,9 @@
 class MobileSubmissionsController < ApplicationController
   protect_from_forgery :except => :create
+  before_action :authenticate_user!
 
   def create
     params[:mobile_submission] = JSON.parse(params[:mobile_submission])
-
-    u = User.where(:uid => params[:mobile_submission][:uid]).first
-    params[:mobile_submission][:user_id] = u.id
 
     @mobile_submission = MobileSubmission.create(params.require(:mobile_submission).permit!)
 
@@ -14,6 +12,7 @@ class MobileSubmissionsController < ApplicationController
     if @mobile_submission.save!
       # need to save photo url after paperclip
       @mobile_submission.photo_url = @mobile_submission.photo.url(:medium)
+      @mobile_submission.user_id = current_user.id
       @mobile_submission.save!
       SubmissionMailer.nutrition_request(@mobile_submission).deliver
       render :nothing => true, :status => 200, :content_type => 'text/html'

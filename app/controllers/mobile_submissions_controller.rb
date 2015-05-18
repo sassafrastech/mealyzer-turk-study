@@ -1,6 +1,6 @@
 class MobileSubmissionsController < ApplicationController
   protect_from_forgery :except => :create
-  before_action :authenticate_user!
+  before_action :authenticate_user!,  :except => :edit
 
   def create
     params[:mobile_submission] = JSON.parse(params[:mobile_submission])
@@ -40,8 +40,9 @@ class MobileSubmissionsController < ApplicationController
 
   def index
     # get all submissions for a particular user that have not been evaluated yet
-    @submitted = MobileSubmission.where(:uid => params[:id]).where(:evaluated => nil).all
-    @evaluated = MobileSubmission.where(:uid => params[:id]).where(:evaluated => true).all
+
+    @submitted = MobileSubmission.where(:user_id => current_user.id).where(:evaluated => nil).all
+    @evaluated = MobileSubmission.where(:user_id => current_user.id).where(:evaluated => true).all
     @all = {:submitted => @submitted, :evaluated => @evaluated}
     Rails.logger.debug(@all)
     respond_to do |format|

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428132730) do
+ActiveRecord::Schema.define(version: 20150512152755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,10 @@ ActiveRecord::Schema.define(version: 20150428132730) do
     t.boolean  "calories_grade"
     t.text     "calories_explain"
     t.integer  "calories_eval"
+    t.integer  "premeal_bg"
+    t.integer  "insulin"
+    t.boolean  "reminder"
+    t.integer  "postmeal_bg"
   end
 
   add_index "mobile_submissions", ["user_id"], name: "index_mobile_submissions_on_user_id", using: :btree
@@ -182,6 +186,8 @@ ActiveRecord::Schema.define(version: 20150428132730) do
     t.string   "nickname"
     t.text     "tokens"
     t.boolean  "diabetes"
+    t.boolean  "training"
+    t.integer  "training_stage"
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) << :first_name << :last_name << :diabetes
+    devise_parameter_sanitizer.for(:sign_up) << :first_name << :last_name << :diabetes << :training << :training_stage
     devise_parameter_sanitizer.for(:account_update) << :token
   end
 

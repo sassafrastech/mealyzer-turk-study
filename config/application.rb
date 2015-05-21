@@ -22,5 +22,15 @@ module MealyzerStudy
 
     # allow for localhost ssl
     config.use_ssl = false
+
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*',
+         :headers => :any,
+         :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+         :methods => [:get, :post, :delete, :put, :options]
+      end
+    end
   end
 end

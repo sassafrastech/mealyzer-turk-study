@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408181232) do
+ActiveRecord::Schema.define(version: 20150522160018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,12 @@ ActiveRecord::Schema.define(version: 20150408181232) do
     t.boolean  "calories_grade"
     t.text     "calories_explain"
     t.integer  "calories_eval"
+    t.integer  "premeal_bg"
+    t.integer  "insulin"
+    t.boolean  "reminder"
+    t.integer  "postmeal_bg"
+    t.datetime "premeal_bg_time"
+    t.datetime "postmeal_bg_time"
   end
 
   add_index "mobile_submissions", ["user_id"], name: "index_mobile_submissions_on_user_id", using: :btree
@@ -153,7 +159,7 @@ ActiveRecord::Schema.define(version: 20150408181232) do
     t.string   "assignmentId"
     t.string   "hitId"
     t.integer  "condition"
-    t.integer  "num_tests",       default: 0
+    t.integer  "num_tests",              default: 0
     t.string   "study_id"
     t.text     "pre_test"
     t.text     "post_test"
@@ -161,6 +167,33 @@ ActiveRecord::Schema.define(version: 20150408181232) do
     t.integer  "post_test_score"
     t.string   "token"
     t.string   "uid"
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "provider",               default: "", null: false
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
+    t.string   "name"
+    t.string   "nickname"
+    t.text     "tokens"
+    t.boolean  "diabetes"
+    t.boolean  "training"
+    t.integer  "training_stage"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
 end

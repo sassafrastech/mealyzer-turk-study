@@ -1,5 +1,9 @@
 MealyzerStudy::Application.routes.draw do
 
+  #devise_for :users, :controllers => { :registrations => "registrations" }
+
+  mount_devise_token_auth_for 'User', at: 'auth'
+
   root 'home#index'
   resources :meals, :tags
   resources :match_answers

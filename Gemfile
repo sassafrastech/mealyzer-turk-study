@@ -22,6 +22,8 @@ gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
 
+gem 'active_model_serializers'
+
 # Cross origin requests
 gem 'rack-cors', :require => 'rack/cors'
 

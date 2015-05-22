@@ -40,16 +40,12 @@ class MobileSubmissionsController < ApplicationController
 
   def index
     # get all submissions for a particular user that have not been evaluated yet
-
-    @submitted = MobileSubmission.where(:user_id => current_user.id).where(:evaluated => nil).all
-    @evaluated = MobileSubmission.where(:user_id => current_user.id).where(:evaluated => true).all
+    @submitted = MobileSubmission.where(:user_id => current_user.id).where(:evaluated => nil)
+    @evaluated = MobileSubmission.where(:user_id => current_user.id).where(:evaluated => true)
     @all = {:submitted => @submitted, :evaluated => @evaluated}
-    Rails.logger.debug(@all)
     respond_to do |format|
-      format.html
       format.json { render json: @all }
     end
-
   end
 
   def show
@@ -57,7 +53,5 @@ class MobileSubmissionsController < ApplicationController
     respond_to do |format|
       format.json { render json: @meal}
     end
-
   end
-
 end

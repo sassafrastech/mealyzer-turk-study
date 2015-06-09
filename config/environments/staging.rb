@@ -82,13 +82,14 @@ MealyzerStudy::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = Env.mealyzer_mail_delivery_method
   config.action_mailer.smtp_settings = {
-  :address              => "smtp.webfaction.com",
-  :port                 =>  587,
-  :domain               =>  "sassafras.coop",
-  :user_name            =>  "sassafrastech",
-  :password             =>  "revolutionstartsathome",
-  :authentication       =>  :plain,
-  :enable_starttls_auto =>  true }
+  :address              => Env.mealyzer_smtp_host_address,
+  :port                 => Env.mealyzer_smtp_host_port,
+  :domain               => Env.mealyzer_smtp_host_domain,
+  :user_name            => Env.mealyzer_smtp_host_user_name,
+  :password             => Env.mealyzer_smtp_host_password,
+  :authentication       => Env.mealyzer_smtp_host_authentication,
+  :enable_starttls_auto => Env.mealyzer_smtp_host_enable_starttls
+  }
 end

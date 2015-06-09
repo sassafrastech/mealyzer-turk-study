@@ -41,7 +41,7 @@ MealyzerStudy::Application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-  :address              => Env.mealyzer_smtp_host_address.presence || 'localhost',
-  :port                 => ENV.mealyzer_smtp_host_port.presence || 587
+    :address              => Env.mealyzer_smtp_host_address.presence || 'localhost',
+    :port                 => Env.mealyzer_smtp_host_port.presence || 587
   }
 end

@@ -36,5 +36,15 @@ module MealyzerStudy
          :methods => [:get, :post, :delete, :put, :options]
       end
     end
+    config.action_mailer.delivery_method = Env.mealyzer_mail_delivery_method(allow_nil: true)
+    config.action_mailer.smtp_settings = {
+      :address              => Env.mealyzer_smtp_host_address(allow_nil: true),
+      :port                 => Env.mealyzer_smtp_host_port(allow_nil: true),
+      :domain               => Env.mealyzer_smtp_host_domain(allow_nil: true),
+      :user_name            => Env.mealyzer_smtp_host_user_name(allow_nil: true),
+      :password             => Env.mealyzer_smtp_host_password(allow_nil: true),
+      :authentication       => Env.mealyzer_smtp_host_authentication(allow_nil: true),
+      :enable_starttls_auto => Env.mealyzer_smtp_host_enable_starttls(allow_nil: true)
+    }
   end
 end

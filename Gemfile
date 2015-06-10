@@ -21,7 +21,6 @@ gem 'houston'
 gem 'devise'
 gem 'devise_token_auth'
 gem 'omniauth'
-gem 'mailcatcher'
 
 # Cross origin requests
 gem 'rack-cors', :require => 'rack/cors'
@@ -38,6 +37,7 @@ group :development, :test do
   gem 'pry-debugger'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
+  gem 'mailcatcher'
 end
 
 group :doc do

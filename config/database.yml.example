@@ -3,13 +3,16 @@ development:
   database: mealyzer_development
   pool: 5
   timeout: 5000
+  username: 
+  password:
+
 
 test:
   adapter: postgresql
   database: mealyzer_test
   pool: 5
   timeout: 5000
-  username: jpdimond
+  username: 
   password:
 
 production:
@@ -17,5 +20,5 @@ production:
   database: mealyzer_production
   pool: 5
   timeout: 5000
-  username: jpdimond
+  username: 
   password:

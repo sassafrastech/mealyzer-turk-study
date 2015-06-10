@@ -31,6 +31,8 @@ set :linked_files, %w{config/database.yml config/railsenv config/initializers/tu
 # Default value for linked_dirs is []
 set :linked_dirs, %w{public/system public/uploads}
 
+set :bundle_dir, "$HOME/webapps/rails4/gems"
+
 # Default value for default_env is {}
 set :default_env, {
   path: "$PATH:$HOME/bin:$HOME/webapps/rails4/bin",

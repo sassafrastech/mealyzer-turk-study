@@ -24,11 +24,20 @@ gem 'omniauth'
 
 # Cross origin requests
 gem 'rack-cors', :require => 'rack/cors'
+gem 'dotenv'
+gem 'environs'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'sqlite3'
   gem 'thin'
+  gem 'capistrano',  '~> 3.1'
+  gem 'capistrano-rails', '~> 1.1'
+  gem 'pry'
+  gem 'pry-debugger'
+  gem 'pry-remote'
+  gem 'pry-stack_explorer'
+  gem 'mailcatcher'
 end
 
 group :doc do
@@ -39,10 +48,3 @@ end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
-gem 'capistrano',  '~> 3.1'
-gem 'capistrano-rails', '~> 1.1'
-# Use debugger
-# gem 'debugger', group: [:development, :test]

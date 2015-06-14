@@ -54,7 +54,7 @@ class MobileSubmissionsController < ApplicationController
 
   private
 
-  def process_photo
+  def load_photo
     if params[:mock_request].present?
       @mobile_submission.photo = load_photo_from_server
     else

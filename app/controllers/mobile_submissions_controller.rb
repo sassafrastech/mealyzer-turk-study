@@ -3,8 +3,8 @@ class MobileSubmissionsController < ApplicationController
   before_action :authenticate_user!,  :except => :edit
 
   def create
-    params[:mobile_submission] = JSON.parse(params[:patient_observations][:mobile_submission])
-    @mobile_submission = MobileSubmission.create(params.require(:mobile_submission).permit!, )
+    params[:mobile_submission] = JSON.parse(params[:mobile_submission])
+    @mobile_submission = MobileSubmission.create(mobile_submission_params)
     process_photo
     if @mobile_submission.save!
       # need to save photo url after paperclip
@@ -63,9 +63,13 @@ class MobileSubmissionsController < ApplicationController
   end
 
   def load_photo_from_server
-    file_path = File.join(Rails.root.to_s, 'app/assets/images', params[:fileName]) 
+    file_path = File.join(Rails.root.to_s, 'app/assets/images', 'kabobs.jpg')
     File.new(file_path, 'r')
   rescue => e
     Rails.logger.debug "File not accessible: #{e}"
+  end
+
+  def mobile_submission_params
+    params.require(:mobile_submission).permit(:premeal_bg_time, :carbs_user, :protein_user, :fat_user, :fiber_user, :calories_user, :premeal_bg, :insulin, :description, :meal)
   end
 end

@@ -31,7 +31,7 @@ class MobileSubmissionsController < ApplicationController
     @mobile_submission.update_attributes(mobile_submissions_parameters)
     @mobile_submission.grade! unless params[:user_update].presence
     @user = User.find(@mobile_submission.user_id)
-    PushNotification.send(@user.token)
+    send_mobile_submissions
   end
 
   def index
@@ -54,6 +54,27 @@ class MobileSubmissionsController < ApplicationController
   private
 
   def mobile_submissions_parameters
-    params.require(:mobile_submission).permit(:premeal_bg, :premeal_bg_time)
+    params.require(:mobile_submission).permit(:protein_user, :fat_user, :carbs_user,
+                                              :fiber_user, :created_at, :photo_file_name,
+                                              :photo_content_type, :photo_file_size, :photo_updated_at,
+                                              :protein_eval, :carbs_eval, :fiber_eval, :fat_eval,
+                                              :evaluated, :meal, :protein_grade,
+                                              :fat_grade, :carbs_grade, :fiber_grade,
+                                              :protein_explain, :fat_explain, :carbs_explain,
+                                              :fiber_explain, :photo_url, :calories_user,
+                                              :calories_grade, :calories_explain, :calories_eval,
+                                              :premeal_bg, :insulin, :reminder,
+                                              :postmeal_bg, :premeal_bg_time, :postmeal_bg_time
+                                              )
   end
+
+  def send_mobile_submissions
+    if Rails.env.production? || Rails.env.staging?
+      PushNotification.send(@user.token)
+    end
+    render :nothing => true, :status => 200, :content_type => 'text/html'    
+  rescue => e
+    render :nothing => true, :status => 500, :content_type => 'text/html'    
+  end
+
 end

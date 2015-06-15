@@ -27,14 +27,9 @@ class MobileSubmissionsController < ApplicationController
 
   def update
     @mobile_submission = MobileSubmission.find(params[:id])
-
-    # this should only be for dietician update
-    @mobile_submission.evaluated = true
-    # Moncef: Please fix strong params.
-    @mobile_submission.update_attributes(params.require(:mobile_submission).permit!)
-
-    # Moncef: This stuff is only for dietician update.
-    @mobile_submission.grade!
+    @mobile_submission.evaluated = true unless params[:user_update].presence
+    @mobile_submission.update_attributes(mobile_submissions_parameters)
+    @mobile_submission.grade! unless params[:user_update].presence
     @user = User.find(@mobile_submission.user_id)
     PushNotification.send(@user.token)
   end
@@ -54,5 +49,11 @@ class MobileSubmissionsController < ApplicationController
     respond_to do |format|
       format.json { render json: @meal}
     end
+  end
+
+  private
+
+  def mobile_submissions_parameters
+    params.require(:mobile_submission).permit(:premeal_bg, :premeal_bg_time)
   end
 end

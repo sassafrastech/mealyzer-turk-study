@@ -7,7 +7,7 @@ class MobileSubmission < ActiveRecord::Base
 
   has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
 
-  validates_attachment_presence :photo
+#  validates_attachment_presence :photo
   validates_attachment_content_type :photo, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
   def grade!

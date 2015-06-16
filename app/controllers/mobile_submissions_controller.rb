@@ -27,9 +27,9 @@ class MobileSubmissionsController < ApplicationController
 
   def update
     @mobile_submission = MobileSubmission.find(params[:id])
-    @mobile_submission.evaluated = true unless params[:user_update].presence
+    @mobile_submission.evaluated = true unless params[:user_update]
     @mobile_submission.update_attributes(mobile_submissions_parameters)
-    @mobile_submission.grade! unless params[:user_update].presence
+    @mobile_submission.grade! unless params[:user_update]
     @user = User.find(@mobile_submission.user_id)
     send_mobile_submissions
   end
@@ -69,7 +69,7 @@ class MobileSubmissionsController < ApplicationController
   end
 
   def send_mobile_submissions
-    if Rails.env.production? || Rails.env.staging?
+    if !(Rails.env.development? || Rails.env.test?)
       PushNotification.send(@user.token)
     end
     render :nothing => true, :status => 200, :content_type => 'text/html'    

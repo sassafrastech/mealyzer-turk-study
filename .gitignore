@@ -25,4 +25,6 @@ config/database.yml
 
 public/system/mobile_submissions/photos/*
 
-.env
+.env.development
+.env.test
+

@@ -35,10 +35,12 @@ group :development, :test do
   gem 'thin'
   gem 'capistrano',  '~> 3.1'
   gem 'capistrano-rails', '~> 1.1'
-  gem 'pry'
-  gem 'pry-debugger'
-  gem 'pry-remote'
-  gem 'pry-stack_explorer'
+  gem 'pry-byebug'
+  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
+#  gem 'pry'
+#  gem 'pry-debugger'
+#  gem 'pry-remote'
+#  gem 'pry-stack_explorer'
   gem 'mailcatcher'
 end
 

@@ -23,16 +23,12 @@ class MobileSubmissionsController < ApplicationController
   end
 
   def update
-    Rails.logger.debug("updating the evalution")
     @mobile_submission = MobileSubmission.find(params[:id])
-    params[:mobile_submission][:evaluated] = true
-    @mobile_submission.update_attributes(params.require(:mobile_submission).permit!)
-    @mobile_submission.grade!
-    Rails.logger.debug("about to find the user")
+    @mobile_submission.evaluated = true unless params[:user_update]
+    @mobile_submission.update_attributes(mobile_submissions_parameters)
+    @mobile_submission.grade! unless params[:user_update]
     @user = User.find(@mobile_submission.user_id)
-    Rails.logger.debug("the user is #{@user}")
-    Rails.logger.debug("Sending a PN using the token #{@user.token}")
-    PushNotification.send(@user.token)
+    send_mobile_submissions
   end
 
   def index
@@ -54,6 +50,30 @@ class MobileSubmissionsController < ApplicationController
 
   private
 
+  def mobile_submissions_parameters
+    params.require(:mobile_submission).permit(:protein_user, :fat_user, :carbs_user,
+                                              :fiber_user, :created_at, :photo_file_name,
+                                              :photo_content_type, :photo_file_size, :photo_updated_at,
+                                              :protein_eval, :carbs_eval, :fiber_eval, :fat_eval,
+                                              :evaluated, :meal, :protein_grade,
+                                              :fat_grade, :carbs_grade, :fiber_grade,
+                                              :protein_explain, :fat_explain, :carbs_explain,
+                                              :fiber_explain, :photo_url, :calories_user,
+                                              :calories_grade, :calories_explain, :calories_eval,
+                                              :premeal_bg, :insulin, :reminder,
+                                              :postmeal_bg, :premeal_bg_time, :postmeal_bg_time
+                                              )
+  end
+
+  def send_mobile_submissions
+    if !(Rails.env.development? || Rails.env.test?)
+      PushNotification.send(@user.token)
+    end
+    render :nothing => true, :status => 200, :content_type => 'text/html'    
+  rescue => e
+    render :nothing => true, :status => 500, :content_type => 'text/html'    
+  end
+
   def load_photo
     if params[:mock_request].present?
       @mobile_submission.photo = load_photo_from_server
@@ -67,9 +87,5 @@ class MobileSubmissionsController < ApplicationController
     File.new(file_path, 'r')
   rescue => e
     Rails.logger.debug "File not accessible: #{e}"
-  end
-
-  def mobile_submission_params
-    params.require(:mobile_submission).permit(:premeal_bg_time, :carbs_user, :protein_user, :fat_user, :fiber_user, :calories_user, :premeal_bg, :insulin, :description, :meal)
   end
 end

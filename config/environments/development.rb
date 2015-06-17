@@ -34,6 +34,6 @@ MealyzerStudy::Application.configure do
   config.use_ssl = false
   config.ssl_port = 3001
 
-  config.action_controller.asset_host = 'http://localhost:3001' # Locally
+  #config.action_controller.asset_host = 'http://localhost:3001' # Locally
   #config.action_dispatch.default_headers['X-Frame-Options'] = "ALLOW-FROM https://workersandbox.mturk.com"
 end

@@ -4,7 +4,7 @@ class MobileSubmissionsController < ApplicationController
 
   def create
     params[:mobile_submission] = JSON.parse(params[:mobile_submission])
-    @mobile_submission = MobileSubmission.create(mobile_submission_params)
+    @mobile_submission = MobileSubmission.create(mobile_submissions_parameters)
     load_photo
     if @mobile_submission.save!
       # need to save photo url after paperclip

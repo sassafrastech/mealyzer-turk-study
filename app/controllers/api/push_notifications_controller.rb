@@ -1,4 +1,4 @@
-class PushNotificationsController < ApplicationController
+class Api::PushNotificationsController < ApplicationController
   protect_from_forgery :except => :subscribe
   before_action :authenticate_user!
 

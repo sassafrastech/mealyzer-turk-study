@@ -27,4 +27,4 @@ public/system/mobile_submissions/photos/*
 
 .env.development
 .env.test
-
+.env

@@ -12,9 +12,7 @@ MealyzerStudy::Application.routes.draw do
 
   resources :mobile_submissions
 
-  devise_scope :user do
-    root to: "devise/sessions#new"
-  end
+  root to: 'home#index'
 
   # Mechanical Turk routes
   # resources :tags

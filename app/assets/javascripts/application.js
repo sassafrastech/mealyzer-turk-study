@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require underscore
+//= require jquery.mobile
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink

@@ -3,7 +3,7 @@ class MobileSubmission < ActiveRecord::Base
   THRESHOLD_CARBS = 5
   THRESHOLD_FAT = 5
   THRESHOLD_FIBER = 5
-  THRESHOLD_CALORIES = 5
+  THRESHOLD_CALORIES = 100
 
   has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
 

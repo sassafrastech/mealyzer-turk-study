@@ -1,7 +1,6 @@
 <div class="edit" data-role="page">
   <div role="main" class="ui-content">
   <h1>Mealyzer: Evaluate Mobile Submission #<%= @mobile_submission.id %></h1>
-  <h4>User id:<%= @mobile_submission.uid %></h4>
 
   <br/><br/>
   <% if @mobile_submission.evaluated? %>
@@ -45,8 +44,3 @@
     <% end %>
   <% end %>
 </div>
-
-
-<script>
-  //$(document).ready(function(){new Mealyzer.Views.MobileSubmissionsView({el: '.edit'}); });
-</script>

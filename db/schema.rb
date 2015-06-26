@@ -11,18 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522160018) do
+ActiveRecord::Schema.define(version: 20150626195506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "match_answers", force: true do |t|
+  create_table "match_answers", force: :cascade do |t|
     t.integer  "meal_id"
     t.integer  "user_id"
     t.text     "food_groups"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "component_name"
+    t.string   "component_name",                 limit: 255
     t.text     "food_groups_update"
     t.text     "explanation"
     t.boolean  "changed_answer"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20150522160018) do
     t.text     "food_groups_correct_all"
     t.text     "food_groups_update_correct_all"
     t.integer  "task_num"
-    t.string   "task_type"
+    t.string   "task_type",                      limit: 255
     t.integer  "num_ingredients"
     t.integer  "num_correct"
     t.integer  "num_correct_update"
@@ -43,22 +43,22 @@ ActiveRecord::Schema.define(version: 20150522160018) do
   add_index "match_answers", ["meal_id"], name: "index_match_answers_on_meal_id", using: :btree
   add_index "match_answers", ["user_id"], name: "index_match_answers_on_user_id", using: :btree
 
-  create_table "meals", force: true do |t|
-    t.string   "name",               default: "Meal"
+  create_table "meals", force: :cascade do |t|
+    t.string   "name",               limit: 255, default: "Meal"
     t.text     "food_locations"
     t.text     "food_options"
     t.text     "food_nutrition"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
+    t.string   "photo_file_name",    limit: 255
+    t.string   "photo_content_type", limit: 255
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.text     "food_components"
   end
 
-  create_table "mobile_submissions", force: true do |t|
-    t.string   "uid"
+  create_table "mobile_submissions", force: :cascade do |t|
+    t.string   "uid",                limit: 255
     t.text     "description"
     t.integer  "protein_user"
     t.integer  "fat_user"
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(version: 20150522160018) do
     t.integer  "fiber_user"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
+    t.string   "photo_file_name",    limit: 255
+    t.string   "photo_content_type", limit: 255
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.integer  "protein_eval"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20150522160018) do
     t.integer  "fiber_eval"
     t.integer  "fat_eval"
     t.boolean  "evaluated"
-    t.string   "meal"
+    t.string   "meal",               limit: 255
     t.boolean  "protein_grade"
     t.boolean  "fat_grade"
     t.boolean  "carbs_grade"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150522160018) do
     t.text     "fat_explain"
     t.text     "carbs_explain"
     t.text     "fiber_explain"
-    t.string   "photo_url"
+    t.string   "photo_url",          limit: 255
     t.integer  "user_id"
     t.integer  "calories_user"
     t.boolean  "calories_grade"
@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20150522160018) do
 
   add_index "mobile_submissions", ["user_id"], name: "index_mobile_submissions_on_user_id", using: :btree
 
-  create_table "tag_answers", force: true do |t|
+  create_table "tag_answers", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "meal_id"
     t.text     "food_locations"
@@ -111,40 +111,40 @@ ActiveRecord::Schema.define(version: 20150522160018) do
   add_index "tag_answers", ["meal_id"], name: "index_tag_answers_on_meal_id", using: :btree
   add_index "tag_answers", ["user_id"], name: "index_tag_answers_on_user_id", using: :btree
 
-  create_table "turkee_imported_assignments", force: true do |t|
-    t.string   "assignment_id"
+  create_table "turkee_imported_assignments", force: :cascade do |t|
+    t.string   "assignment_id",  limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "turkee_task_id"
-    t.string   "worker_id"
+    t.string   "worker_id",      limit: 255
     t.integer  "result_id"
   end
 
   add_index "turkee_imported_assignments", ["assignment_id"], name: "index_turkee_imported_assignments_on_assignment_id", unique: true, using: :btree
   add_index "turkee_imported_assignments", ["turkee_task_id"], name: "index_turkee_imported_assignments_on_turkee_task_id", using: :btree
 
-  create_table "turkee_studies", force: true do |t|
+  create_table "turkee_studies", force: :cascade do |t|
     t.integer  "turkee_task_id"
     t.text     "feedback"
-    t.string   "gold_response"
+    t.string   "gold_response",  limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "turkee_studies", ["turkee_task_id"], name: "index_turkee_studies_on_turkee_task_id", using: :btree
 
-  create_table "turkee_tasks", force: true do |t|
-    t.string   "hit_url"
+  create_table "turkee_tasks", force: :cascade do |t|
+    t.string   "hit_url",               limit: 255
     t.boolean  "sandbox"
-    t.string   "task_type"
+    t.string   "task_type",             limit: 255
     t.text     "hit_title"
     t.text     "hit_description"
-    t.string   "hit_id"
-    t.decimal  "hit_reward",            precision: 10, scale: 2
+    t.string   "hit_id",                limit: 255
+    t.decimal  "hit_reward",                        precision: 10, scale: 2
     t.integer  "hit_num_assignments"
     t.integer  "hit_lifetime"
-    t.string   "form_url"
-    t.integer  "completed_assignments",                          default: 0
+    t.string   "form_url",              limit: 255
+    t.integer  "completed_assignments",                                      default: 0
     t.boolean  "complete"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -152,44 +152,40 @@ ActiveRecord::Schema.define(version: 20150522160018) do
     t.integer  "expired"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "workerId"
-    t.string   "assignmentId"
-    t.string   "hitId"
+    t.string   "workerId",                limit: 255
+    t.string   "assignmentId",            limit: 255
+    t.string   "hitId",                   limit: 255
     t.integer  "condition"
-    t.integer  "num_tests",              default: 0
-    t.string   "study_id"
+    t.integer  "num_tests",                           default: 0
+    t.string   "study_id",                limit: 255
     t.text     "pre_test"
     t.text     "post_test"
     t.integer  "pre_test_score"
     t.integer  "post_test_score"
-    t.string   "token"
-    t.string   "uid"
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+    t.string   "push_notification_token", limit: 255
+    t.string   "uid",                     limit: 255
+    t.string   "email",                   limit: 255, default: "", null: false
+    t.string   "encrypted_password",      limit: 255, default: "", null: false
+    t.string   "reset_password_token",    limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                       default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "provider",               default: "", null: false
-    t.string   "confirmation_token"
+    t.string   "first_name",              limit: 255
+    t.string   "last_name",               limit: 255
+    t.string   "provider",                limit: 255, default: "", null: false
+    t.string   "confirmation_token",      limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.string   "name"
-    t.string   "nickname"
+    t.string   "unconfirmed_email",       limit: 255
     t.text     "tokens"
     t.boolean  "diabetes"
-    t.boolean  "training"
-    t.integer  "training_stage"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

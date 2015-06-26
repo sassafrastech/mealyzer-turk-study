@@ -11,7 +11,7 @@ class MobileSubmissionsController < ApplicationController
     @mobile_submission.grade!
 
     unless Rails.env.development? || Rails.env.test?
-      PushNotification.send(@mobile_submission.user.token)
+      PushNotification.send(@mobile_submission.user.push_notification_token)
     end
   end
 

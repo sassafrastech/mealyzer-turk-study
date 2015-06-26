@@ -3,7 +3,7 @@ class Api::PushNotificationsController < ApplicationController
   before_action :authenticate_user!
 
   def subscribe
-    current_user.update_attributes(token: params[:token])
+    current_user.update_attribute(:push_notification_token, params[:token])
     render nothing: true
   end
 end

@@ -97,7 +97,7 @@ class MatchAnswerSummarizer
   end
 
 
-  def self.other_answers(answer)
+  def other_answers(answer)
     other_answers = {}
     MatchAnswer.where("meal_id = ? AND component_name = ?", meal_id, component).each do |a|
       if a.food_groups != answer.food_groups
@@ -111,7 +111,7 @@ class MatchAnswerSummarizer
 
   def most_popular(answer)
     all = other_answers(answer)
-    if all.first[1] > num_matches(answer)
+    if all.any? && all.first[1] > num_matches(answer)
       return all.first[0]
     else
       return answer.food_groups

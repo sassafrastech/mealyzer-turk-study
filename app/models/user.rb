@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   serialize :pre_test
   serialize :post_test
 
-  attr_accessor :pre_test_1, :pre_test_2
+  attr_accessor :pre_test_1, :pre_test_2, :force_condition
 
   def unique?
     # should be unique across all studies
@@ -64,31 +64,33 @@ class User < ActiveRecord::Base
   private
 
   def choose_condition
-    #first need to make sure we have a min number of 1
-    if User.where(condition: 1).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 1
-    elsif User.where(condition: 2).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 2
-    elsif User.where(condition: 3).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 3
-    elsif User.where(condition: 4).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 4
-    elsif User.where(condition: 5).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 5
-    elsif User.where(condition: 6).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 6
-    elsif User.where(condition: 7).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 7
-    elsif User.where(condition: 8).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
-      self.condition = 8
+    # If this is being accessed from the tryouts panel, we can set the condition immediately
+    if force_condition
+      self.condition = force_condition.to_i
     else
-      self.condition = random_condition
+      #first need to make sure we have a min number of 1
+      if User.where(condition: 1).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 1
+      elsif User.where(condition: 2).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 2
+      elsif User.where(condition: 3).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 3
+      elsif User.where(condition: 4).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 4
+      elsif User.where(condition: 5).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 5
+      elsif User.where(condition: 6).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 6
+      elsif User.where(condition: 7).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 7
+      elsif User.where(condition: 8).where(study_id: STUDY_ID).where("num_tests > ?", 0).count < MIN_CONDITION
+        self.condition = 8
+      else
+        self.condition = random_condition
+      end
     end
 
     self.study_id = STUDY_ID
-
-    self.condition = 3
-
   end
 
   def random_condition

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  force_ssl
+  #force_ssl
   after_action :allow_amt_iframe
 
   # Prevent CSRF attacks by raising an exception.

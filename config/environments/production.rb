@@ -79,5 +79,5 @@ MealyzerStudy::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # allow ssl
-  config.use_ssl = true
+  #config.use_ssl = true
 end

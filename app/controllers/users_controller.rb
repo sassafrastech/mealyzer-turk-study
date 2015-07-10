@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       redirect_to new_match_answer_path
     else
       flash.now[:error] = "All questions are required."
-      render :pre_test
+      render :new
     end
   end
 

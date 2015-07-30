@@ -20,6 +20,8 @@
 //= require backbone_rails_sync
 //= require backbone_datalink
 //= require backbone/mealyzer
+//= require annotorious.min
+//= require jquery.simulate
 //= require_tree .
 
 jQuery.noConflict();

@@ -1,15 +1,6 @@
 Mealyzer.Views.TagsView = Backbone.View.extend({
 
   initialize: function(params) {
-    // Make current image annotatable
-    anno.makeAnnotatable(document.getElementById('food'));
-
-    // Hack to hide annotator pop up and save after drawn
-    anno.addHandler('onSelectionCompleted', function(event) {
-      $('.annotorious-editor-text').val('Add description');
-      $('.annotorious-editor-button-save').simulate("click");
-    });
-
   },
 
   events: {

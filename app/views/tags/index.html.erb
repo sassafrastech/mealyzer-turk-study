@@ -2,7 +2,7 @@
   <div class="instructions">
     <p>Draw a rectangle around the different food groups using your mouse.</p>
   </div>
-  <%= image_tag @meal.photo, :id => "food", :data => {:id => @meal.id } %>
+  <%= image_tag @meal.photo, id: "food", class: "annotatable", data: {id: @meal.id } %>
   <div class="row">
     <div class="col-md-4">
       <a href="<%= tags_url %>" class="btn next btn-primary">Next</a>

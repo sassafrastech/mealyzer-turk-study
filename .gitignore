@@ -22,3 +22,6 @@ config/initializers/turkee.rb
 config/database.yml
 
 .ssl
+
+# Meal photos
+/public/system

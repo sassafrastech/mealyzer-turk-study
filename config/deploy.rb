@@ -1,20 +1,23 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'mealyzer-study'
+set :application, 'mealyzer-turk-study'
 
 #set :repo_url, 'git@example.com:me/my_repo.git'
-set :repo_url, 'git@github.com:hooverlunch/mealyzer.git'
+set :repo_url, 'git@gitlab.com:sassafras/mealyzer-turk-study.git'
 
 set :use_sudo, false
 
 # set rails env to stage name
 set :rails_env, -> {fetch(:stage)}
 
-set :deploy_to, -> {"/home/tomsmyth/webapps/rails4/mealyzer_study"}
+set :deploy_to, -> {"/home/tomsmyth/webapps/rails4/mealyzer_turk_study"}
 
 # needed to avoid execution permission errors
 set :tmp_dir, -> {"/home/tomsmyth/tmp"}
+
+set :bundle_path, -> { "/home/tomsmyth/webapps/rails4/gems" }
+set :bundle_binstubs, -> { "/home/tomsmyth/webapps/rails4/bin" }
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -26,7 +29,7 @@ set :tmp_dir, -> {"/home/tomsmyth/tmp"}
 set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/railsenv config/initializers/turkee.rb}
+set :linked_files, %w{config/database.yml config/initializers/turkee.rb}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{public/system public/uploads}

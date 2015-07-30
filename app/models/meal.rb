@@ -3,7 +3,7 @@ class Meal < ActiveRecord::Base
 
   GROUPS = ["Protein", "Fat", "Carbohydrate", "Fiber"]
 
-  has_attached_file :photo, :default_url => "/images/:style/missing.png"
+  has_attached_file :photo, :styles => { :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :photo, :content_type => /\Aimage\/.*\Z/
 
   def self.random
@@ -36,6 +36,7 @@ class Meal < ActiveRecord::Base
     food_locations[name]
   end
 
-
-
+  def component_names
+    food_components.try(:keys) || []
+  end
 end

@@ -1,0 +1,17 @@
+<div class="meals">
+  <h1>Meals</h1>
+  <table>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Components</th>
+      </tr>
+    <% @meals.each do |meal| %>
+      <tr>
+        <td><%= link_to(image_tag(meal.photo(:thumb)), edit_meal_path(meal)) %></td>
+        <td><%= link_to(meal.name, edit_meal_path(meal)) %></td>
+        <td><%= meal.component_names.join(", ") %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

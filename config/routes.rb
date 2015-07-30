@@ -1,9 +1,8 @@
 MealyzerStudy::Application.routes.draw do
 
   root 'home#index'
-  resources :meals, :tags
+  resources :meals
   resources :match_answers
-
   resources :users
 
   get 'tryout', to: 'tryouts#index'

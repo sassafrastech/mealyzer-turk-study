@@ -1,16 +1,32 @@
-<div class="tags">
+<div class="meals">
+  <h1><%= @meal.name %></h1>
+
+  <h3>Components</h3>
+  <% if @meal.food_components.blank? %>
+    None
+  <% else %>
+    <ul>
+      <% @meal.food_components.each do |name, ingredients| %>
+        <li><strong><%= name %></strong>: <%= ingredients.join(', ') %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+
+  <h3>Locations</h3>
   <div class="instructions">
     <p>Draw a rectangle around the different food groups using your mouse.</p>
+    <p>For the "comment", enter the component name. Spelling must match exactly.</p>
   </div>
-  <%= image_tag @meal.photo, id: "food", class: "annotatable", data: {id: @meal.id } %>
+  <%= image_tag @meal.photo, id: "food", class: "meal-photo annotatable", data: {id: @meal.id } %>
   <div class="row">
     <div class="col-md-4">
-      <a href="<%= tags_url %>" class="btn next btn-primary">Next</a>
+      <a href="#" class="btn next btn-primary">Next</a>
     </div>
   </div>
 </div>
 
 
 <%= javascript_doc_ready do %>
-  new Mealyzer.Views.TagsView({el: '.tags'});
+  new Mealyzer.Views.FoodLocationsView({el: '.meals', locations: <%=json @meal.food_locations %>});
 <% end %>

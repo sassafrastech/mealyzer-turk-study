@@ -35,7 +35,12 @@ Mealyzer.Views.FoodLocationsView = Backbone.View.extend({
     });
 
     // Save and redirect to index on success.
-    jQuery.post("/meals/" + this.meal_id, data)
+    jQuery.ajax({
+      type: "PUT",
+      url: "/meals/" + this.meal_id,
+      data: JSON.stringify(data),
+      contentType: "application/json"
+    })
     .done(function(){
       window.location.href = "/meals";
     })

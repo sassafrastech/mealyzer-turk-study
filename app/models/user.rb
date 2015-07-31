@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
     "Evaluate someone else's answer",
     "Can see how evaluated you, can change answer, and asked to estimate how change was",
     "Same as #2, but with bar chart instead of most popular",
-    "Same as #3, but with bar chart"
+    "Same as #3, but with bar chart instead of most popular"
   ]
 
   # A hard limit on the number of trials to run, regardless of available meal components.

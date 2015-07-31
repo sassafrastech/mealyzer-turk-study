@@ -48,7 +48,6 @@ class User < ActiveRecord::Base
     else
       return unique || (num_tests < User::MAX_TESTS)
     end
-
   end
 
   def max_tests?
@@ -105,15 +104,10 @@ class User < ActiveRecord::Base
   end
 
   def completed_tests
-    completed = []
+    # Get all non-evaluation-based answers for this user.
     answers = MatchAnswer.where(:user_id => id.to_s).where(:evaluating_id => nil)
-    if answers.nil?
-      return nil
-    else
-      answers.each do |a|
-        completed.push([a.meal_id, a.component_name])
-      end
-      return completed
-    end
+
+    # Convert to pairs of form [meal_id, component_name]
+    answers.map{ |a| [a.meal_id, a.component_name] }
   end
 end

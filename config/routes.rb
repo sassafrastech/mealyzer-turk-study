@@ -11,7 +11,6 @@ MealyzerStudy::Application.routes.draw do
   put 'finish', to: 'users#update_survey', as: :finish
   get 'completed', to: 'users#completed', as: :completed
 
-
   resource :match_answer_group
 
   match 'process', to: 'process#create', via: :post

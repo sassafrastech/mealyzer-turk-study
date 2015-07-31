@@ -19,7 +19,16 @@ class User < ActiveRecord::Base
     "Same as #3, but with bar chart"
   ]
 
-  MAX_TESTS = Meal.all_tests.length
+  # A hard limit on the number of trials to run, regardless of available meal components.
+  # nil implies alls should be tested
+  HARD_MAX_TESTS = 4
+
+  # How many pre- and post-control trails each user should take.
+  PRE_POST_CONTROL_COUNT = 1
+
+  # For some conditions, user can reevaluate answers ever N answers. This is N. Should be an even divisor of
+  # self.max_tests.
+  REEVAL_INTERVAL = 5
 
   REQUIRE_UNIQUE = true
   STUDY_ID = "study_3"
@@ -36,22 +45,26 @@ class User < ActiveRecord::Base
 
   attr_accessor :pre_test_1, :pre_test_2, :force_condition
 
+  # Returns the lesser of the number of available meal components
+  # and the value of HARD_MAX_TESTS. This is the total number of trials each user should
+  # be subject to.
+  def self.max_tests
+    @@max_tests ||= [Meal.all_tests.size, HARD_MAX_TESTS].compact.min
+  end
+
   def unique?
     # should be unique across all studies
     unique = (User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil)
 
-    Rails.logger.debug("NUM TESTS #{num_tests}")
-    Rails.logger.debug("Unique?? #{unique}")
-
     if !User::REQUIRE_UNIQUE
       return true
     else
-      return unique || (num_tests < User::MAX_TESTS)
+      return unique || (num_tests < self.class.max_tests)
     end
   end
 
   def max_tests?
-    num_tests >= MAX_TESTS
+    num_tests >= self.class.max_tests
   end
 
   def next_test

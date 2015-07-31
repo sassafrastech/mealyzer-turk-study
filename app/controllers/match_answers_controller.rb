@@ -46,7 +46,8 @@ class MatchAnswersController < ApplicationController
     session[:current_user_id] = @user.id
 
     if @match_answer.valid?
-      render_by_condition_for_create
+      @user.increment_tests!
+      redirect_by_condition
     else
       flash.now[:error] = "All food items must be matched to at least one group"
       render :new
@@ -63,7 +64,7 @@ class MatchAnswersController < ApplicationController
     if @match_answer.valid?
       # Check if we have done enough tests yet
       if @user.max_tests?
-        redirect_to post_test_path(@match_answer)
+        redirect_to post_test_path
       else
         redirect_to new_match_answer_path
       end
@@ -98,42 +99,30 @@ class MatchAnswersController < ApplicationController
     end
   end
 
-  def render_by_condition_for_create
-    @user.increment_tests!
+  # Redirects to the appropriate place based on condition and number of trials complete.
+  def redirect_by_condition
+    # Pre-control, everyone gets constant number
+    if @user.num_tests <= User::PRE_POST_CONTROL_COUNT
+      @match_answer.update_attribute(:task_type, "pre-control")
 
-    # Pre-test, everyone gets 5
-    if @user.num_tests <= 5
-      @match_answer.task_type = "pre-test"
-      @match_answer.save :validate => false
-      redirect_to new_match_answer_url
+    # Post-control, everyone gets constant number
+    elsif @user.num_tests > User.max_tests - User::PRE_POST_CONTROL_COUNT
+      @match_answer.update_attribute(:task_type, "post-control")
+
+    # Special case redirects
     else
-
-      if @user.max_tests? && (@user.condition == 1 || @user.condition == 7 || @user.condition == 8)
-        redirect_to post_test_path(@match_answer)
-      else
-
-        Rails.logger.debug("condition: #{@match_answer.condition}")
-        Rails.logger.debug("num tests: #{@match_answer.num_tests}")
-        case @match_answer.condition
-        when 1
-          redirect_to new_match_answer_url
-        when 2..6
-          redirect_to edit_match_answer_path(@match_answer)
-        when 6
-        when 7,8
-          # if this is the 5th test
-          if (@user.num_tests % 5) == 0
-            redirect_to edit_match_answer_group_path
-          else
-            redirect_to new_match_answer_url
-          end
-        else
-          Rails.logger.debug("in case else")
+      case @match_answer.condition
+      when 2..6
+        return redirect_to edit_match_answer_path(@match_answer)
+      when 7,8
+        # Every Nth test, reevaluate
+        if (@user.num_tests - User::PRE_POST_CONTROL_COUNT % User::REEVAL_INTERVAL) == 0
+          return redirect_to edit_match_answer_group_path
         end
-
       end
     end
 
+    # Default redirect.
+    redirect_to @user.max_tests? ? post_test_path : new_match_answer_url
   end
-
 end

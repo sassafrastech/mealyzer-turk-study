@@ -6,8 +6,15 @@
     None
   <% else %>
     <ul>
-      <% @meal.food_components.each do |name, ingredients| %>
-        <li><strong><%= name %></strong>: <%= ingredients.join(', ') %></li>
+      <% @meal.food_components.each do |component_name, ingredients| %>
+        <li>
+          <strong><%= component_name %></strong>
+          <ul>
+            <% ingredients.each do |ingredient| %>
+              <li><%= ingredient %> (<%= @meal.nutrients_for_ingredient(component_name, ingredient).join(', ') %>)</li>
+            <% end %>
+          </ul>
+        </li>
       <% end %>
     </ul>
   <% end %>

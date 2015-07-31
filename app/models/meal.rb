@@ -23,6 +23,10 @@ class Meal < ActiveRecord::Base
     food_components[name]
   end
 
+  def nutrients_for_ingredient(component_name, ingredient)
+    food_nutrition.try(:[], component_name).try(:[], ingredient) || []
+  end
+
   def location_for_component(name)
     food_locations[name]
   end

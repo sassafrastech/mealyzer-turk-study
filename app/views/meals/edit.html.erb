@@ -21,12 +21,17 @@
   <%= image_tag @meal.photo, id: "food", class: "meal-photo annotatable", data: {id: @meal.id } %>
   <div class="row">
     <div class="col-md-4">
-      <a href="#" class="btn next btn-primary">Next</a>
+      <button class="btn btn-primary">Save</button>
     </div>
   </div>
 </div>
 
 
 <%= javascript_doc_ready do %>
-  new Mealyzer.Views.FoodLocationsView({el: '.meals', locations: <%=json @meal.food_locations %>});
+  new Mealyzer.Views.FoodLocationsView({
+    el: '.meals',
+    meal_id: <%= @meal.id%>,
+    component_names: <%=json @meal.component_names %>,
+    locations: <%=json @meal.food_locations %>
+  });
 <% end %>

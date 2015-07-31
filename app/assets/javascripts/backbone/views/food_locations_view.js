@@ -3,6 +3,8 @@ Mealyzer.Views.FoodLocationsView = Backbone.View.extend({
   initialize: function(params) {
     // Get food image source, used later.
     this.src = this.$('#food')[0].src;
+    this.meal_id = params.meal_id;
+    this.component_names = params.component_names;
 
     // Add any existing locations
     if (params.locations) {
@@ -12,7 +14,7 @@ Mealyzer.Views.FoodLocationsView = Backbone.View.extend({
   },
 
   events: {
-    'click .next' : 'save_annotations'
+    'click .btn-primary' : 'save'
   },
 
   // Adds boxes around existing food locations.
@@ -23,23 +25,35 @@ Mealyzer.Views.FoodLocationsView = Backbone.View.extend({
     }
   },
 
-  save_annotations: function(params) {
-    // Get all of the rectangles drawn by the user
-    var rectangles = [];
-    console.log(anno.getAnnotations());
-    return;
+  save: function(params) {
+    if (!this.validate_component_names()) return;
+
+    var data = { _method: 'put', meal: { food_locations: {} } };
+
     anno.getAnnotations().forEach(function(a) {
-      rectangles.push({ "x": a.shapes[0].geometry.x, "y": a.shapes[0].geometry.y,
-      "width": a.shapes[0].geometry.width, "height": a.shapes[0].geometry.height});
+      data.meal.food_locations[a.text] = a.shapes[0].geometry;
     });
 
-    // Convert rectangles to json
-    var locations = (rectangles.length > 0) ? JSON.stringify(rectangles) : null;
-
-    // Format parameter string and add meal id
-    var data = { "answer" : {"food_locations" : locations, "meal_id" : $('#food').data("id")}};
-
-    $.post("/tags/", data).done(function(data){ console.log("finished");});
+    // Save and redirect to index on success.
+    jQuery.post("/meals/" + this.meal_id, data)
+    .done(function(){
+      window.location.href = "/meals";
+    })
+    .fail(function(){
+      alert("Save failed.");
+    });
   },
 
+  validate_component_names: function() {
+    var self = this;
+    var valid = true;
+    anno.getAnnotations().forEach(function(a) {
+      if (self.component_names.indexOf(a.text) == -1) {
+        alert("The component name '" + a.text + "' is invalid.");
+        valid = false;
+        return false;
+      }
+    });
+    return valid;
+  }
 });

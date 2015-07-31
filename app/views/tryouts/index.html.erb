@@ -1,7 +1,8 @@
 <h3>Mealyzer Turk Study: Tryout Panel</h3>
 
 <ul>
-  <% (1..8).each do |cond| %>
+  <li><%= link_to("Next available condition", new_user_path(@fake_turk_params)) %></li>
+  <% User::ACTIVE_CONDITIONS.each do |cond| %>
     <li><%= link_to("Condition #{cond}", new_user_path(@fake_turk_params.merge(force_condition: cond))) %></li>
   <% end %>
 </ul>

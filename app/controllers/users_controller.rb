@@ -67,6 +67,4 @@ class UsersController < ApplicationController
     @user = current_user
     reset_session
   end
-
-
 end

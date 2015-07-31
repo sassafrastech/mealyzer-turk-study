@@ -1,5 +1,6 @@
 require 'pp'
 
+# This is the main controller used during the study.
 class MatchAnswersController < ApplicationController
 
   def new

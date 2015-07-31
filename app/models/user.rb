@@ -4,7 +4,20 @@ class User < ActiveRecord::Base
   MAX_SUBJ_PER_CONDITION = 40
   MIN_SUBJ_PER_CONDITION = 40
 
-  ACTIVE_CONDITIONS = [1, 2, 3, 4, 5, 6, 7, 8]
+  ACTIVE_CONDITIONS = [1, 2, 3, 5, 6, 7]
+
+  CONDITION_NAMES = [
+    "No feedback",
+    "Compare with answer but can't revise",
+    "Can compare AND revise",
+    "Can compare, revise, AND assess size of change you made",
+    "Pretend that sent your answer to others and rated it as correct/incorrect, with explanation, but can't change answer",
+    "Same as #5 but can change answer",
+    "Evaluate someone else's answer",
+    "Can see how evaluated you, can change answer, and asked to estimate how change was",
+    "Same as #2, but with bar chart instead of most popular",
+    "Same as #3, but with bar chart"
+  ]
 
   MAX_TESTS = Meal.all_tests.length
 

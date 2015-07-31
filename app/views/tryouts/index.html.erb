@@ -2,7 +2,14 @@
 
 <ul>
   <li><%= link_to("Next available condition", new_user_path(@fake_turk_params)) %></li>
-  <% User::ACTIVE_CONDITIONS.each do |cond| %>
-    <li><%= link_to("Condition #{cond}", new_user_path(@fake_turk_params.merge(force_condition: cond))) %></li>
+  <% User::CONDITION_NAMES.each_with_index do |name, i| %>
+    <% cond = i + 1 %>
+    <li>
+      <% if User::ACTIVE_CONDITIONS.include?(cond) %>
+        <%= link_to("Condition ##{cond}: #{name}", new_user_path(@fake_turk_params.merge(force_condition: cond))) %>
+      <% else %>
+        <%= "Condition ##{cond}: #{name}" %>
+      <% end %>
+    </li>
   <% end %>
 </ul>

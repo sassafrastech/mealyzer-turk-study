@@ -21,6 +21,7 @@
 //= require backbone/mealyzer
 //= require annotorious.debug
 //= require jquery.simulate
+//= require jquery.prevent_double_submission
 //= require_tree .
 
 jQuery.noConflict();

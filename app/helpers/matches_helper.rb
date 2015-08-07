@@ -1,5 +1,5 @@
 module MatchesHelper
-  BAR_HEIGHT_MULTIPLER = 2
+  BAR_MAX_HEIGHT = 20
 
   def my_answer?(group_arr, item)
     group_arr == @match_answer.food_groups[item]

@@ -34,7 +34,7 @@ class MatchAnswersController < ApplicationController
     if @match_answer.condition == 4
       @match_answer = MatchAnswer.copy_for_eval(MatchAnswer.equivalent(@match_answer), @match_answer.user)
     end
-    @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
+    build_summarizer
   end
 
   def create
@@ -70,7 +70,7 @@ class MatchAnswersController < ApplicationController
       end
     else
       flash.now[:error] = @match_answer.errors.full_messages.to_sentence
-      @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name)
+      build_summarizer
       render :edit
     end
   end
@@ -91,11 +91,6 @@ class MatchAnswersController < ApplicationController
       @match_answer.build_answers_changed!
       @match_answer.impact = params[:impact]
       @match_answer.save
-    when 5
-      # do nothing
-
-    when 7
-
     end
   end
 
@@ -124,5 +119,10 @@ class MatchAnswersController < ApplicationController
 
     # Default redirect.
     redirect_to @user.max_tests? ? post_test_path : new_match_answer_url
+  end
+
+  # Gets the summarizer object used by some conditions.
+  def build_summarizer
+    @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name, current_user)
   end
 end

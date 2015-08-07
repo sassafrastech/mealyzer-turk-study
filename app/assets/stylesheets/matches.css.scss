@@ -76,6 +76,10 @@ div.my_answer, div.other_answers {
       &:nth-child(2) {
         width: 150px;
       }
+
+      &.full-width {
+        width: 500px;
+      }
     }
   }
 }

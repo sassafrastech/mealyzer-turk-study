@@ -21,6 +21,10 @@ class MatchAnswer < ActiveRecord::Base
   belongs_to :meal
   belongs_to :user
 
+  scope :for_component, -> (meal_id, component) { where("meal_id = ? AND component_name = ?", meal_id, component) }
+  scope :for_users_other_than, -> (user) { where("user_id != ?", user.id) }
+
+
   def self.build_for_random_meal(user)
     user_id = user.id unless user.nil?
     meal = Meal.random

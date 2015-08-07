@@ -1,7 +1,7 @@
 require "pp"
 class MatchAnswerSummarizer
 
-  attr_reader :meal_id, :component
+  attr_reader :meal_id, :component, :current_user
 
   def self.other_answers_at_time(answer)
     other_answers = {}
@@ -78,9 +78,31 @@ class MatchAnswerSummarizer
 
   end
 
-  def initialize(meal_id, component)
+  def self.build_evaluations_time(answer)
+    evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
+    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json).where("created_at < answer.created_at")
+    if !ma.nil?
+      ma.each do |a|
+         if a.changed_answer
+          evals[:incorrect] += 1
+          unless a.explanation.nil?
+            evals[:explanations].push(a.explanation)
+          end
+        else
+          evals[:correct] += 1
+        end
+      end
+      evals[:length] = ma.length
+      return evals
+    else
+      return nil
+    end
+  end
+
+  def initialize(meal_id, component, current_user)
     @meal_id = meal_id
     @component = component
+    @current_user = current_user
   end
 
   def summary
@@ -96,6 +118,38 @@ class MatchAnswerSummarizer
     return num_matches
   end
 
+  # Counts how often each food group was chosen for each component item.
+  # Normalizes to value between 0 and 1.
+  # Returns ordered hash of form: {
+  #   "Salmon" => {"Protein" => .13, "Fat" => .36, "Carbohydrate" => .46, "Fiber" => .05},
+  #   "Oil" => {"Protein" => .25, "Fat" => .25, "Carbohydrate" => .25, "Fiber" => .25}
+  # }
+  # Returns nil if no other answers for this component.
+  def tallies_by_component
+    return @tallies_by_component if @tallies_by_component
+
+    answers = MatchAnswer.for_component(meal_id, component).for_users_other_than(current_user)
+    return nil if answers.empty?
+
+    @tallies_by_component = {}.tap do |result|
+      answers.each do |answer|
+        answer.food_groups.each do |item, groups|
+          result[item] ||= { "Protein" => 0, "Fat" => 0, "Carbohydrate" => 0, "Fiber" => 0 }
+          groups.each do |group|
+            result[item][group] += 1
+          end
+        end
+      end
+
+      # Normalize
+      result.each do |component_name, tallies|
+        total = tallies.values.inject(0){ |sum, i| sum += i }
+        tallies.keys.each do |k|
+          result[component_name][k] /= total.to_f
+        end
+      end
+    end
+  end
 
   def other_answers(answer)
     other_answers = {}
@@ -157,27 +211,4 @@ class MatchAnswerSummarizer
       return nil
     end
   end
-
-    def self.build_evaluations_time(answer)
-    evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
-    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json).where("created_at < answer.created_at")
-    if !ma.nil?
-      ma.each do |a|
-         if a.changed_answer
-          evals[:incorrect] += 1
-          unless a.explanation.nil?
-            evals[:explanations].push(a.explanation)
-          end
-        else
-          evals[:correct] += 1
-        end
-      end
-      evals[:length] = ma.length
-      return evals
-    else
-      return nil
-    end
-  end
-
-
 end

@@ -13,7 +13,7 @@
   <div class="my_answer">
     <table>
       <tr><td class="community" colspan=4>Another Turker's Answer:</td></tr>
-      <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+      <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
       <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
       <% current_food_groups = @match_answer.changed_answer ? @match_answer.food_groups_update : @match_answer.food_groups %>
       <% current_food_groups.each do |k, v| %>

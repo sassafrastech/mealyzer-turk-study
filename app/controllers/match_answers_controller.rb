@@ -112,7 +112,7 @@ class MatchAnswersController < ApplicationController
     # Special case redirects
     else
       case @match_answer.condition
-      when 2..6
+      when 2,3,4,5,6,9,10
         return redirect_to edit_match_answer_path(@match_answer)
       when 7,8
         # Every Nth test, reevaluate

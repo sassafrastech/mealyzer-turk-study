@@ -15,7 +15,7 @@
 
       <table>
         <tr><td class="community" colspan="4">Your Answer:</td></tr>
-        <tr><td></td><td>What is it made of?</td><td colspan="3">What food group does it belong to?</td></tr>
+        <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
         <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
         <% answer.food_groups_update.each do |food_item, groups| %>
           <tr><td></td><td><%= food_item %></td>

@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   MAX_SUBJ_PER_CONDITION = 40
   MIN_SUBJ_PER_CONDITION = 40
 
-  ACTIVE_CONDITIONS = [1, 2, 3, 5, 6, 7]
+  ACTIVE_CONDITIONS = [1, 2, 3, 5, 6, 7, 9]
 
   CONDITION_NAMES = [
     "No feedback",

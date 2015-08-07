@@ -33,6 +33,8 @@ class UsersController < ApplicationController
     if @user.workerId.present?
       session[:current_user_id] = @user.id
     end
+
+    get_meal_and_component_counts
   end
 
   def update

@@ -3,6 +3,8 @@ require 'pp'
 # This is the main controller used during the study.
 class MatchAnswersController < ApplicationController
 
+  before_action :get_meal_and_component_counts
+
   def new
     #@disabled = false
     #@match_answer = MatchAnswer.next(current_user)

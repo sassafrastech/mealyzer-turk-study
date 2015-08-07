@@ -1,0 +1,23 @@
+1: # Name the photo file with this ID number, e.g. 1.jpg
+  name: Burger and Fries
+  components:
+    Burger:
+      Bun: Carbohydrate
+      Patty: Protein, Fat
+      Lettuce: Fiber
+    Fries:
+      Potatoes: Carbohydrate
+      Oil: Fat
+      Ketchup: Carbohydrate
+2:
+  name: Ribs
+  components:
+    Ribs:
+      Pork: Protein, Fat
+      Barbecue sauce: Carbohydrate
+    Cornbread:
+      Cornmeal: Carbohydrate
+    Corn:
+      Corn: Carbohydrate
+    Baked beans:
+      Beans with sauce: Carbohydrate, Protein

@@ -80,14 +80,14 @@ class MatchAnswersController < ApplicationController
   def update_by_condition(params)
 
     case @match_answer.condition
-    when 3,6
+    when 3,6,10
       @match_answer.food_groups_update = params[:food_groups]
-      @match_answer.explanation = params[:explanation].html_safe
+      @match_answer.explanation = params[:explanation]
       @match_answer.build_answers_changed!
       @match_answer.save
     when 4
       @match_answer.food_groups_update = params[:food_groups]
-      @match_answer.explanation = params[:explanation].html_safe
+      @match_answer.explanation = params[:explanation]
       @match_answer.build_answers_changed!
       @match_answer.impact = params[:impact]
       @match_answer.save

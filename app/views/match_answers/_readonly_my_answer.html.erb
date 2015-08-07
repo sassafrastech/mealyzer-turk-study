@@ -1,0 +1,25 @@
+<p>We don’t know which answer is correct, but please take time to compare your answer to the answers of others. Remember, the best answer should list ALL food groups for each of the ingredients. Developing a good “nutrition gut” takes time and experience. Reflecting on how your answer differs or agrees with answers of others may help you become better at this task.</p>
+<br/>
+<h4><%= @match_answer.component_name %></h4>
+<%= f.hidden_field :meal_id %>
+<%= f.hidden_field :component_name %>
+<%= f.hidden_field :user_id %>
+<% popular = @summarizer.most_popular(@match_answer) %>
+<div class="my_answer">
+  <table>
+    <tr><td class="community" colspan=4>Your Answer:</td></tr>
+    <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
+    <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+    <% @match_answer.food_groups.each do |k, v| %>
+      <tr><td></td><td><%= k %></td>
+      <% Meal::GROUPS.each do |group| %>
+        <td>
+          <% if v.include?(group) %>
+            <span class='glyphicon glyphicon-ok'></span>
+          <% end %>
+        </td>
+      <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>

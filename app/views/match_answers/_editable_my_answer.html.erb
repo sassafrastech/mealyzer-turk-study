@@ -1,0 +1,26 @@
+<p>We don’t know which answer is correct, but please take time to compare your answer to the answers of others. Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
+<br/>
+<h4><%= @match_answer.component_name %></h4>
+<%= f.hidden_field :meal_id %>
+<%= f.hidden_field :component_name %>
+<%= f.hidden_field :user_id %>
+
+<div class="my_answer">
+  <table>
+    <tr><td class="community" colspan=4>Your Answer:</td></tr>
+    <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
+    <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+    <% current_food_groups = @match_answer.changed_answer ? @match_answer.food_groups_update : @match_answer.food_groups %>
+    <% current_food_groups.each do |k, v| %>
+      <tr><td></td><td><%= k %></td>
+      <% Meal::GROUPS.each do |group| %>
+        <td>
+          <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
+        </td>
+      <% end %>
+      </tr>
+    <% end %>
+  </table>
+  <h5>*If you changed your answer, please explain why:</h5>
+  <%= f.input :explanation, :label => false %>
+</div>

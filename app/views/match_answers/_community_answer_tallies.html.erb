@@ -1,0 +1,36 @@
+<div class="other_answers">
+  <table>
+    <tr><td class="community" colspan="4">Community Answers:</td></tr>
+
+    <% if @summarizer.tallies_by_component.nil? %>
+
+      <tr>
+        <td colspan="6" class="full-width">
+          No community answers available yet.
+        </td>
+      </tr>
+
+    <% else %>
+
+      <tr class="groups">
+        <td></td>
+        <td></td>
+        <% Meal::GROUPS.each do |h| %>
+          <td><%= h %></td>
+        <% end %>
+      </tr>
+
+      <% @summarizer.tallies_by_component.each do |component_name, tallies| %>
+        <tr>
+          <td></td>
+          <td><%= component_name %></td>
+          <% Meal::GROUPS.each do |group| %>
+            <td class="tally-cell">
+              <div class="tally-bar" style="height: <%= (tallies[group] * MatchesHelper::BAR_MAX_HEIGHT).to_i %>px"></div>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>

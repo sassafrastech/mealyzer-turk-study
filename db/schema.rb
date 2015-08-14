@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814162516) do
+ActiveRecord::Schema.define(version: 20150814173045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 20150814162516) do
     t.text     "post_test"
     t.integer  "pre_test_score"
     t.integer  "post_test_score"
+    t.string   "study_phase",     default: "seed", null: false
   end
 
 end

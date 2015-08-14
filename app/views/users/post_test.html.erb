@@ -4,39 +4,42 @@
 
 <%= form_for @user, method: 'put', url: '/finish' do |f| %>
   <ol>
-    <% t("survey.post_test_questions").each do |question| %>
-      <li><strong><%= question.last %></strong></li>
-      <ul>
-      <% t("survey.#{User::POST_TEST_OPTION_SETS[question.first]}").each_with_index do |response, index| %>
-        <li>
-          <% checked = nil %>
-          <% unless @user.post_test.nil? %>
-            <% checked = ((@user.post_test[question.first].to_i == index + 1) ? :checked : nil) %>
-          <% end %>
-          <%= radio_button_tag("post_test[#{question.first}]", response.first, checked) %>
-          <label><%= response.last %></label>
-        </li>
-      <% end %>
-      </ul>
-    <% end %>
 
-    <% for i in 1..8 do %>
-      <% if @user.condition == i %>
-        <li><strong><%= t("survey.condition_specific_questions").values[i-1] %></strong></li>
+    <%= fields_for(:post_test) do |ptf| %>
+      <% t("survey.post_test_questions").each do |question| %>
+        <li><strong><%= question.last %></strong></li>
         <ul>
-        <% t("survey.answers_agree").each_with_index do |response, index| %>
-        <li>
-          <% checked = nil %>
-          <% unless @user.post_test.nil? %>
-            <% checked = (@user.post_test[t("survey.condition_specific_questions").keys[i-1]].to_i == index + 1) ? :checked : nil %>
+        <% t("survey.#{User::POST_TEST_OPTION_SETS[question.first]}").each_with_index do |response, index| %>
+          <li>
+            <% checked = nil %>
+            <% unless @user.post_test.nil? %>
+              <% checked = (@user.post_test[question.first].to_i == index + 1) %>
+            <% end %>
+            <%= ptf.radio_button(question.first, response.first, checked: checked) %>
+            <%= ptf.label("#{question.first}_#{response.first}", response.last) %>
+          </li>
+        <% end %>
+        </ul>
+      <% end %>
+
+      <% for i in 1..8 do %>
+        <% if @user.condition == i %>
+          <% question = t("survey.condition_specific_questions").keys[i-1] %>
+          <li><strong><%= t("survey.condition_specific_questions").values[i-1] %></strong></li>
+          <ul>
+          <% t("survey.answers_agree").each_with_index do |response, index| %>
+          <li>
+            <% checked = nil %>
+            <% unless @user.post_test.nil? %>
+              <% checked = (@user.post_test[question].to_i == index + 1) %>
+            <% end %>
+            <%= ptf.radio_button(question, response.first, checked: checked) %>
+            <%= ptf.label("#{question}_#{response.first}", response.last) %>
+          </li>
           <% end %>
-          <%= radio_button_tag("post_test[#{t('survey.condition_specific_questions').keys[i-1]}]", response.first, checked) %>
-          <label><%= response.last %></label>
-        </li>
         <% end %>
       <% end %>
     <% end %>
-
   </ol>
   <%= f.submit "Submit", :class => "btn btn-primary" %>
 <% end %>

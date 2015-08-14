@@ -117,6 +117,12 @@ table {
     text-align: left;
     font-weight: bold;
   }
+
+  // Percentages
+  tr.pct td {
+    padding-top: 4px;
+    padding-bottom: 10px;
+  }
 }
 
 table.even, table.odd {

@@ -30,6 +30,14 @@
             </td>
           <% end %>
         </tr>
+        <tr class="pct">
+          <td></td>
+          <td></td>
+          <% Meal::GROUPS.each do |group| %>
+            <td>
+              <%= number_to_percentage(tallies[group] * 100, precision: 0) %>
+            </td>
+          <% end %>
       <% end %>
     <% end %>
   </table>

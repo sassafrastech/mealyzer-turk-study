@@ -25,12 +25,12 @@
       <tr>
         <td colspan=6 class="community">
         <p>What others thought of your answer:</p>
-          <p>Correct: <%= @summarizer.evaluations(@match_answer).nil? ? "Not evaluated yet" : @summarizer.evaluations(@match_answer)[:correct] %> </p>
-          <p>Incorrect: <%= @summarizer.evaluations(@match_answer).nil? ? "Not evaluated yet" : @summarizer.evaluations(@match_answer)[:incorrect] %> </p>
-            <% if !@summarizer.evaluations(@match_answer)[:explanations].nil? %>
+          <p>Correct: <%= @summarizer.evaluations.nil? ? "Not evaluated yet" : @summarizer.evaluations[:correct] %> </p>
+          <p>Incorrect: <%= @summarizer.evaluations.nil? ? "Not evaluated yet" : @summarizer.evaluations[:incorrect] %> </p>
+            <% if !@summarizer.evaluations[:explanations].nil? %>
               <p>Why people thought it was wrong:</p>
               <ul>
-                <% @summarizer.evaluations(@match_answer)[:explanations].each do |e| %>
+                <% @summarizer.evaluations[:explanations].each do |e| %>
                   <li>"<%= e %>"</li>
                 <% end %>
               </ul>

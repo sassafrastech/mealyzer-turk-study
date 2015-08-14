@@ -125,6 +125,6 @@ class MatchAnswersController < ApplicationController
 
   # Gets the summarizer object used by some conditions.
   def build_summarizer
-    @summarizer = MatchAnswerSummarizer.new(@match_answer.meal_id, @match_answer.component_name, current_user)
+    @summarizer = MatchAnswerSummarizer.new(@match_answer, current_user)
   end
 end

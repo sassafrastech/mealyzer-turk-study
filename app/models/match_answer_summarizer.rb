@@ -1,11 +1,11 @@
 require "pp"
 class MatchAnswerSummarizer
 
-  attr_reader :meal_id, :component, :current_user
+  attr_accessor :base_answer, :current_user
 
   def self.other_answers_at_time(answer)
     other_answers = {}
-    answers = MatchAnswer.where("meal_id = ? AND component_name = ?", answer.meal_id, answer.component_name).where('created_at < ?',answer.created_at).where(
+    answers = MatchAnswer.for_same_component_as(answer).where('created_at < ?',answer.created_at).where(
       "food_groups != 'NULL'")
     answers.each do |a|
       if a.food_groups != answer.food_groups
@@ -32,7 +32,7 @@ class MatchAnswerSummarizer
 
   def self.num_matches(answer)
     num_matches = 0
-    MatchAnswer.where("meal_id = ? AND component_name = ?", answer.meal_id, answer.component_name).each do |a|
+    MatchAnswer.for_same_component_as(answer).each do |a|
       num_matches += 1 if answer.food_groups == a.food_groups
     end
     return num_matches
@@ -99,23 +99,18 @@ class MatchAnswerSummarizer
     end
   end
 
-  def initialize(meal_id, component, current_user)
-    @meal_id = meal_id
-    @component = component
-    @current_user = current_user
+  def initialize(base_answer, current_user)
+    self.base_answer = base_answer
+    self.current_user = current_user
   end
 
-  def summary
-    build_summary unless @summary
-    @summary
-  end
-
-  def num_matches(answer)
-    num_matches = 0
-    MatchAnswer.where("meal_id = ? AND component_name = ?", answer.meal_id, answer.component_name).each do |a|
-      num_matches += 1 if answer.food_groups == a.food_groups
+  # Returns the number of other answers matching the base answers food groups.
+  def num_matches
+    0.tap do |count|
+      other_answers.each do |a|
+        count += 1 if base_answer.food_groups == a.food_groups
+      end
     end
-    return num_matches
   end
 
   # Counts how often each food group was chosen for each component item.
@@ -128,7 +123,7 @@ class MatchAnswerSummarizer
   def tallies_by_component
     return @tallies_by_component if @tallies_by_component
 
-    answers = MatchAnswer.for_component(meal_id, component).for_users_other_than(current_user)
+    answers = other_answers
     return nil if answers.empty?
 
     @tallies_by_component = {}.tap do |result|
@@ -151,49 +146,51 @@ class MatchAnswerSummarizer
     end
   end
 
-  def other_answers(answer)
-    other_answers = {}
-    MatchAnswer.where("meal_id = ? AND component_name = ?", meal_id, component).each do |a|
-      if a.food_groups != answer.food_groups
-        other_answers[a.food_groups] ||= 0
-        other_answers[a.food_groups] += 1
+  # Returns most popular food group set for this component, not including user's own answers.
+  # Returns a pair of form [{ "Pork"=>["Protein"], "Barbecue sauce"=>["Carbohydrate", "Fat"] }, 4]
+  # Returns nil if no other answers.
+  def most_popular
+    @most_popular ||= answer_distribution.first
+  end
+
+  # Whether the base answer has the most popular food group set.
+  # Returns nil if no other answers.
+  def base_is_most_popular?
+    most_popular.nil? ? nil : most_popular[0] == base_answer.food_groups
+  end
+
+  def evaluations
+    @evaluations ||= build_evaluations
+  end
+
+  private
+
+  # Returns an ordered hash of the form:
+  # {
+  #   { "Pork"=>["Protein"], "Barbecue sauce"=>["Carbohydrate", "Fat"] }=>4,
+  #   { "Pork"=>["Fat", "Fiber"], "Barbecue sauce"=>["Fat"] }=>3,
+  #   { "Pork"=>["Protein"], "Barbecue sauce"=>["Fat"] }=>1
+  # }
+  # where the numbers are the frequency of that food group choice in answers other than this user's.
+  # Returns empty hash if no other answers.
+  def answer_distribution
+    result = {}
+    other_answers.each do |a|
+      if a.food_groups != base_answer.food_groups
+        result[a.food_groups] ||= 0
+        result[a.food_groups] += 1
       end
     end
-    oa = other_answers.sort_by {|food_groups, num| num}
-    oa.reverse
+    result.sort_by{ |_, num| num }.reverse
   end
 
-  def most_popular(answer)
-    all = other_answers(answer)
-    if all.any? && all.first[1] > num_matches(answer)
-      return all.first[0]
-    else
-      return answer.food_groups
-    end
-  end
-
-  def evaluations(answer)
-    @eval ||= build_evaluations(answer)
-  end
-
-  def increment(item, groups)
-    @summary[item] ||= {}
-    @summary[item][groups] ||= 0
-    @summary[item][groups] += 1
-  end
-
-  def build_summary
-    @summary = {}
-    MatchAnswer.where("meal_id = ? AND component_name = ?", meal_id, component).each do |answer|
-      (answer.food_groups || {}).each do |item, groups|
-        increment(item,groups)
-      end
-    end
+  def other_answers
+    MatchAnswer.for_same_component_as(base_answer).for_users_other_than(current_user)
   end
 
   def build_evaluations(answer)
-    evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
-    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json)
+    evals = {id: base_answer.id, correct: 0, incorrect: 0, explanations: []}
+    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)
     if !ma.nil?
       ma.each do |a|
          if a.changed_answer

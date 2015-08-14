@@ -21,6 +21,7 @@ class MatchAnswer < ActiveRecord::Base
   belongs_to :meal
   belongs_to :user
 
+  scope :current_study, -> { includes(:user).where("users.study_id" => Settings.study_id) }
   scope :for_component, -> (meal_id, component) { where("meal_id = ? AND component_name = ?", meal_id, component) }
   scope :for_same_component_as, -> (answer) { for_component(answer.meal_id, answer.component_name) }
   scope :for_users_other_than, -> (user) { where("user_id != ?", user.id) }

@@ -5,8 +5,8 @@ class MatchAnswerSummarizer
 
   def self.other_answers_at_time(answer)
     other_answers = {}
-    answers = MatchAnswer.for_same_component_as(answer).where('created_at < ?',answer.created_at).where(
-      "food_groups != 'NULL'")
+    answers = MatchAnswer.current_study.for_same_component_as(answer).where('created_at < ?',answer.created_at).
+      where("food_groups != 'NULL'")
     answers.each do |a|
       if a.food_groups != answer.food_groups
         other_answers[a.food_groups] ||= 0
@@ -32,7 +32,7 @@ class MatchAnswerSummarizer
 
   def self.num_matches(answer)
     num_matches = 0
-    MatchAnswer.for_same_component_as(answer).each do |a|
+    MatchAnswer.current_study.for_same_component_as(answer).each do |a|
       num_matches += 1 if answer.food_groups == a.food_groups
     end
     return num_matches
@@ -80,7 +80,7 @@ class MatchAnswerSummarizer
 
   def self.build_evaluations_time(answer)
     evals = {id: answer.id, correct: 0, incorrect: 0, explanations: []}
-    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json).where("created_at < answer.created_at")
+    ma = MatchAnswer.current_study.where("food_groups = ? AND evaluating_id IS NOT NULL", answer.food_groups.to_json).where("created_at < answer.created_at")
     if !ma.nil?
       ma.each do |a|
          if a.changed_answer
@@ -186,12 +186,12 @@ class MatchAnswerSummarizer
   end
 
   def other_answers
-    MatchAnswer.for_same_component_as(base_answer).for_users_other_than(current_user)
+    MatchAnswer.current_study.for_same_component_as(base_answer).for_users_other_than(current_user)
   end
 
   def build_evaluations(answer)
     evals = {id: base_answer.id, correct: 0, incorrect: 0, explanations: []}
-    ma = MatchAnswer.where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)
+    ma = MatchAnswer.current_study.where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)
     if !ma.nil?
       ma.each do |a|
          if a.changed_answer

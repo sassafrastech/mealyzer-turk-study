@@ -99,11 +99,11 @@ class MatchAnswersController < ApplicationController
   # Redirects to the appropriate place based on condition and number of trials complete.
   def redirect_by_condition
     # Pre-control, everyone gets constant number
-    if @user.num_tests <= User::PRE_POST_CONTROL_COUNT
+    if @user.num_tests <= Settings.pre_post_control_count
       @match_answer.update_attribute(:task_type, "pre-control")
 
     # Post-control, everyone gets constant number
-    elsif @user.num_tests > User.max_tests - User::PRE_POST_CONTROL_COUNT
+    elsif @user.num_tests > User.max_tests - Settings.pre_post_control_count
       @match_answer.update_attribute(:task_type, "post-control")
 
     # Special case redirects
@@ -113,7 +113,7 @@ class MatchAnswersController < ApplicationController
         return redirect_to edit_match_answer_path(@match_answer)
       when 7,8
         # Every Nth test, reevaluate
-        if (@user.num_tests - User::PRE_POST_CONTROL_COUNT % User::REEVAL_INTERVAL) == 0
+        if (@user.num_tests - Settings.pre_post_control_count % Settings.reeval_interval) == 0
           return redirect_to edit_match_answer_group_path
         end
       end

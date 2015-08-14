@@ -1,0 +1,15 @@
+# Min number of subjects to run through each condition
+max_subj_per_condition: 40
+
+# Max number of subjects to run through each condition
+min_subj_per_condition: 40
+
+# How many pre- and post-control trails each user should take.
+pre_post_control_count: 5
+
+# For some conditions, user can reevaluate answers ever N answers.
+# This is N. Should be an even divisor of number of available meal components.
+reeval_interval: 5
+
+# Study identifier by which everything is scoped.
+study_id: study_1

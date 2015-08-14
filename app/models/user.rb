@@ -1,9 +1,4 @@
 class User < ActiveRecord::Base
-  before_create :choose_condition
-
-  MAX_SUBJ_PER_CONDITION = 40
-  MIN_SUBJ_PER_CONDITION = 40
-
   ACTIVE_CONDITIONS = [1, 2, 3, 5, 6, 7, 9, 10]
 
   CONDITION_NAMES = [
@@ -19,27 +14,31 @@ class User < ActiveRecord::Base
     "Same as #3, but with bar chart instead of most popular"
   ]
 
-  # How many pre- and post-control trails each user should take.
-  PRE_POST_CONTROL_COUNT = 1
-
-  # For some conditions, user can reevaluate answers ever N answers. This is N. Should be an even divisor of
-  # self.max_tests.
-  REEVAL_INTERVAL = 5
-
   REQUIRE_UNIQUE = true
-  STUDY_ID = "study_3"
 
-  POST_TEST_OPTION_SETS = {:level_difficulty => :answers_difficulty,  :confident => :answers_confidence, :confident_groups => :answers_confidence,
-    :feedback => :answers_agree, :future => :answers_agree, :learned => :answers_agree}
+  POST_TEST_OPTION_SETS = {
+    :level_difficulty => :answers_difficulty,
+    :confident => :answers_confidence,
+    :confident_groups => :answers_confidence,
+    :feedback => :answers_agree,
+    :future => :answers_agree,
+    :learned => :answers_agree
+  }
+
+  # Users that have at least one trial for the current study and given study phase
+  scope :non_empty_in_phase,
+    -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id).where("num_tests > ?", 0) }
 
   # Users that have at least one trial for the current study and given condition
-  scope :non_empty_in_condition,
-    -> (num) { where(condition: num).where(study_id: STUDY_ID).where("num_tests > ?", 0) }
+  scope :non_empty_in_phase_and_condition,
+    -> (phase, cond) { non_empty_in_phase(phase).where(condition: num) }
 
   serialize :pre_test
   serialize :post_test
 
-  attr_accessor :pre_test_1, :pre_test_2, :force_condition
+  before_create :choose_condition
+
+  attr_accessor :pre_test_1, :pre_test_2, :force_condition, :force_study_phase
 
   # Returns the number of available meal components
   def self.max_tests
@@ -92,22 +91,24 @@ class User < ActiveRecord::Base
     else
       # Assign user to first condition not yet at minimum.
       ACTIVE_CONDITIONS.each do |c|
-        if User.non_empty_in_condition(c).count < MIN_SUBJ_PER_CONDITION
+        if User.non_empty_in_phase_and_condition(study_phase, c).count < Settings.min_subj_per_condition
           self.condition = c
           break
         end
       end
-      self.condition = nil
       # If all conditions have reached minimum, assign a random one.
       self.condition = random_condition if condition.blank?
     end
 
-    self.study_id = STUDY_ID
+    self.study_id = Settings.study_id
   end
 
   # Choses a random non-full condition. Returns nil if all conditions are full.
   def random_condition
-    ACTIVE_CONDITIONS.select{ |c| User.non_empty_in_condition(c).count < MAX_SUBJ_PER_CONDITION }.sample
+    non_full = ACTIVE_CONDITIONS.select do |c|
+      User.non_empty_in_phase_and_condition(study_phase, c).count < Settings.max_subj_per_condition
+    end
+    non_full.sample
   end
 
   def completed_tests

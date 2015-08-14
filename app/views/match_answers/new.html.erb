@@ -9,8 +9,7 @@
 
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
-      <%= image_tag @match_answer.meal.photo, :id => "photo_#{@match_answer.id}", :class => "annotatable" %>
-      <% #DRAW Rectangle %>
+      <%= image_tag @match_answer.meal.photo, id: "photo" %>
     </div>
     <div class="col-md-6">
       <h3>(<%= @match_answer.num_tests + 1 %>/<%= User.max_tests %>) <%= @match_answer.meal.food_options %></h3>
@@ -46,14 +45,4 @@
   </div>
 </div>
 
-<script>
-  jQuery(window).load(function(){
-    new Mealyzer.Views.MatchesView({
-      el: '.matches',
-      geometry: <%= @match_answer.location.to_json.html_safe %>,
-      name: "<%= @match_answer.component_name %>",
-      source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>",
-      id: "<%= @match_answer.id %>"
-    });
-  });
-</script>
+<%= render("matches_view_js") %>

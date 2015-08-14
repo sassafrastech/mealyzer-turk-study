@@ -1,9 +1,8 @@
 Mealyzer.Views.MatchesView = Backbone.View.extend({
 
   initialize: function(params) {
-
     // Make current image annotatable
-    anno.makeAnnotatable(document.getElementById("photo_"+params.id));
+    anno.makeAnnotatable(document.getElementById("photo"));
     // hiding selection widget prevents editing
     anno.hideSelectionWidget();
 
@@ -21,6 +20,6 @@ Mealyzer.Views.MatchesView = Backbone.View.extend({
     // add and show annotation
     anno.addAnnotation(a);
     anno.highlightAnnotation(a);
-  },
+  }
 
 });

@@ -1,0 +1,10 @@
+<script>
+  jQuery(window).load(function(){
+    new Mealyzer.Views.MatchesView({
+      el: '.matches',
+      geometry: <%= @match_answer.location.to_json.html_safe %>,
+      name: "<%= @match_answer.component_name %>",
+      source: "<%= "#{request.protocol}#{request.host_with_port}#{@match_answer.meal.photo.url}" %>"
+    });
+  });
+</script>

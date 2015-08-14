@@ -25,7 +25,7 @@
           <td></td>
           <td><%= component_name %></td>
           <% Meal::GROUPS.each do |group| %>
-            <td class="tally-cell">
+            <td class="tally-cell" style="height: <%= MatchesHelper::BAR_MAX_HEIGHT %>px">
               <div class="tally-bar" style="height: <%= (tallies[group] * MatchesHelper::BAR_MAX_HEIGHT).to_i %>px"></div>
             </td>
           <% end %>

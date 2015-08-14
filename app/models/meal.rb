@@ -6,8 +6,10 @@ class Meal < ActiveRecord::Base
   has_attached_file :photo, :styles => { :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :photo, :content_type => /\Aimage\/.*\Z/
 
+  scope :enabled, -> { where(disabled: false) }
+
   def self.random
-    Meal.first(:offset => rand(Meal.count))
+    Meal.enabled.first(:offset => rand(Meal.enabled.count))
   end
 
   # Returns an array of pairs of form [meal_id, component name] for all Meals in system.
@@ -39,7 +41,7 @@ class Meal < ActiveRecord::Base
 
   def self.build_all_tests
     all_tests = []
-    Meal.all.each do |meal|
+    Meal.enabled.all.each do |meal|
       meal.food_components.each do |k,v|
         all_tests << [meal.id, k]
       end

@@ -7,7 +7,7 @@
         <th>Components</th>
       </tr>
     <% @meals.each do |meal| %>
-      <tr>
+      <tr class="<%= meal.disabled? ? "disabled" : "" %>">
         <td><%= link_to(image_tag(meal.photo(:thumb)), edit_meal_path(meal)) %></td>
         <td><%= link_to(meal.name, edit_meal_path(meal)) %></td>
         <td><%= meal.component_names.join(", ") %></td>

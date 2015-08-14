@@ -19,10 +19,6 @@ class User < ActiveRecord::Base
     "Same as #3, but with bar chart instead of most popular"
   ]
 
-  # A hard limit on the number of trials to run, regardless of available meal components.
-  # nil implies alls should be tested
-  HARD_MAX_TESTS = 4
-
   # How many pre- and post-control trails each user should take.
   PRE_POST_CONTROL_COUNT = 1
 
@@ -45,11 +41,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :pre_test_1, :pre_test_2, :force_condition
 
-  # Returns the lesser of the number of available meal components
-  # and the value of HARD_MAX_TESTS. This is the total number of trials each user should
-  # be subject to.
+  # Returns the number of available meal components
   def self.max_tests
-    @@max_tests ||= [Meal.all_tests.size, HARD_MAX_TESTS].compact.min
+    @@max_tests ||= Meal.all_tests.size
   end
 
   def unique?

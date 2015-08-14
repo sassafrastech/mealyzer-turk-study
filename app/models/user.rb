@@ -46,6 +46,17 @@ class User < ActiveRecord::Base
     @@max_tests ||= Meal.all_tests.size
   end
 
+  def phase_progress
+    return nil unless study_phase == "seed"
+    done = self.class.non_empty_in_phase(study_phase).count
+    "#{done}/#{Settings.seed_phase_count}"
+  end
+
+  def condition_progress
+    done = self.class.non_empty_in_phase_and_condition(study_phase, condition).count
+    "#{done}/#{Settings.max_subj_per_condition}"
+  end
+
   def unique?
     # should be unique across all studies
     unique = (User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil)

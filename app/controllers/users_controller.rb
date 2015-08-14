@@ -4,7 +4,6 @@ class UsersController < ApplicationController
   def new
     # Only create the user if they have accepted task and there is no user already
     @disabled = true
-    pp "in pretest"
 
     # Reload user from session if already assigned
     @user = if current_user
@@ -27,7 +26,6 @@ class UsersController < ApplicationController
 
         # Make sure we don't have repeat turkers
     if !@user.unique?
-      pp "We are totally DIABLING BECAUSE NOT UNIQUE"
       @disabled = true
     end
     if @user.workerId.present?

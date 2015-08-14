@@ -8,8 +8,32 @@
 </head>
 <body>
   <div class="container">
-    <div class="row">
-    </div>
+    <% if session[:tryout_mode] && current_user.present? %>
+      <div id="tryout-header" class="row">
+        <strong>Tryout Mode</strong>
+        &nbsp;&nbsp;
+
+        Study ID: <strong><%= current_user.study_id %></strong>
+        &nbsp;&nbsp;
+
+        Phase:
+        <strong>
+          <%= current_user.study_phase %>
+          <% if current_user.study_phase == "seed" %>
+            (<%= current_user.phase_progress %>)
+          <% end %>
+        </strong>
+        &nbsp;&nbsp;
+
+        Condition:
+        <strong>
+          <%= current_user.condition %>
+          <% if current_user.study_phase == "main" %>
+            (<%= current_user.condition_progress %>)
+          <% end %>
+        </strong>
+      </div>
+    <% end %>
     <div class="row">
       <br/>
       <%= yield %>

@@ -6,6 +6,7 @@ MealyzerStudy::Application.routes.draw do
   resources :users
 
   get 'tryout', to: 'tryouts#index'
+  delete 'tryout', to: 'tryouts#exit'
 
   get 'finish', to: 'users#post_test', as: :post_test
   put 'finish', to: 'users#update_survey', as: :finish

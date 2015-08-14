@@ -114,9 +114,10 @@ class MatchAnswerSummarizer
   end
 
   # Counts how often each food group was chosen for each component item.
-  # Normalizes to value between 0 and 1.
+  # Normalizes to value between 0 and 1, with number of answers as denominator.
+  # As a result, the sum of normalized values for a given component may exceed 1.
   # Returns ordered hash of form: {
-  #   "Salmon" => {"Protein" => .13, "Fat" => .36, "Carbohydrate" => .46, "Fiber" => .05},
+  #   "Salmon" => {"Protein" => .13, "Fat" => .36, "Carbohydrate" => .46, "Fiber" => .25},
   #   "Oil" => {"Protein" => .25, "Fat" => .25, "Carbohydrate" => .25, "Fiber" => .25}
   # }
   # Returns nil if no other answers for this component.
@@ -127,6 +128,7 @@ class MatchAnswerSummarizer
     return nil if answers.empty?
 
     @tallies_by_component = {}.tap do |result|
+      # Count the nutrients mentioned in each answer.
       answers.each do |answer|
         answer.food_groups.each do |item, groups|
           result[item] ||= { "Protein" => 0, "Fat" => 0, "Carbohydrate" => 0, "Fiber" => 0 }
@@ -136,11 +138,10 @@ class MatchAnswerSummarizer
         end
       end
 
-      # Normalize
+      # Normalize.
       result.each do |component_name, tallies|
-        total = tallies.values.inject(0){ |sum, i| sum += i }
         tallies.keys.each do |k|
-          result[component_name][k] /= total.to_f
+          result[component_name][k] /= answers.size.to_f
         end
       end
     end

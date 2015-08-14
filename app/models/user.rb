@@ -31,11 +31,12 @@ class User < ActiveRecord::Base
 
   # Users that have at least one trial for the current study and given condition
   scope :non_empty_in_phase_and_condition,
-    -> (phase, cond) { non_empty_in_phase(phase).where(condition: num) }
+    -> (phase, cond) { non_empty_in_phase(phase).where(condition: cond) }
 
   serialize :pre_test
   serialize :post_test
 
+  before_create :choose_phase
   before_create :choose_condition
 
   attr_accessor :pre_test_1, :pre_test_2, :force_condition, :force_study_phase
@@ -84,14 +85,32 @@ class User < ActiveRecord::Base
 
   private
 
+  def choose_phase
+    if force_study_phase
+      self.study_phase = force_study_phase
+    else
+      self.study_phase = seed_phase_full? ? "main" : "seed"
+    end
+  end
+
+  def seed_phase_full?
+    self.class.non_empty_in_phase("seed").count >= Settings.seed_phase_count
+  end
+
+  def condition_full?(c)
+    self.class.non_empty_in_phase_and_condition(study_phase, c).count < Settings.min_subj_per_condition
+  end
+
   def choose_condition
     # If this is being accessed from the tryouts panel, we can set the condition immediately
     if force_condition
       self.condition = force_condition.to_i
+    elsif study_phase == "seed"
+      self.condition = 1
     else
       # Assign user to first condition not yet at minimum.
       ACTIVE_CONDITIONS.each do |c|
-        if User.non_empty_in_phase_and_condition(study_phase, c).count < Settings.min_subj_per_condition
+        if condition_full?(c)
           self.condition = c
           break
         end

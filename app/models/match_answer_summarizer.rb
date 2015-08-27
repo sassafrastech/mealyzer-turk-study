@@ -186,7 +186,7 @@ class MatchAnswerSummarizer
   end
 
   def other_answers
-    MatchAnswer.current_study.seed_phase.for_same_component_as(base_answer).for_users_other_than(current_user)
+    MatchAnswer.current_study.seed_phase.for_same_component_as(base_answer).for_complete_users_other_than(current_user)
   end
 
   def build_evaluations(answer)

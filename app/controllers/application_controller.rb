@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
   end
 
   def get_meal_and_component_counts
-    @meal_count = Meal.count
-    @component_count = Meal.all_tests.size
+    @meal_count = Meal.enabled.count
+    @component_count = Meal.enabled.all_tests.size
   end
 
   private

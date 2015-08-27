@@ -26,6 +26,9 @@ class MatchAnswer < ActiveRecord::Base
   scope :for_component, -> (meal_id, component) { where("meal_id = ? AND component_name = ?", meal_id, component) }
   scope :for_same_component_as, -> (answer) { for_component(answer.meal_id, answer.component_name) }
   scope :for_users_other_than, -> (user) { where("user_id != ?", user.id) }
+  scope :for_complete_users_other_than, -> (user) do
+    includes(:user).for_users_other_than(user).where("users.complete = ?", true)
+  end
 
 
   def self.build_for_random_meal(user)

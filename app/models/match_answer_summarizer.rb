@@ -106,11 +106,11 @@ class MatchAnswerSummarizer
 
   # Returns the number of other answers matching the base answers food groups.
   def num_matches
-    0.tap do |count|
-      other_answers.each do |a|
-        count += 1 if base_answer.food_groups == a.food_groups
-      end
+    count = 0
+    other_answers.each do |a|
+      count += 1 if base_answer.food_groups == a.food_groups
     end
+    count
   end
 
   # Counts how often each food group was chosen for each component item.

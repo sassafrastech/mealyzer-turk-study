@@ -9,7 +9,7 @@
 
   <%= render partial: "shared/flash_messages", flash: flash %>
     <div class="col-md-5">
-      <%= image_tag @match_answer.meal.photo, id: "photo" %>
+      <%= meal_photo(@match_answer.meal) %>
     </div>
     <div class="col-md-6">
       <h3>(<%= @match_answer.num_tests + 1 %>/<%= User.max_tests %>) <%= @match_answer.meal.food_options %></h3>

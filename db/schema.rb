@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150827171920) do
+ActiveRecord::Schema.define(version: 20150827201746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20150827171920) do
     t.datetime "photo_updated_at"
     t.text     "food_components"
     t.boolean  "disabled",           default: false,  null: false
+    t.text     "photo_credit"
   end
 
   create_table "tag_answers", force: true do |t|

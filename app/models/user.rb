@@ -26,12 +26,12 @@ class User < ActiveRecord::Base
   }
 
   # Users that have at least one trial for the current study and given study phase
-  scope :non_empty_in_phase,
-    -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id).where("num_tests > ?", 0) }
+  scope :complete_in_phase,
+    -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id).where(complete: true) }
 
   # Users that have at least one trial for the current study and given condition
-  scope :non_empty_in_phase_and_condition,
-    -> (phase, cond) { non_empty_in_phase(phase).where(condition: cond) }
+  scope :complete_in_phase_and_condition,
+    -> (phase, cond) { complete_in_phase(phase).where(condition: cond) }
 
   serialize :pre_test
   serialize :post_test
@@ -48,12 +48,12 @@ class User < ActiveRecord::Base
 
   def phase_progress
     return nil unless study_phase == "seed"
-    done = self.class.non_empty_in_phase(study_phase).count
+    done = self.class.complete_in_phase(study_phase).count
     "#{done}/#{Settings.seed_phase_count}"
   end
 
   def condition_progress
-    done = self.class.non_empty_in_phase_and_condition(study_phase, condition).count
+    done = self.class.complete_in_phase_and_condition(study_phase, condition).count
     "#{done}/#{Settings.max_subj_per_condition}"
   end
 
@@ -105,11 +105,11 @@ class User < ActiveRecord::Base
   end
 
   def seed_phase_full?
-    self.class.non_empty_in_phase("seed").count >= Settings.seed_phase_count
+    self.class.complete_in_phase("seed").count >= Settings.seed_phase_count
   end
 
   def condition_full?(c)
-    self.class.non_empty_in_phase_and_condition(study_phase, c).count < Settings.min_subj_per_condition
+    self.class.complete_in_phase_and_condition(study_phase, c).count < Settings.min_subj_per_condition
   end
 
   def choose_condition
@@ -136,7 +136,7 @@ class User < ActiveRecord::Base
   # Choses a random non-full condition. Returns nil if all conditions are full.
   def random_condition
     non_full = ACTIVE_CONDITIONS.select do |c|
-      User.non_empty_in_phase_and_condition(study_phase, c).count < Settings.max_subj_per_condition
+      User.complete_in_phase_and_condition(study_phase, c).count < Settings.max_subj_per_condition
     end
     non_full.sample
   end

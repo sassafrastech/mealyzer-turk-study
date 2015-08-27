@@ -56,6 +56,7 @@ class UsersController < ApplicationController
     answers = params[:post_test].present? ? params.require(:post_test).permit! : nil
 
     if @user.assign_post_test(answers)
+      @user.update_attribute(:complete, true)
       redirect_to :completed
     else
       flash.now[:error] = "All questions are required."

@@ -1,6 +1,7 @@
 1:
   file: Blackbeanstew.jpg
   name: Black bean stew
+  set_num: 1
   components:
     Black bean stew:
       Black turtle beans: Carbohydrate, Protein, Fiber
@@ -11,6 +12,7 @@
 2:
   file: Colourful_bean_salad.jpg
   name: Pinto beans with green vegetables and lime juice
+  set_num: 1
   components:
     Pinto beans with green vegetables and lime juice:
       Pinto beans: Carbohydrate, Protein, Fiber
@@ -23,6 +25,7 @@
 3:
   file: Rice_and_beans.png
   name: Rice and beans
+  set_num: 1
   components:
     Rice and beans:
       Rice: Carbohydrate
@@ -32,6 +35,7 @@
 4:
   file: Salad_Avocado.jpg
   name: Mixed salad with arugula, grape tomatos, avocado, and balsamic glaze
+  set_num: 2
   components:
     Mixed salad:
       Avocado: Fat, Fiber
@@ -43,6 +47,7 @@
 5:
   file: Avocado_and_Strawberries.jpg
   name: Avocado and Strawberries
+  set_num: 2
   components:
     Avocado and strawberries:
       Avocado: Fat, Fiber
@@ -53,6 +58,7 @@
 6:
   file: Bruschetta_avocado.jpg
   name: Avocado cheese and tomato open sandwich
+  set_num: 2
   components:
     Avocado cheese and tomato open sandwich:
       Bread: Carbohydrate
@@ -64,6 +70,7 @@
 7:
   file: 100714_lunch.jpg
   name: Large salad
+  set_num: 3
   components:
     Large salad:
       Lettuce: Fiber
@@ -78,6 +85,7 @@
 8:
   file: Party_food.jpg
   name: Salad platter with tomato, basil, and mozzarella
+  set_num: 3
   components:
     Salad platter with tomato, basil, and mozzarella:
       Tomato: Carbohydrate, Fiber
@@ -88,6 +96,7 @@
 9:
   file: Mozarella.JPG
   name: Mozarella and tomato
+  set_num: 3
   components:
     Mozarella:
       Fresh mozarella: Fat, Protein
@@ -96,6 +105,7 @@
 10:
   file: 101114_lunch.jpg
   name: Pancake with peanut butter
+  set_num: 4
   components:
     Pancake with peanut butter:
       Multi-grain pancake: Carbohydrate, Fiber
@@ -104,6 +114,7 @@
 11:
   file: 101814_breakfast.jpg
   name: Pancake with slivered almonds
+  set_num: 4
   components:
     Pancake with slivered almonds:
       Multi-grain pancake: Carbohydrate, Fiber
@@ -112,6 +123,7 @@
 12:
   file: 100714_breakfast.jpg
   name: Pancake with peanut butter and mixed berries
+  set_num: 4
   components:
     Pancake with peanut butter and mixed berries:
       Multi-grain pancake: Carbohydrate, Fiber
@@ -122,6 +134,7 @@
 13:
   file: Corn_Capsicum_Fried.jpg
   name: Corn side dish
+  set_num: 5
   components:
     Corn side dish:
       Corn: Carbohydrate, Fiber
@@ -133,6 +146,7 @@
 14:
   file: Barbeque_chicken_and_corn.jpg
   name: Barbeque chicken and corn
+  set_num: 5
   components:
     Corn on a cob:
       Corn: Carbohydrate, Fiber
@@ -141,6 +155,7 @@
 15:
   file: Corn_tadka_spaghetti.JPG
   name: Corn spaghetti
+  set_num: 5
   components:
     Corn spaghetti:
       Spaghetti: Carbohydrate

@@ -30,9 +30,11 @@ namespace :db do
         # Validate
         abort2("ERROR: No name found for meal #{num}") if data[:name].blank?
         abort2("ERROR: No components found for meal #{num}") if data[:components].blank?
+        abort2("ERROR: Invalid set_num for meal #{num}") if data[:set_num] && !data[:set_num].is_a?(Fixnum)
 
         attribs[:name] = data[:name]
         attribs[:photo_credit] = data[:credit]
+        attribs[:set_num] = data[:set_num]
 
         # Build food_components and food_nutrition
         data[:components].each do |cname, ingredients|
@@ -54,6 +56,18 @@ namespace :db do
 
         puts "Adding ##{num}: #{attribs[:name]}"
         Meal.create!(attribs)
+      end
+
+      # Verify set nums
+      nums = Meal.enabled.pluck(:set_num).compact.uniq.sort
+      if nums.any?
+        abort2("ERROR: Invalid set_num sequence #{nums.join(',')}") unless nums == (1..nums.last).to_a
+
+        nums.each do |n|
+          if (c = Meal.enabled.where(set_num: n).count) != 3
+            abort2("ERROR: Set #{n} has #{c} items instead of 3")
+          end
+        end
       end
     end
   end

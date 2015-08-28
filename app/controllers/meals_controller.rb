@@ -1,6 +1,6 @@
 class MealsController < ApplicationController
   def index
-    @meals = Meal.order(:name)
+    @meals = Meal.by_enabled_and_name
   end
 
   def edit

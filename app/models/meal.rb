@@ -7,6 +7,7 @@ class Meal < ActiveRecord::Base
   validates_attachment_content_type :photo, :content_type => /\Aimage\/.*\Z/
 
   scope :enabled, -> { where(disabled: false) }
+  scope :by_enabled_and_name, -> { order(:disabled, :name) }
 
   def self.random
     Meal.enabled.first(:offset => rand(Meal.enabled.count))

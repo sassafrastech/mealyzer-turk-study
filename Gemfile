@@ -16,7 +16,6 @@ gem 'simple_form'
 gem 'turkee', :git => 'https://github.com/jpdimond/turkee.git', branch: 'master'
 gem 'factory_girl'
 
-
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
   gem 'sqlite3'

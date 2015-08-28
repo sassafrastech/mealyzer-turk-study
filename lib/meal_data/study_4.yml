@@ -1,0 +1,196 @@
+1:
+  file: Blackbeanstew.jpg
+  name: Black bean stew
+  components:
+    Black bean stew:
+      Black turtle beans: Carbohydrate, Protein, Fiber
+      Olive oil: Fat
+      Tomato paste: Carbohydrate
+  credit: "\"Blackbeanstew\" by Badagnani - Own work. Licensed under CC BY 3.0 via Wikimedia Commons https://commons.wikimedia.org/wiki/File:Blackbeanstew.jpg#/media/File:Blackbeanstew.jpg"
+
+2:
+  file: Colourful_bean_salad.jpg
+  name: Pinto beans with green vegetables and lime juice
+  components:
+    Pinto beans with green vegetables and lime juice:
+      Pinto beans: Carbohydrate, Protein, Fiber
+      Tomatoes: Carbohydrate
+      Green pepper: Fiber
+      Red onion: Fiber
+      Olive oil: Fat
+  credit: "\"Colourful bean salad\" by Paul Goyette - http://www.flickr.com/photos/pgoyette/84062829/. Licensed under CC BY-SA 2.0 via Wikimedia Commons - http://commons.wikimedia.org/wiki/File:Colourful_bean_salad.jpg#/media/File:Colourful_bean_salad.jpg"
+
+3:
+  file: Rice_and_beans.png
+  name: Rice and beans
+  components:
+    Rice and beans:
+      Rice: Carbohydrate
+      Beans: Carbohydrate, Protein, Fiber
+  credit: "\"800px-Rice and beans, Hotel in Itatiaia\" by Own work. Licensed under CC BY-SA 3.0 via Wikimedia Commons - https://commons.wikimedia.org/wiki/File:800px-Rice_and_beans,_Hotel_in_Itatiaia.png#/media/File:800px-Rice_and_beans,_Hotel_in_Itatiaia.png"
+
+4:
+  file: Salad_Avocado.jpg
+  name: Mixed salad with arugula, grape tomatos, avocado, and balsamic glaze
+  components:
+    Mixed salad:
+      Avocado: Fat, Fiber
+      Tomatoes: Carbohydrate, Fiber
+      Arugula: Fiber
+      Balsamic reduction: Carbohydrate
+  credit: "\"My Lunch (3927456388)\" by Ewan Munro from London, UK - My LunchUploaded by tm. Licensed under CC BY-SA 2.0 via Wikimedia Commons - http://commons.wikimedia.org/wiki/File:My_Lunch_(3927456388).jpg#/media/File:My_Lunch_(3927456388).jpg"
+
+5:
+  file: Avocado_and_Strawberries.jpg
+  name: Avocado and Strawberries
+  components:
+    Avocado and strawberries:
+      Avocado: Fat, Fiber
+      Strawberries: Carbohydrate, Fiber
+  credit: "By Jennifer from Vancouver, Canada [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons http://commons.wikimedia.org/wiki/File%3AAvocado_and_Strawberries_with_Balsamic_Vinegar_(7694884384).jpg"
+
+
+6:
+  file: Bruschetta_avocado.jpg
+  name: Avocado cheese and tomato open sandwich
+  components:
+    Avocado cheese and tomato open sandwich:
+      Bread: Carbohydrate
+      Cheese: Fat, Protein
+      Avocado: Fat, Fiber
+      Tomato: Carbohydrate, Fiber
+  credit: "\"Flickr - cyclonebill - Brød med gedeost, tomat og avocado\" by cyclonebill - Brød med gedeost, tomat og avocado. Licensed under CC BY-SA 2.0 via Wikimedia Commons - https://commons.wikimedia.org/wiki/File:Flickr_-_cyclonebill_-_Br%C3%B8d_med_gedeost,_tomat_og_avocado.jpg#/media/File:Flickr_-_cyclonebill_-_Br%C3%B8d_med_gedeost,_tomat_og_avocado.jpg"
+
+7:
+  file: 100714_lunch.jpg
+  name: Large salad
+  components:
+    Large salad:
+      Lettuce: Fiber
+      Brocolli: Fiber
+      Red pepper: Carbohydrate, Fiber
+      Tomato: Carbohydrate, Fiber
+      Carrot: Carbohydrate, Fiber
+      Strawberries: Carbohydrate, Fiber
+      Fresh mozarella: Fat, Protein
+      Blue cheese dressing: Fat
+
+8:
+  file: Party_food.jpg
+  name: Salad platter with tomato, basil, and mozzarella
+  components:
+    Salad platter with tomato, basil, and mozzarella:
+      Tomato: Carbohydrate, Fiber
+      Fresh mozarella: Fat, Protein
+      Olive oil: Fat
+  credit: "By Tomwsulcer (Own work) [CC0], via Wikimedia Commons http://commons.wikimedia.org/wiki/File%3AParty_food_dish_8_salad_tomatoes_cheese_lettuce_spinach.jpg"
+
+9:
+  file: Mozarella.JPG
+  name: Mozarella and tomato
+  components:
+    Mozarella:
+      Fresh mozarella: Fat, Protein
+  credit: "© Nevit Dilmen [CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0) or GFDL (http://www.gnu.org/copyleft/fdl.html)], via Wikimedia Commons"
+
+10:
+  file: 101114_lunch.jpg
+  name: Pancake with peanut butter
+  components:
+    Pancake with peanut butter:
+      Multi-grain pancake: Carbohydrate, Fiber
+      Peanut butter: Protein, Fat, Fiber
+
+11:
+  file: 101814_breakfast.jpg
+  name: Pancake with slivered almonds
+  components:
+    Pancake with slivered almonds:
+      Multi-grain pancake: Carbohydrate, Fiber
+      Almonds: Protein, Fat, Fiber
+
+12:
+  file: 100714_breakfast.jpg
+  name: Pancake with peanut butter and mixed berries
+  components:
+    Pancake with peanut butter and mixed berries:
+      Multi-grain pancake: Carbohydrate, Fiber
+      Strawberries: Carbohydrate, Fiber
+      Blueberries: Carbohydrate, Fiber
+      Peanut butter: Protein, Fat, Fiber
+
+13:
+  file: Corn_Capsicum_Fried.jpg
+  name: Corn side dish
+  components:
+    Corn side dish:
+      Corn: Carbohydrate, Fiber
+      Onions: Fiber
+      Green pepper: Carbohydrate, Fiber
+      Olive oil: Fat
+  credit: "By LuckyRani2990 (Own work) [CC BY-SA 4.0 (http://creativecommons.org/licenses/by-sa/4.0)], via Wikimedia Commons"
+
+14:
+  file: Barbeque_chicken_and_corn.jpg
+  name: Barbeque chicken and corn
+  components:
+    Corn on a cob:
+      Corn: Carbohydrate, Fiber
+  credit: "By U.S. Air Force photo/Airman Cortney Hansen [Public domain], via Wikimedia Commons https://upload.wikimedia.org/wikipedia/commons/e/e7/Barbeque_chicken_and_corn.jpg"
+
+15:
+  file: Corn_tadka_spaghetti.JPG
+  name: Corn spaghetti
+  components:
+    Corn spaghetti:
+      Spaghetti: Carbohydrate
+      Corn: Carbohydrate, Fiber
+      Butter: Fat
+  credit: "By AmaliaGonsalves (Own work) [CC BY-SA 4.0 (http://creativecommons.org/licenses/by-sa/4.0)], via Wikimedia Commons https://upload.wikimedia.org/wikipedia/commons/c/c7/Corn_tadka_spaghetti.JPG"
+
+16:
+  file: Rissoto_Spain.jpeg
+  name: Rissotto with green vegetables
+  components:
+    Risotto:
+      Arborio rice: Carbohydrate
+      Mixed green vegetables: Fiber
+      Parmesan cheese: Fat, Protein
+  credit: "\"Rissoto - Spain\" by Tamorlan - Own work. Licensed under CC BY 3.0 via Wikimedia Commons - http://commons.wikimedia.org/wiki/File:Rissoto_-_Spain.JPG#/media/File:Rissoto_-_Spain.JPG"
+
+17:
+  file: Bruschetta_Balsamic.jpg
+  name: Bruschetta with tomatoes and cheese
+  components:
+    Bruschetta:
+      White bread: Carbohydrate
+      Grana Padano cheese: Fat, Protein
+      Caramelized balsamic dressing: Carbohydrate
+  credit: "\"2014 Bruschetta The Larder Chiang Mai\" by Takeaway - Own work. Licensed under CC BY-SA 4.0 via Wikimedia Commons - http://commons.wikimedia.org/wiki/File:2014_Bruschetta_The_Larder_Chiang_Mai.jpg#/media/File:2014_Bruschetta_The_Larder_Chiang_Mai.jpg"
+
+18:
+  file: Waffle_fries.jpg
+  name: Waffle fries with BBQ sauce and mayo
+  components:
+    Waffle fries:
+      Potatoes: Carbohydrate
+      BBQ sauce: Carbohydrate
+      Mayo: Fat
+  credit: "By Connie Ma from Chicago, United States of America (Waffle fries with BBQ sauce and mayo.) [CC BY-SA 2.0 (http://creativecommons.org/licenses/by-sa/2.0)], via Wikimedia Commons http://commons.wikimedia.org/wiki/File%3AWaffle_fries_with_BBQ_sauce_and_mayo_(12767083365).jpg"
+
+19:
+  file: Beef_Prime_Rib_Dinner.jpg
+  name: Beef prime rib dinner plate
+  components:
+    Prime rib with demi glaze:
+      Prime beef rib: Protein, Fat
+      Demi glaze: Carbohydrate, Fat
+  credit: "\"Beef Prime Rib Dinner 02\" by Michael J. Bennett - Own work. Licensed under CC BY-SA 3.0 via Wikimedia Commons - http://commons.wikimedia.org/wiki/File:Beef_Prime_Rib_Dinner_02.jpg#/media/File:Beef_Prime_Rib_Dinner_02.jpg"
+
+20:
+  file: Homegrown_potatoes.jpg
+  name: New potatoes, knish and kebabs
+  components:
+    New potatoes:
+      Potatoes: Carbohydrate, Fiber
+  credit: "\"Homegrown new potatoes, knish and kebabs (7883192012)\" by Ruth Hartnup from Vancouver, Canada - Homegrown new potatoes, knish and kebabs. Licensed under CC BY 2.0 via Wikimedia Commons - http://commons.wikimedia.org/wiki/File:Homegrown_new_potatoes,_knish_and_kebabs_(7883192012).jpg#/media/File:Homegrown_new_potatoes,_knish_and_kebabs_(7883192012).jpg"

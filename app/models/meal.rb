@@ -31,7 +31,7 @@ class Meal < ActiveRecord::Base
   end
 
   def location_for_component(name)
-    food_locations[name]
+    food_locations.try(:[], name)
   end
 
   def component_names

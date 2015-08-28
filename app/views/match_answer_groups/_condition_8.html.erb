@@ -32,17 +32,19 @@
     </div>
     <br/><br/><br/>
 
-    <script>
-      jQuery(window).load(function(){
-        new Mealyzer.Views.MatchesView({
-          el: '.matches',
-          geometry: <%= answer.location.to_json.html_safe %>,
-          name: "<%= answer.component_name %>",
-          source: "<%= "#{request.protocol}#{request.host_with_port}#{answer.meal.photo.url}_#{answer.id}" %>",
-          id: "<%= "#{answer.id}_#{answer.component_name.squish.downcase.tr(" ","_")}" %>"
+    <% if answer.location %>
+      <script>
+        jQuery(window).load(function(){
+          new Mealyzer.Views.MatchesView({
+            el: '.matches',
+            geometry: <%= answer.location.to_json.html_safe %>,
+            name: "<%= answer.component_name %>",
+            source: "<%= "#{request.protocol}#{request.host_with_port}#{answer.meal.photo.url}_#{answer.id}" %>",
+            id: "<%= "#{answer.id}_#{answer.component_name.squish.downcase.tr(" ","_")}" %>"
+          });
         });
-      });
-    </script>
+      </script>
+    <% end %>
     </div>
   </div>
 

@@ -35,9 +35,11 @@ class User < ActiveRecord::Base
 
   serialize :pre_test
   serialize :post_test
+  serialize :test_order
 
   before_create :choose_phase
   before_create :choose_condition
+  before_create :set_test_order
 
   attr_accessor :pre_test_1, :pre_test_2, :force_condition, :force_study_phase
 
@@ -73,7 +75,11 @@ class User < ActiveRecord::Base
   end
 
   def next_test
-    (Meal.all_tests - completed_tests).sample
+    # (Meal.all_tests - completed_tests).sample
+    if test_order.blank? || num_tests >= test_order.size
+      raise "Test order does not have test ##{num_tests}"
+    end
+    test_order[num_tests]
   end
 
   # move to user
@@ -147,5 +153,36 @@ class User < ActiveRecord::Base
 
     # Convert to pairs of form [meal_id, component_name]
     answers.map{ |a| [a.meal_id, a.component_name] }
+  end
+
+  def set_test_order
+    meals_by_set = Meal.enabled.group_by(&:set_num)
+
+    # Randomize each group and expand into test pairs.
+    pairs_by_set = {}
+    meals_by_set.each do |set_num, meals|
+      pairs_by_set[set_num] = meals.map do |m|
+        m.food_components.keys.map{ |c| [m.id, c, set_num] }
+      end.flatten(1).shuffle
+    end
+    pairs_with_no_set = pairs_by_set.delete(nil) || []
+
+    # Distribute one pair from each numbered set into pre, main, and post bins
+    pre, main, post = [], [], []
+    pairs_by_set.each do |_, pairs|
+      pre << pairs[0]
+      main << pairs[1]
+      post << pairs[2]
+
+      # Put rest in main area
+      pairs[3..-1].each do |m, c, x|
+        main << [m, c, x]
+      end
+    end
+
+    # Pairs with no set go in main area
+    main += pairs_with_no_set
+
+    self.test_order = pre.shuffle + main.shuffle + post.shuffle
   end
 end

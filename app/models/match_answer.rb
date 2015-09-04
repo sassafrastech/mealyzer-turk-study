@@ -47,13 +47,12 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   def self.next(user)
-    user_id = user.id unless user.nil?
     test = user.next_test
     if test.nil?
       build_for_random_meal(user)
     else
       meal = Meal.find(test[0])
-      new(:meal => meal, :component_name => test[1], :user_id => user_id)
+      new(:meal => meal, :component_name => test[1], :user => user)
     end
   end
 

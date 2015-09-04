@@ -40,6 +40,13 @@
         </table>
         <br/>
         <%= f.submit "Submit", :class => "btn btn-primary", :disabled => @disabled %>
+        <% if session[:tryout_mode] %>
+          <%= link_to("Check Random Boxes", "#", class: "btn btn-default",
+            onclick: 'jQuery("table tr").each(function(){
+              var cb = jQuery(this).find("input").get(parseInt(Math.random() * 4));
+              if (cb) jQuery(cb).prop("checked", true);
+            }); return false;') %>
+        <% end %>
       <% end %>
     </div>
   </div>

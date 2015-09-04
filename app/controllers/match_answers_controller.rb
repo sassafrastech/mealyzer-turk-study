@@ -113,7 +113,7 @@ class MatchAnswersController < ApplicationController
         return redirect_to edit_match_answer_path(@match_answer)
       when 7,8
         # Every Nth test, reevaluate
-        if (@user.num_tests - Settings.pre_post_control_count % Settings.reeval_interval) == 0
+        if ((@user.num_tests - Settings.pre_post_control_count) % Settings.reeval_interval) == 0
           return redirect_to edit_match_answer_group_path
         end
       end

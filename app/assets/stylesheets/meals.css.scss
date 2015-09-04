@@ -21,13 +21,21 @@
   }
 }
 
-.meal-photo .credit {
-  font-size: 8pt;
-  color: #ccc;
-  margin-top: 3px;
+.meal-photo {
+  width: 400px;
 
-  a {
+  img {
+    width: 400px;
+  }
+
+  .credit {
+    font-size: 8pt;
     color: #ccc;
-    text-decoration: underline;
+    margin-top: 3px;
+
+    a {
+      color: #ccc;
+      text-decoration: underline;
+    }
   }
 }

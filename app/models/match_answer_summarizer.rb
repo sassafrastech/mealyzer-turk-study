@@ -189,7 +189,7 @@ class MatchAnswerSummarizer
     MatchAnswer.current_study.seed_phase.for_same_component_as(base_answer).for_complete_users_other_than(current_user)
   end
 
-  def build_evaluations(answer)
+  def build_evaluations
     evals = {id: base_answer.id, correct: 0, incorrect: 0, explanations: []}
 
     ma = MatchAnswer.current_study.where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)

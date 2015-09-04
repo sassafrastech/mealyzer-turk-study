@@ -1,4 +1,4 @@
- <p>Think again about your choices, and whether you were consistent in how you matched the different ingredients to food groups. Remember, the best answer should list ALL food groups for each of the ingredients. Do you still think your answers were correct? Developing a good “nutrition gut” takes time and experience. Reflecting on and correcting your earlier answers may help you become better at this task.
+<p>Think again about your choices, and whether you were consistent in how you matched the different ingredients to food groups. Remember, the best answer should list ALL food groups for each of the ingredients. Do you still think your answers were correct? Developing a good “nutrition gut” takes time and experience. Reflecting on and correcting your earlier answers may help you become better at this task.
 </p>
 <br/>
 
@@ -13,7 +13,9 @@
       </div>
     <% end %>
 
-    <div class="col-md-5"><%= image_tag "#{answer.meal.photo}_#{answer.id}", :id => "photo_#{answer.id}_#{answer.component_name.squish.downcase.tr(" ","_")}" %></div>
+    <div class="col-md-5">
+      <%= meal_photo(answer.meal) %>
+    </div>
     <div class="my_answer">
       <table>
         <tr><td class="community" colspan="4">Your Answer:</td></tr>
@@ -31,23 +33,9 @@
         <% end %>
       </table>
       <h5>*If you changed your answer, please explain why:</h5>
-      <%= text_field_tag "match_answer_group[answers][#{answer.id}][explanation]" %>
+      <%= text_area_tag "match_answer_group[answers][#{answer.id}][explanation]" %>
     </div>
     <br/><br/><br/>
-
-    <% if answer.location %>
-      <script>
-        jQuery(window).load(function(){
-          new Mealyzer.Views.MatchesView({
-            el: '.matches',
-            geometry: <%= answer.location.to_json.html_safe %>,
-            name: "<%= answer.component_name %>",
-            source: "<%= "#{request.protocol}#{request.host_with_port}#{answer.meal.photo.url}_#{answer.id}" %>",
-            id: "<%= "#{answer.id}_#{answer.component_name.squish.downcase.tr(" ","_")}" %>"
-          });
-        });
-      </script>
-    <% end %>
   <% end %>
 
   <%= submit_tag "Next", :class => "btn btn-primary" %>

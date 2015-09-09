@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
 
   def assign_post_test(answers)
     self.post_test = answers
-    return false if answers.nil? || (answers.length < I18n.t('survey.post_test_questions').length+1)
+    return false if answers.nil? || (answers.length < I18n.t('survey.post_test_questions').length + 1)
     self.save
   end
 

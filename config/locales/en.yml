@@ -21,6 +21,8 @@ en:
       6_revise_evaluated: "Being able to revise my own answers after seeing whether other Turkers evaluated them as correct or incorrect helped me get better at mapping different foods to their food groups."
       7_self: "Reviewing and revising my own answers helped me get better at mapping different foods to their food groups."
       8_self_view: "Reviewing my own answers helped me get better at mapping different foods to their food groups."
+      9_question: "Placeholder."
+      10_question: "Placeholder."
     answers_knowledge:
       1: "Very knowledgeable"
       2: "Somewhat knowledgeable"

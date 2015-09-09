@@ -22,22 +22,18 @@
         </ul>
       <% end %>
 
-      <% for i in 1..8 do %>
-        <% if @user.condition == i %>
-          <% question = t("survey.condition_specific_questions").keys[i-1] %>
-          <li><strong><%= t("survey.condition_specific_questions").values[i-1] %></strong></li>
-          <ul>
-          <% t("survey.answers_agree").each_with_index do |response, index| %>
-          <li>
-            <% checked = nil %>
-            <% unless @user.post_test.nil? %>
-              <% checked = (@user.post_test[question].to_i == index + 1) %>
-            <% end %>
-            <%= ptf.radio_button(question, response.first, checked: checked) %>
-            <%= ptf.label("#{question}_#{response.first}", response.last) %>
-          </li>
-          <% end %>
+      <% question = t("survey.condition_specific_questions").keys[@user.condition-1] %>
+      <li><strong><%= t("survey.condition_specific_questions").values[@user.condition-1] %></strong></li>
+      <ul>
+      <% t("survey.answers_agree").each_with_index do |response, index| %>
+      <li>
+        <% checked = nil %>
+        <% unless @user.post_test.nil? %>
+          <% checked = (@user.post_test[question].to_i == index + 1) %>
         <% end %>
+        <%= ptf.radio_button(question, response.first, checked: checked) %>
+        <%= ptf.label("#{question}_#{response.first}", response.last) %>
+      </li>
       <% end %>
     <% end %>
   </ol>

@@ -5,8 +5,8 @@ MealyzerStudy::Application.routes.draw do
   resources :match_answers
   resources :users
 
-  get 'tryout', to: 'tryouts#index'
-  delete 'tryout', to: 'tryouts#exit'
+  get 'admin', to: 'admin#index'
+  delete 'admin', to: 'admin#exit'
 
   get 'finish', to: 'users#post_test', as: :post_test
   put 'finish', to: 'users#update_survey', as: :finish

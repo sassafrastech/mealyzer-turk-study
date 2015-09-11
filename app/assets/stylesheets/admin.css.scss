@@ -1,0 +1,21 @@
+table.stats {
+  border-collapse: collapse;
+
+  tr.top th {
+    text-align: center;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 4px;
+  }
+
+  th {
+    vertical-align: bottom;
+  }
+
+  td {
+    text-align: left;
+    width: 50px;
+  }
+}

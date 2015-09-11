@@ -1,6 +1,6 @@
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Below you can see your own answer and the answers of other Turkers. </div>
-  <p>We don’t know which answer is correct, but please take time to compare your answer to the answers of others. Remember, the best answer should list ALL food groups for each of the ingredients. Developing a good “nutrition gut” takes time and experience. Reflecting on how your answer differs or agrees with answers of others may help you become better at this task.</p>
+  <div class="alert alert-success" role="alert">Thank you! Below you can see your own answer and the most popular answer from other Turkers.</div>
+  <p>We don’t know which answer is correct, but please take time to compare your answer to the most popular one. Remember, the best answer should list ALL food groups for each of the ingredients. Developing a good “nutrition gut” takes time and experience. Reflecting on how your answer differs or agrees with answers of others may help you become better at this task.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>

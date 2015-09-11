@@ -1,6 +1,6 @@
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! Below you can see your own answer and the answers of other Turkers. </div>
-  <p>We don’t know which answer is correct, but please take time to compare your answer to the answers of others. Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
+  <div class="alert alert-success" role="alert">Thank you! Below you can see your own answer and the most popular answer from other Turkers.</div>
+  <p>We don’t know which answer is correct, but please take time to compare your answer to the most popular one. Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>

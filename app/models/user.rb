@@ -25,9 +25,10 @@ class User < ActiveRecord::Base
     :learned => :answers_agree
   }
 
+  scope :in_phase, -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id) }
+
   # Users that have at least one trial for the current study and given study phase
-  scope :complete_in_phase,
-    -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id).where(complete: true) }
+  scope :complete_in_phase, -> (phase) { in_phase(phase).where(complete: true) }
 
   # Users that have at least one trial for the current study and given condition
   scope :complete_in_phase_and_condition,
@@ -125,15 +126,12 @@ class User < ActiveRecord::Base
     elsif study_phase == "seed"
       self.condition = 1
     else
-      # Assign user to first condition not yet at minimum.
-      ACTIVE_CONDITIONS.each do |c|
-        if condition_full?(c)
-          self.condition = c
-          break
-        end
-      end
-      # If all conditions have reached minimum, assign a random one.
-      self.condition = random_condition if condition.blank?
+      # Select the condition with the least number of complete users
+      # (if tie, use fewest incomplete users; if still tie, use condition number).
+      stats = User.select("condition, SUM(complete::int) AS complete, SUM(1 - complete::int) AS incomplete").
+        in_phase("main").group(:condition).order("complete", "incomplete", :condition)
+      conditions_with_no_users = ACTIVE_CONDITIONS - stats.map(&:condition)
+      self.condition = conditions_with_no_users.first || stats.first.condition
     end
 
     self.study_id = Settings.study_id

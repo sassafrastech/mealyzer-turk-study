@@ -24,19 +24,9 @@
       <% end %>
       <tr>
         <td colspan=6 class="community">
-        <p>What others thought of your answer:</p>
-          <p>Correct: <%= @summarizer.evaluations.nil? ? "Not evaluated yet" : @summarizer.evaluations[:correct] %> </p>
-          <p>Incorrect: <%= @summarizer.evaluations.nil? ? "Not evaluated yet" : @summarizer.evaluations[:incorrect] %> </p>
-            <% if !@summarizer.evaluations[:explanations].nil? %>
-              <p>Why people thought it was wrong:</p>
-              <ul>
-                <% @summarizer.evaluations[:explanations].each do |e| %>
-                  <li>"<%= e %>"</li>
-                <% end %>
-              </ul>
-            <% end %>
-          </td>
-        </tr>
+          <%= render("community_evals") %>
+        </td>
+      </tr>
     </table>
     <h5>*If you changed your answer, please explain why:</h5>
     <%= f.input :explanation, :label => false %>

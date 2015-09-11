@@ -1,0 +1,16 @@
+<p>What others thought of your answer:</p>
+<% evals = @summarizer.evaluations %>
+<% if evals[:length] == 0 %>
+  <em>Not evaluated yet</em>
+<% else %>
+  <p>Correct: <%= evals[:correct] %> </p>
+  <p>Incorrect: <%= evals[:incorrect] %> </p>
+  <% unless evals[:explanations].empty? %>
+    <p>Why people thought it was wrong:</p>
+    <ul>
+      <% evals[:explanations].each do |e| %>
+        <li>"<%= e %>"</li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

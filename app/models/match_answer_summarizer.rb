@@ -190,10 +190,11 @@ class MatchAnswerSummarizer
   end
 
   def build_evaluations
-    evals = {id: base_answer.id, correct: 0, incorrect: 0, explanations: []}
+    ma = MatchAnswer.current_study.
+      where(meal_id: base_answer.meal_id).
+      where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)
 
-    ma = MatchAnswer.current_study.where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)
-    if !ma.nil?
+    { id: base_answer.id, correct: 0, incorrect: 0, explanations: [] }.tap do |evals|
       ma.each do |a|
          if a.changed_answer
           evals[:incorrect] += 1
@@ -204,10 +205,7 @@ class MatchAnswerSummarizer
           evals[:correct] += 1
         end
       end
-      evals[:length] = ma.length
-      return evals
-    else
-      return nil
+      evals[:length] = ma.size
     end
   end
 end

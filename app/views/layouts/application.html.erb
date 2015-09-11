@@ -42,5 +42,8 @@
       <%= yield %>
     </div>
   </div>
+  <%= javascript_tag do %>
+    jQuery("form").preventDoubleSubmission();
+  <% end %>
 </body>
 </html>

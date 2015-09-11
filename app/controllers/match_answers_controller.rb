@@ -32,10 +32,6 @@ class MatchAnswersController < ApplicationController
 
   def edit
     @match_answer = MatchAnswer.find(params[:id])
-    # Build evaluation copy
-    if @match_answer.condition == 4
-      @match_answer = MatchAnswer.copy_for_eval(MatchAnswer.equivalent(@match_answer), @match_answer.user)
-    end
     build_summarizer
   end
 
@@ -109,8 +105,16 @@ class MatchAnswersController < ApplicationController
     # Special case redirects
     else
       case @match_answer.condition
-      when 2,3,4,5,6,9,10
+      when 2,3,5,6,9,10
         return redirect_to edit_match_answer_path(@match_answer)
+      when 4
+        # Find a match answer for same meal/component from seed phase
+        equivalent = MatchAnswer.equivalent(@match_answer)
+        raise "No equivalent answers found" if equivalent.nil?
+
+        # Make a copy for the user to evaluate and redirect there.
+        eval_copy = MatchAnswer.copy_for_eval(equivalent, @match_answer.user)
+        return redirect_to edit_match_answer_path(eval_copy)
       when 7,8
         # Every Nth test, reevaluate
         if ((@user.num_tests - Settings.pre_post_control_count) % Settings.reeval_interval) == 0

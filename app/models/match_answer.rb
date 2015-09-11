@@ -58,15 +58,18 @@ class MatchAnswer < ActiveRecord::Base
 
   def self.copy_for_eval(obj, user)
     MatchAnswer.create(:meal_id => obj.meal_id, :user_id => user.id, :food_groups => obj.food_groups,
-      :component_name => obj.component_name, :evaluating_id => obj.id, :task_type => "peer assessment")
+      :component_name => obj.component_name, :evaluating_id => obj.id, :task_type => "peer-assessment")
   end
 
   def self.last_five(user)
     where(user_id: user.id).order("created_at DESC").limit(5).reverse
   end
 
+  # Returns a random answer from the seed phase of the current study with the same
+  # meal and component as the given answer.
   def self.equivalent(answer)
-    where(:meal_id => answer.meal_id).where(:component_name => answer.component_name).where(:id != answer.id).sample
+    current_study.seed_phase.where(:meal_id => answer.meal_id).
+      where(:component_name => answer.component_name).sample
   end
 
   def item_has_group?(item, group)
@@ -174,7 +177,7 @@ class MatchAnswer < ActiveRecord::Base
 
   def increment_task_num
     if user.condition == 4 && evaluating_id
-      self.task_type = "peer assessment"
+      self.task_type = "peer-assessment"
       self.task_num = user.num_tests
     else
       self.task_type = "primary"

@@ -5,4 +5,4 @@ AWSACCESSKEYID      = 'XXXX'
 AWSSECRETACCESSKEY  = 'XXXX'
 
 RTurk::logger.level = Logger::DEBUG
-RTurk.setup(AWSACCESSKEYID, AWSSECRETACCESSKEY, :sandbox => (Rails.env == 'production' ? false : true))
+RTurk.setup(AWSACCESSKEYID, AWSSECRETACCESSKEY, sandbox: !Rails.env.production?)

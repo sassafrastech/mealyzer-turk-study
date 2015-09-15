@@ -34,4 +34,9 @@ MealyzerStudy::Application.configure do
 
   #config.action_dispatch.default_headers['X-Frame-Options'] = "ALLOW-FROM https://workersandbox.mturk.com"
 
+  config.middleware.use ExceptionNotification::Rack, :email => {
+    :email_prefix => "[MEALYZER-TURK-STUDY] ",
+    :sender_address => %{"Notifier" <webmaster@sassafras.coop>},
+    :exception_recipients => %w{tomsmyth@gmail.com}
+  }
 end

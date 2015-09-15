@@ -80,4 +80,10 @@ MealyzerStudy::Application.configure do
 
   # allow ssl
   #config.use_ssl = true
+
+  config.middleware.use ExceptionNotification::Rack, :email => {
+    :email_prefix => "[MEALYZER-TURK-STUDY] ",
+    :sender_address => %{"Notifier" <webmaster@sassafras.coop>},
+    :exception_recipients => %w{tomsmyth@gmail.com}
+  }
 end

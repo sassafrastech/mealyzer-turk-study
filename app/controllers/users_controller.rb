@@ -13,7 +13,8 @@ class UsersController < ApplicationController
     elsif params[:workerId]
       @disabled = false
       u = User.where(:workerId => params[:workerId]).first
-      u.present? ? u : User.create(params.permit(:assignmentId, :workerId, :hitId, :force_condition))
+      u.present? ? u : User.create(
+        params.permit(:assignmentId, :workerId, :hitId, :force_condition, :force_study_phase))
     # Else just create a new user
     else
       @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)

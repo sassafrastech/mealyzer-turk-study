@@ -1,9 +1,6 @@
 <%= simple_form_for @match_answer do |f| %>
   <div class="alert alert-success" role="alert">Thank you! Now take a look at an answer from another Turker.</div>
-  <p>Other Turkers have already provided answers for this task. Here is one of them. Please tell us whether this answer is correct or not. Remember, the best answer should list ALL food groups for each of the ingredients. If you agree with this answer, simply submit it again. If you disagree with it, please change it to correct the mistake. If you decide to change the answer, <strong>please explain what was incorrect</strong> in the original solution.  </p>
-
-  <p>If you decide to make a change, think about how this change impacts the overall nutritional breakdown of this meal. You may find that some changes have a significant impact (for example switching to a new food group for a main ingredient in a dish), and others may have a small impact (adding an additional food group to a small ingredient of a dish).
-  </p>
+  <p>Other Turkers have already provided answers for this task. Here is one of them. Please tell us whether this answer is correct or not. Remember, the best answer should list ALL food groups for each of the ingredients. If you agree with this answer, simply submit it again. If you disagree with it, please change it to correct the mistake. If you decide to change the answer, <strong>please explain what was incorrect</strong> in the original solution.</p>
   <br/>
   <h4><%= @match_answer.component_name %></h4>
   <%= f.hidden_field :meal_id %>
@@ -29,16 +26,6 @@
     <h5>*Please explain each change you made in the answer:</h5>
     <%= f.input :explanation, :label => false %>
     <br/>
-    <div class="impact">
-      <h5>*What do you think is the impact of the change you made on the overall nutritional assessment?</h5>
-      <% MatchAnswer::IMPACT_SCORES.each do |k, v| %>
-        <label>
-          <%= radio_button_tag "match_answer[impact]", k %>
-          <%= v %>
-        </label>
-        <br/>
-      <% end %>
-    </div>
   </div>
 
   <br/>

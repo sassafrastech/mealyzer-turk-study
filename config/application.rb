@@ -22,5 +22,15 @@ module MealyzerStudy
 
     # allow for localhost ssl
     config.use_ssl = false
+
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: Settings.mail.address,
+      port: Settings.mail.port,
+      user_name: Settings.mail.user_name,
+      password: Settings.mail.password,
+      authentication: Settings.mail.authentication.to_sym,
+      enable_starttls_auto: Settings.mail.enable_starttls_auto
+    }
   end
 end

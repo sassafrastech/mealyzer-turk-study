@@ -17,3 +17,10 @@ study_id: study_1
 # Number of users to assign to run through the seed phase before moving on to main phase.
 seed_phase_count: 20
 
+mail:
+  address: example.com
+  port: 587
+  user_name: xxx
+  password: xxx
+  authentication: plain
+  enable_starttls_auto: true

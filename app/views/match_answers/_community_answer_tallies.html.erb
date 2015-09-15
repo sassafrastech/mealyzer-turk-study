@@ -1,6 +1,10 @@
 <div class="other_answers">
   <table>
-    <tr><td class="community" colspan="4">Community Answers:</td></tr>
+    <tr>
+      <td class="community" colspan="4">
+        Community Answers (<%= @summarizer.other_answer_count %> in Total):
+      </td>
+    </tr>
 
     <% if @summarizer.tallies_by_component.nil? %>
 

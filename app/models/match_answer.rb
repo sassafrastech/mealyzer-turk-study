@@ -26,10 +26,9 @@ class MatchAnswer < ActiveRecord::Base
   scope :for_component, -> (meal_id, component) { where("meal_id = ? AND component_name = ?", meal_id, component) }
   scope :for_same_component_as, -> (answer) { for_component(answer.meal_id, answer.component_name) }
   scope :for_users_other_than, -> (user) { where("user_id != ?", user.id) }
-  scope :for_complete_users_other_than, -> (user) do
-    includes(:user).for_users_other_than(user).where("users.complete = ?", true)
-  end
-
+  scope :for_complete_users, -> { includes(:user).where("users.complete = ?", true) }
+  scope :for_complete_users_other_than, -> (user) { for_users_other_than(user).for_complete_users }
+  scope :valid_seed_phase, -> { current_study.seed_phase.for_complete_users }
 
   def self.build_for_random_meal(user)
     user_id = user.id unless user.nil?
@@ -68,8 +67,7 @@ class MatchAnswer < ActiveRecord::Base
   # Returns a random answer from the seed phase of the current study with the same
   # meal and component as the given answer.
   def self.equivalent(answer)
-    current_study.seed_phase.where(:meal_id => answer.meal_id).
-      where(:component_name => answer.component_name).sample
+    current_study.seed_phase.for_same_component_as(answer).sample
   end
 
   def item_has_group?(item, group)

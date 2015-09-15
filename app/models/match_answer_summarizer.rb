@@ -164,6 +164,10 @@ class MatchAnswerSummarizer
     @evaluations ||= build_evaluations
   end
 
+  def other_answer_count
+    other_answers.size
+  end
+
   private
 
   # Returns an ordered hash of the form:
@@ -186,26 +190,28 @@ class MatchAnswerSummarizer
   end
 
   def other_answers
-    MatchAnswer.current_study.seed_phase.for_same_component_as(base_answer).for_complete_users_other_than(current_user)
+    @other_answers ||= MatchAnswer.valid_seed_phase.for_same_component_as(base_answer).
+      for_users_other_than(current_user)
   end
 
   def build_evaluations
-    ma = MatchAnswer.current_study.
-      where(meal_id: base_answer.meal_id).
+    equivalents = MatchAnswer.valid_seed_phase.for_same_component_as(base_answer)
+
+    explainers = equivalents.
       where("food_groups = ? AND evaluating_id IS NOT NULL", base_answer.food_groups.to_json)
 
     { id: base_answer.id, correct: 0, incorrect: 0, explanations: [] }.tap do |evals|
-      ma.each do |a|
-         if a.changed_answer
-          evals[:incorrect] += 1
-          unless a.explanation.nil?
-            evals[:explanations].push(a.explanation)
-          end
-        else
-          evals[:correct] += 1
-        end
+      # Count matches.
+      equivalents.each do |a|
+        a.food_groups == base_answer.food_groups ? (evals[:correct] += 1) : (evals[:incorrect] += 1)
       end
-      evals[:length] = ma.size
+
+      # Gather explanations from evaluated answers.
+      evals[:explanations] = explainers.map do |a|
+        a.changed_answer? && a.explanation.present? ? a.explanation : nil
+      end.compact
+
+      evals[:length] = equivalents.size
     end
   end
 end

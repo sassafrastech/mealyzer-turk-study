@@ -2,36 +2,29 @@ require "pp"
 class UsersController < ApplicationController
 
   def new
-    # Only create the user if they have accepted task and there is no user already
-    @disabled = true
+    # If workerId is given, they have accepted the HIT. So find/create the user.
+    if params[:workerId]
+      @user = User.find_by(workerId: params[:workerId])
 
-    # Reload user from session if already assigned
-    @user = if current_user
-      @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      current_user
-    # Check to see if user exists
-    elsif params[:workerId]
-      @disabled = false
-      u = User.where(:workerId => params[:workerId]).first
-      u.present? ? u : User.create(
-        params.permit(:assignmentId, :workerId, :hitId, :force_condition, :force_study_phase))
-    # Else just create a new user
-    else
-      @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      if (params[:workerId])
-        User.create(params.permit(:assignmentId, :workerId, :hitId))
+      # If user is present, they must have zero tests, otherwise they are not unique.
+      if @user.present?
+        if @user.num_tests > 0
+          @disabled = true
+          flash[:error] = "Oops! We are unable to offer you this HIT because we need unique Turkers. Thank you for your interest!"
+        else
+          @disabled = false
+        end
       else
-        User.create
+        @user = User.create(params.permit(:assignmentId, :workerId, :hitId, :force_condition, :force_study_phase))
       end
-    end
-
-        # Make sure we don't have repeat turkers
-    if !@user.unique?
+    # Else just build a new user for showing the preview
+    else
+      @user = User.new
       @disabled = true
     end
-    if @user.workerId.present?
-      session[:current_user_id] = @user.id
-    end
+
+    # Save in session
+    session[:current_user_id] = @user.id if @user.workerId.present?
 
     get_meal_and_component_counts
   end

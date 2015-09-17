@@ -1,14 +1,8 @@
-<% if !@user.unique? %>
-  <div class="alert alert-danger" role="alert">
-    Oops! We are unable to offer you this HIT because we need unique Turkers. Thank you for your interest!
-  </div>
-<% end %>
+<%= render partial: "shared/flash_messages", flash: flash %>
 
 <%= render('shared/instructions') %>
 
 <%= image_tag("sample.png", :class => "sample") %>
-
-<%= render partial: "shared/flash_messages", flash: flash %>
 
 <h2>Before we start...</h2>
 

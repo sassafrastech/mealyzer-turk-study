@@ -60,17 +60,6 @@ class User < ActiveRecord::Base
     "#{done}/#{Settings.max_subj_per_condition}"
   end
 
-  def unique?
-    # should be unique across all studies
-    unique = (User.where(:workerId => workerId).where("num_tests > ?", 0).first == nil)
-
-    if !User::REQUIRE_UNIQUE
-      return true
-    else
-      return unique || (num_tests < self.class.max_tests)
-    end
-  end
-
   def max_tests?
     num_tests >= self.class.max_tests
   end

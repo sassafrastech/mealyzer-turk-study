@@ -6,27 +6,10 @@ class MatchAnswersController < ApplicationController
   before_action :get_meal_and_component_counts
 
   def new
-    #@disabled = false
-    #@match_answer = MatchAnswer.next(current_user)
-    # Only create the user if they have accepted task and there is no user already
-    @disabled = true
+    return render text: "No current user", status: 403 unless current_user
 
-    # Reload user from session if already assigned
-    @user = if !current_user.nil?
-      @disabled = false
-      current_user
-    elsif params[:assignmentId]
-      @disabled = Turkee::TurkeeFormHelper::disable_form_fields?(params)
-      User.create(params.permit(:assignmentId, :workerId, :hitId))
-    else
-      @user = User.create
-    end
-
-    # Make sure we don't have repeat turkers
-    if !@user.unique? && User::REQUIRE_UNIQUE
-      @disabled = true
-    end
-
+    @disabled = false
+    @user = current_user
     @match_answer = MatchAnswer.next(@user)
   end
 

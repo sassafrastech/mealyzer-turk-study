@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904144750) do
+ActiveRecord::Schema.define(version: 20150915184023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20150904144750) do
     t.boolean  "disabled",           default: false,  null: false
     t.text     "photo_credit"
     t.integer  "set_num"
+    t.text     "expert_feedback"
   end
 
   add_index "meals", ["set_num"], name: "index_meals_on_set_num", using: :btree

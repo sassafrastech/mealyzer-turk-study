@@ -1,17 +1,18 @@
 class User < ActiveRecord::Base
-  ACTIVE_CONDITIONS = [1, 2, 3, 4, 5, 6, 9, 10]
+  ACTIVE_CONDITIONS = [1, 2, 3, 4, 5, 6, 9, 10, 11]
 
   CONDITION_NAMES = [
     "No feedback",
     "Compare with answer but can't revise",
     "Can compare AND revise",
     "Evaluate someone else's answer",
-    "Pretend that sent your answer to others and rated it as correct/incorrect, with explanation, but can't change answer",
+    "Show ratings and explanations by other users, but can't change answer",
     "Same as #5 but can change answer",
     "Every N answers, review last N answers with option to revise",
     "Same as #7 but with no option to revise",
     "Same as #2, but with bar chart instead of most popular",
-    "Same as #3, but with bar chart instead of most popular"
+    "Same as #3, but with bar chart instead of most popular",
+    "Same as #6, but with expert feedback"
   ]
 
   REQUIRE_UNIQUE = true

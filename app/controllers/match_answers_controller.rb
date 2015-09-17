@@ -61,7 +61,7 @@ class MatchAnswersController < ApplicationController
   def update_by_condition(params)
 
     case @match_answer.condition
-    when 3,6,10
+    when 3,6,10,11
       @match_answer.food_groups_update = params[:food_groups]
       @match_answer.explanation = params[:explanation]
       @match_answer.build_answers_changed!
@@ -88,7 +88,7 @@ class MatchAnswersController < ApplicationController
     # Special case redirects
     else
       case @match_answer.condition
-      when 2,3,5,6,9,10
+      when 2,3,5,6,9,10,11
         return redirect_to edit_match_answer_path(@match_answer)
       when 4
         # Find a match answer for same meal/component from seed phase

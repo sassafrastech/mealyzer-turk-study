@@ -14,6 +14,7 @@ class MatchAnswer < ActiveRecord::Base
   serialize :food_groups_update_correct_all, JSON
 
   delegate :condition, :num_tests, to: :user
+  delegate :expert_feedback, to: :meal
 
   validate :food_groups_exist, :food_groups_updated
   validate :explanation_when_updated, :impact_when_updated

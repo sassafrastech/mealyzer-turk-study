@@ -1,5 +1,5 @@
 <%= simple_form_for @match_answer do |f| %>
-  <div class="alert alert-success" role="alert">Thank you! We asked nutritional experts whether your answer was correct or not (and if not, why).</div>
+  <div class="alert alert-success" role="alert">Thank you! We asked our dietitian whether your answer was correct or not (and if not, why).</div>
   <p>Below you can see their feedback. Please review it carefully.</p>
 
   <% unless @match_answer.food_groups_correct? %>
@@ -14,7 +14,7 @@
 
   <div class="my_answer">
     <table>
-      <tr><td class="community" colspan=4>Your Answer:</td></tr>
+      <tr><td class="community" colspan=4>Your Answer (With Dietitian Feedback):</td></tr>
       <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
       <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
       <% current_food_groups = @match_answer.changed_answer ? @match_answer.food_groups_update : @match_answer.food_groups %>
@@ -23,19 +23,19 @@
         <% Meal::GROUPS.each do |group| %>
           <td>
             <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
+            <% if @match_answer.correct_for(ingredient: k, nutrient: group) %>
+              <i class="fa fa-check"></i>
+            <% else %>
+              <i class="fa fa-close"></i>
+            <% end %>
           </td>
         <% end %>
         </tr>
       <% end %>
       <tr>
         <td colspan=6 class="community">
-          <p>What an expert thought of your answer:</p>
-
-          <% if @match_answer.food_groups_correct? %>
-            <p>"Congratulations, you're correct!"</p>
-          <% else %>
-            <%= simple_format(%Q{"#{@match_answer.expert_feedback}"}) %>
-          <% end %>
+          <p>Comments from the Dietitian:</p>
+          <%= simple_format(%Q{"#{@match_answer.expert_feedback}"}) %>
         </td>
       </tr>
     </table>

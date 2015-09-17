@@ -60,6 +60,18 @@ form, table {
 
 div.my_answer {
   background-color: #FFF8DA;
+
+  .fa {
+    width: 15px;
+  }
+
+  .fa-check {
+    color: green;
+  }
+
+  .fa-close {
+    color: red;
+  }
 }
 
 div.my_answer, div.other_answers {

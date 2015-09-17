@@ -144,6 +144,10 @@ class MatchAnswer < ActiveRecord::Base
     end
   end
 
+  def correct_for(options)
+    food_groups_correct_all[options[:ingredient]][options[:nutrient]] == "correct"
+  end
+
   private
   def food_groups_exist
     if food_groups.nil?
@@ -185,12 +189,16 @@ class MatchAnswer < ActiveRecord::Base
     return true
   end
 
+  def answers_match?(a1, a2)
+    a1.keys.sort == a2.keys.sort && a1.all?{ |ing, nutr| a2[ing].sort == nutr.sort }
+  end
+
   def evaluate_answers
     self.num_ingredients = food_groups.keys.length
 
     unless food_groups.nil?
       # overall assessment
-      self.food_groups_correct = meal.food_nutrition[component_name].eql?(food_groups)
+      self.food_groups_correct = answers_match?(meal.food_nutrition[component_name], food_groups)
 
       answers = individual_answers(food_groups)
 
@@ -207,7 +215,7 @@ class MatchAnswer < ActiveRecord::Base
 
     unless food_groups_update.nil?
       # overall assessment
-      self.food_groups_update_correct = meal.food_nutrition[component_name].eql?(food_groups_update)
+      self.food_groups_update_correct = answers_match?(meal.food_nutrition[component_name], food_groups_update)
 
       answers = individual_answers(food_groups_update)
 

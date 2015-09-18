@@ -31,6 +31,8 @@ class User < ActiveRecord::Base
   # Users that have at least one trial for the current study and given study phase
   scope :complete_in_phase, -> (phase) { in_phase(phase).where(complete: true) }
 
+  scope :complete_in_cur_study, -> { where(complete: true).where(study_id: Settings.study_id) }
+
   # Users that have at least one trial for the current study and given condition
   scope :complete_in_phase_and_condition,
     -> (phase, cond) { complete_in_phase(phase).where(condition: cond) }

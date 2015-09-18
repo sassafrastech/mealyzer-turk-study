@@ -3,9 +3,9 @@ require "csv"
 
 namespace :db do
   task :tests_csv => :environment do
-    users = User.where(:study_id => 'study_1').where("pre_test != 'NULL' AND post_test != 'NULL'")
+    users = User.complete_in_cur_study.where("pre_test != 'NULL' AND post_test != 'NULL'")
 
-    CSV.open(Rails.root.join("tmp","csv", "survey_results.csv"), "wb") do |csv|
+    CSV.open(Rails.root.join("tmp", "csv", "survey_results.csv"), "wb") do |csv|
 
       csv << ["user_id", "pre_test_1", "pre_test_2", "post_test_level_difficulty", "post_test_confident_correct",
         "post_test_confident_food_groups", "post_test_time_consuming", "post_test_additional_info", "post_test_learned",
@@ -23,9 +23,9 @@ namespace :db do
   end
 
   task :most_popular_for_user => :environment do
-    users = User.where("condition = 2 OR condition = 3").where(:study_id => 'study_1').where('num_tests = 28')
+    users = User.complete_in_cur_study.where("condition = 2 OR condition = 3")
 
-    CSV.open(Rails.root.join("tmp","csv", "popular.csv"), "wb") do |csv|
+    CSV.open(Rails.root.join("tmp", "csv", "popular.csv"), "wb") do |csv|
 
       csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "user_num_correct",
         "user_num_correct_update","popular_answer", "popular_num_correct", "num_correct_with_popular",
@@ -82,9 +82,9 @@ namespace :db do
   end
 
   task :evaluated => :environment do
-    users = User.where("condition = 5 OR condition = 6").where(:study_id => 'study_1').where('num_tests = 28')
+    users = User.complete_in_cur_study.where("condition = 5 OR condition = 6")
 
-    CSV.open(Rails.root.join("tmp","csv", "evaluated.csv"), "wb") do |csv|
+    CSV.open(Rails.root.join("tmp", "csv", "evaluated.csv"), "wb") do |csv|
       csv << ["match_answer_id", "meal_id", "component", "user_id", "condition", "user_num_correct", "user_num_correct_update",
       "num_ingredients", "task_num", "timestamp", "evaluation_received_correct", "evaluation_received_incorrect",
       "evaluation_right?"]
@@ -148,9 +148,9 @@ namespace :db do
   task :learning_gains => :environment do
     File.new("tmp/csv/learning_gains.csv", "w")
 
-    users = User.where("condition = 2 OR condition = 3").where(:study_id => 'study_2').where('num_tests = 28')
+    users = User.complete_in_cur_study.where("condition = 2 OR condition = 3")
 
-    CSV.open(Rails.root.join("tmp","csv", "learning_gains.csv"), "wb") do |csv|
+    CSV.open(Rails.root.join("tmp", "csv", "learning_gains.csv"), "wb") do |csv|
       csv << ["user_id", "condition", "study_id", "learning_pre", "learning_post", "learning_post_update", "learning_gains_diff", "learning_gains_diff_update", "learning_pre_popular", "learning_post_popular", "learning_gains_diff_popular"]
 
       users.each do |user|
@@ -218,16 +218,4 @@ namespace :db do
       end
     end
   end
-
-  def other_answers
-
-    for i in 1..8 do
-      user = User.where(:study_id => 'study_1').where(:condition => i).first.id
-      answer = MatchAnswer.where(:user_id => user.id).first
-      pp "Condition #{i} other answers: #{MatchAnswerSummarizer.other_answers(answer).length}"
-    end
-
-
-  end
-
 end

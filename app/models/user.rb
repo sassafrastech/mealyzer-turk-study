@@ -39,6 +39,7 @@ class User < ActiveRecord::Base
   serialize :post_test
   serialize :test_order
 
+  before_save :score_pre_post_test
   before_create :choose_phase
   before_create :choose_condition
   before_create :set_test_order
@@ -172,5 +173,12 @@ class User < ActiveRecord::Base
     main += pairs_with_no_set
 
     self.test_order = pre.shuffle + main.shuffle + post.shuffle
+  end
+
+  def score_pre_post_test
+    %w(pre post).each do |type|
+      self.send("#{type}_test_score=",
+        (scores = send("#{type}_test")).nil? ? nil : scores.values.map(&:to_i).reduce(:+))
+    end
   end
 end

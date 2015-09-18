@@ -71,6 +71,13 @@ class MatchAnswer < ActiveRecord::Base
     current_study.seed_phase.for_same_component_as(answer).sample
   end
 
+  # Builds and returns answerlets for all ingredients in this answer
+  def as_answerlets
+    (food_groups || {}).map do |ing, nutrients|
+      Answerlet.new(meal: meal, component_name: component_name, ingredient: ing, nutrients: nutrients)
+    end
+  end
+
   def item_has_group?(item, group)
     return false if food_groups.nil?
     (food_groups[item] || []).include?(group)

@@ -22,6 +22,31 @@ namespace :db do
     end
   end
 
+  # Returns a list of answer popularity, grouped by meal, component, and ingredient
+  task seed_phase_answers_by_ingredient: :environment do
+    answerlets = User.complete_in_phase("seed").includes(match_answers: :meal).
+      map{ |u| u.match_answers.as_answerlets }.flatten
+
+    grouped = answerlets.group_by{|a| a}
+
+    CSV.open(Rails.root.join("tmp", "csv", "answerlets.csv"), "wb") do |csv|
+
+      csv << %w(meal_id meal_name component ingredient answer count correct)
+
+      grouped.sort_by{ |a, v| [a, -v.size] }.each do |a, v|
+        csv << [
+          a.meal.id,
+          a.meal.name,
+          a.component_name,
+          a.ingredient,
+          a.ntrnts,
+          v.size,
+          a.correct? ? "x" : ""
+        ]
+      end
+    end
+  end
+
   task :most_popular_for_user => :environment do
     users = User.complete_in_cur_study.where("condition = 2 OR condition = 3")
 

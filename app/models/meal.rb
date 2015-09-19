@@ -2,6 +2,8 @@ class Meal < ActiveRecord::Base
   %w(food_locations food_options food_nutrition food_components).each {|column| serialize column, JSON}
 
   GROUPS = ["Protein", "Fat", "Carbohydrate", "Fiber"]
+  VOWELS = %w(a e i o u)
+  GRP_ABBRVS = ActiveSupport::OrderedHash[*GROUPS.sort.map{ |g| [g, (g.split(//) - VOWELS)[0,2].join] }.flatten]
 
   has_attached_file :photo, :styles => { :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :photo, :content_type => /\Aimage\/.*\Z/

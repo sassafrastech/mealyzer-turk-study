@@ -1,7 +1,7 @@
 require "pp"
 require "csv"
 
-namespace :db do
+namespace :data do
   task :tests_csv => :environment do
     users = User.complete_in_cur_study.where("pre_test != 'NULL' AND post_test != 'NULL'")
 
@@ -23,13 +23,11 @@ namespace :db do
   end
 
   # Returns a list of answer popularity, grouped by meal, component, and ingredient
-  task seed_phase_answers_by_ingredient: :environment do
-    answerlets = User.complete_in_phase("seed").includes(match_answers: :meal).
-      map{ |u| u.match_answers.as_answerlets }.flatten
+  task answerlet_popularity: :environment do
 
-    grouped = answerlets.group_by{|a| a}
+    grouped = answerlets_for_phase("seed").group_by(&:identity)
 
-    CSV.open(Rails.root.join("tmp", "csv", "answerlets.csv"), "wb") do |csv|
+    CSV.open(Rails.root.join("tmp", "csv", "answerlet_popularity.csv"), "wb") do |csv|
 
       csv << %w(meal_id meal_name component ingredient answer count correct)
 
@@ -43,6 +41,29 @@ namespace :db do
           v.size,
           a.correct? ? "x" : ""
         ]
+      end
+    end
+  end
+
+  task nutrient_popularity_by_ingredient: :environment do
+    grouped = answerlets_for_phase("seed").group_by(&:meal_comp_ing)
+
+    CSV.open(Rails.root.join("tmp", "csv", "nutrient_popularity_by_ingredient.csv"), "wb") do |csv|
+
+      csv << %w(meal_id meal_name component ingredient) + Meal::GRP_ABBRVS.values + %w(correct)
+
+      grouped.sort_by{ |mci, _| mci }.each do |_, answerlets|
+        # Compute tallies of each nutient for all answerlets in this group.
+        tallies = ActiveSupport::OrderedHash[*Meal::GROUPS.map{ |n| [n, 0] }.flatten]
+        answerlets.each do |a|
+          a.nutrients.each do |n|
+            tallies[n] += 1
+          end
+        end
+
+        a = answerlets.first
+        csv << [a.meal.id, a.meal.name, a.component_name, a.ingredient] +
+          tallies.values + [a.correct_answerlet.ntrnts]
       end
     end
   end
@@ -242,5 +263,10 @@ namespace :db do
 
       end
     end
+  end
+
+  def answerlets_for_phase(phase)
+    User.complete_in_phase(phase).includes(match_answers: :meal).
+      map{ |u| u.match_answers.as_answerlets }.flatten
   end
 end

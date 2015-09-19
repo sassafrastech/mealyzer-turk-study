@@ -2,32 +2,39 @@
 
 <ul>
   <li><%= link_to("Next available condition", new_user_path(@fake_turk_params)) %></li>
-  <% User::CONDITION_NAMES.each_with_index do |name, i| %>
-    <% cond = i + 1 %>
-    <li>
-      <% if User::ACTIVE_CONDITIONS.include?(cond) %>
-        <%= link_to("Condition ##{cond}: #{name}",
-          new_user_path(@fake_turk_params.merge(force_condition: cond, force_study_phase: "main"))) %>
-      <% else %>
-        <%= "Condition ##{cond}: #{name}" %>
+  <li><%= link_to("Seed phase", new_user_path(@fake_turk_params.merge(force_study_phase: "seed"))) %></li>
+  <li><%= link_to("Explain phase", new_user_path(@fake_turk_params.merge(force_study_phase: "explain"))) %></li>
+  <li>Main Phase
+    <ul>
+      <% User::CONDITION_NAMES.each_with_index do |name, i| %>
+        <% cond = i + 1 %>
+        <li>
+          <% if User::MAIN_CONDITIONS.include?(cond) %>
+            <%= link_to("Condition ##{cond}: #{name}",
+              new_user_path(@fake_turk_params.merge(force_condition: cond, force_study_phase: "main"))) %>
+          <% else %>
+            <%= "Condition ##{cond}: #{name}" %>
+          <% end %>
+        </li>
       <% end %>
-    </li>
-  <% end %>
-  <li><%= link_to("Exit Tryout Mode", "/admin", method: :delete) %></li>
+    </ul>
+  </li>
+  <li><%= link_to("Exit Admin Mode", "/admin", method: :delete) %></li>
 </ul>
 
 <h4>User Stats</h4>
 <table class="stats">
   <tr class="top">
     <th></th>
-    <th colspan="<%= User::ACTIVE_CONDITIONS.size + 1%>">Complete</th>
-    <th colspan="<%= User::ACTIVE_CONDITIONS.size + 1%>">Incomplete</th>
+    <th colspan="<%= User::MAIN_CONDITIONS.size + 2 %>">Complete</th>
+    <th colspan="<%= User::MAIN_CONDITIONS.size + 2 %>">Incomplete</th>
   </tr>
   <tr>
     <th>Study</th>
     <% %w(Complete Incomplete).each do |comp| %>
       <th>Seed</th>
-      <% User::ACTIVE_CONDITIONS.each do |c| %>
+      <th>Explain</th>
+      <% User::MAIN_CONDITIONS.each do |c| %>
         <th>#<%= c %></th>
       <% end %>
     <% end %>
@@ -36,8 +43,9 @@
     <tr>
       <td><%= s %></td>
       <% [true, false].each do |comp| %>
-        <td><%= @stats[[s, "seed", 1, comp]] %></td>
-        <% User::ACTIVE_CONDITIONS.each do |c| %>
+        <td><%= @stats[[s, "seed", User::SEED_CONDITION, comp]] %></td>
+        <td><%= @stats[[s, "explain", User::EXPLAIN_CONDITION, comp]] %></td>
+        <% User::MAIN_CONDITIONS.each do |c| %>
           <td><%= @stats[[s, "main", c, comp]] %></td>
         <% end %>
       <% end %>

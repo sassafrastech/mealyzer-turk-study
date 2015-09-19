@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  ACTIVE_CONDITIONS = [1, 2, 3, 4, 5, 6, 9, 10, 11]
-
   CONDITION_NAMES = [
     "No feedback",
     "Compare with answer but can't revise",
@@ -12,10 +10,15 @@ class User < ActiveRecord::Base
     "Same as #7 but with no option to revise",
     "Same as #2, but with bar chart instead of most popular",
     "Same as #3, but with bar chart instead of most popular",
-    "Same as #6, but with expert feedback"
+    "Same as #6, but with expert feedback",
+    "Explanation gathering"
   ]
 
   REQUIRE_UNIQUE = true
+
+  SEED_CONDITION = 1
+  EXPLAIN_CONDITION = 12
+  MAIN_CONDITIONS = [1, 2, 3, 4, 5, 6, 9, 10, 11]
 
   POST_TEST_OPTION_SETS = {
     :level_difficulty => :answers_difficulty,
@@ -106,12 +109,22 @@ class User < ActiveRecord::Base
     if force_study_phase
       self.study_phase = force_study_phase
     else
-      self.study_phase = seed_phase_full? ? "main" : "seed"
+      self.study_phase = if !seed_phase_full?
+        "seed"
+      elsif !explain_phase_full?
+        "explain"
+      else
+        "main"
+      end
     end
   end
 
   def seed_phase_full?
     self.class.complete_in_phase("seed").count >= Settings.seed_phase_count
+  end
+
+  def explain_phase_full?
+    false
   end
 
   def condition_full?(c)
@@ -123,25 +136,19 @@ class User < ActiveRecord::Base
     if force_condition
       self.condition = force_condition.to_i
     elsif study_phase == "seed"
-      self.condition = 1
+      self.condition = SEED_CONDITION
+    elsif study_phase == "explain"
+      self.condition = EXPLAIN_CONDITION
     else
       # Select the condition with the least number of complete users
       # (if tie, use fewest incomplete users; if still tie, use condition number).
       stats = User.select("condition, SUM(complete::int) AS complete, SUM(1 - complete::int) AS incomplete").
         in_phase("main").group(:condition).order("complete", "incomplete", :condition)
-      conditions_with_no_users = ACTIVE_CONDITIONS - stats.map(&:condition)
+      conditions_with_no_users = MAIN_CONDITIONS - stats.map(&:condition)
       self.condition = conditions_with_no_users.first || stats.first.condition
     end
 
     self.study_id = Settings.study_id
-  end
-
-  # Choses a random non-full condition. Returns nil if all conditions are full.
-  def random_condition
-    non_full = ACTIVE_CONDITIONS.select do |c|
-      User.complete_in_phase_and_condition(study_phase, c).count < Settings.max_subj_per_condition
-    end
-    non_full.sample
   end
 
   def completed_tests

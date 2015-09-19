@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   SEED_CONDITION = 1
   EXPLAIN_CONDITION = 12
   MAIN_CONDITIONS = [1, 2, 3, 4, 5, 6, 9, 10, 11]
+  SUBGROUPS = 5
 
   POST_TEST_OPTION_SETS = {
     :level_difficulty => :answers_difficulty,
@@ -60,6 +61,15 @@ class User < ActiveRecord::Base
   # Returns the number of available meal components
   def self.max_tests
     @@max_tests ||= Meal.all_tests.size
+  end
+
+  # Select the field value with the least number of complete users
+  # (if tie, use fewest incomplete users; if still tie, use field number).
+  def self.choose_best(field, options)
+    stats = User.select("#{field}, SUM(complete::int) AS complete, SUM(1 - complete::int) AS incomplete").
+      in_phase(options[:phase]).group(field).order("complete", "incomplete", field)
+    with_no_users = options[:all] - stats.map(&field)
+    with_no_users.first || stats.first.send(field)
   end
 
   def phase_progress
@@ -139,13 +149,9 @@ class User < ActiveRecord::Base
       self.condition = SEED_CONDITION
     elsif study_phase == "explain"
       self.condition = EXPLAIN_CONDITION
+      self.subgroup = self.class.choose_best(:subgroup, phase: "explain", all: (1..SUBGROUPS).to_a)
     else
-      # Select the condition with the least number of complete users
-      # (if tie, use fewest incomplete users; if still tie, use condition number).
-      stats = User.select("condition, SUM(complete::int) AS complete, SUM(1 - complete::int) AS incomplete").
-        in_phase("main").group(:condition).order("complete", "incomplete", :condition)
-      conditions_with_no_users = MAIN_CONDITIONS - stats.map(&:condition)
-      self.condition = conditions_with_no_users.first || stats.first.condition
+      self.condition = self.class.choose_best(:condition, phase: "main", all: MAIN_CONDITIONS)
     end
 
     self.study_id = Settings.study_id

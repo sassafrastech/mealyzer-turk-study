@@ -35,6 +35,12 @@
         </strong>
         &nbsp;&nbsp;
 
+        <% if current_user.subgroup %>
+          Subgroup:
+          <strong><%= current_user.subgroup %></strong>
+          &nbsp;&nbsp;
+        <% end %>
+
         <% if meal_id = @match_answer.try(:meal_id) %>
           Meal ID:
           <strong><%= meal_id %></strong>

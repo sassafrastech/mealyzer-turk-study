@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915184023) do
+ActiveRecord::Schema.define(version: 20150919192830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 20150915184023) do
     t.string   "study_phase",     default: "seed", null: false
     t.boolean  "complete",        default: false,  null: false
     t.text     "test_order"
+    t.integer  "subgroup"
   end
 
   add_index "users", ["complete"], name: "index_users_on_complete", using: :btree

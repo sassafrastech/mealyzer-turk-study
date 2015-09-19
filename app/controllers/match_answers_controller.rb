@@ -11,6 +11,13 @@ class MatchAnswersController < ApplicationController
     @disabled = false
     @user = current_user
     @match_answer = MatchAnswer.next(@user)
+
+    # If this is the explain phase, we save @match_answer immediately because
+    # it is a fake answer that the user will be asked to evaluate.
+    if @user.study_phase == "explain"
+      @match_answer.save!
+      redirect_by_condition
+    end
   end
 
   def edit
@@ -27,7 +34,6 @@ class MatchAnswersController < ApplicationController
     session[:current_user_id] = @user.id
 
     if @match_answer.valid?
-      @user.increment_tests!
       redirect_by_condition
     else
       flash.now[:error] = "All food items must be matched to at least one group"
@@ -59,35 +65,31 @@ class MatchAnswersController < ApplicationController
   private
 
   def update_by_condition(params)
-
     case @match_answer.condition
-    when 3,6,10,11
+    when 3,4,6,10,11,12
       @match_answer.food_groups_update = params[:food_groups]
       @match_answer.explanation = params[:explanation]
       @match_answer.build_answers_changed!
-      @match_answer.save
-    when 4
-      @match_answer.food_groups_update = params[:food_groups]
-      @match_answer.explanation = params[:explanation]
-      @match_answer.build_answers_changed!
-      @match_answer.impact = params[:impact]
+      @match_answer.impact = params[:impact] if @match_answer.condition == 4
       @match_answer.save
     end
   end
 
   # Redirects to the appropriate place based on condition and number of trials complete.
   def redirect_by_condition
+    @user.increment_tests!
+
     # Pre-control, everyone gets constant number
-    if @user.num_tests <= Settings.pre_post_control_count
+    if @user.study_phase == "main" && @user.num_tests <= Settings.pre_post_control_count
       @match_answer.update_attribute(:task_type, "pre-control")
 
     # Post-control, everyone gets constant number
-    elsif @user.num_tests > User.max_tests - Settings.pre_post_control_count
+    elsif @user.study_phase == "main" && @user.num_tests > User.max_tests - Settings.pre_post_control_count
       @match_answer.update_attribute(:task_type, "post-control")
 
     # Special case redirects
     else
-      case @match_answer.condition
+      case @user.condition
       when 2,3,5,6,9,10,11
         return redirect_to edit_match_answer_path(@match_answer)
       when 4
@@ -96,13 +98,16 @@ class MatchAnswersController < ApplicationController
         raise "No equivalent answers found" if equivalent.nil?
 
         # Make a copy for the user to evaluate and redirect there.
-        eval_copy = MatchAnswer.copy_for_eval(equivalent, @match_answer.user)
+        eval_copy = equivalent.copy_for_eval(@match_answer.user)
         return redirect_to edit_match_answer_path(eval_copy)
       when 7,8
         # Every Nth test, reevaluate
         if ((@user.num_tests - Settings.pre_post_control_count) % Settings.reeval_interval) == 0
           return redirect_to edit_match_answer_group_path
         end
+      when 12
+        eval_copy = @match_answer.copy_for_eval(current_user)
+        return redirect_to edit_match_answer_path(eval_copy)
       end
     end
 

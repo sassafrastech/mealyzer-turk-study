@@ -13,7 +13,7 @@ class MatchAnswer < ActiveRecord::Base
   serialize :food_groups_correct_all, JSON
   serialize :food_groups_update_correct_all, JSON
 
-  delegate :condition, :num_tests, to: :user
+  delegate :condition, :num_tests, to: :user, allow_nil: true
   delegate :expert_feedback, to: :meal
 
   validate :food_groups_exist, :food_groups_updated
@@ -48,17 +48,21 @@ class MatchAnswer < ActiveRecord::Base
 
   def self.next(user)
     test = user.next_test
-    if test.nil?
+    answer = if test.nil?
       build_for_random_meal(user)
     else
       meal = Meal.find(test[0])
-      new(:meal => meal, :component_name => test[1], :user => user)
+      new(meal: meal, component_name: test[1], user: user)
     end
-  end
 
-  def self.copy_for_eval(obj, user)
-    MatchAnswer.create(:meal_id => obj.meal_id, :user_id => user.id, :food_groups => obj.food_groups,
-      :component_name => obj.component_name, :evaluating_id => obj.id, :task_type => "peer-assessment")
+    # In condition 12, we need to create a fake, anonymous answer consisting of popular
+    # answers for various ingredients
+    if user.condition == 12
+      answer.user = nil
+      answer.food_groups = meal.food_nutrition[test[1]]
+    end
+
+    answer
   end
 
   def self.last_five(user)
@@ -69,6 +73,12 @@ class MatchAnswer < ActiveRecord::Base
   # meal and component as the given answer.
   def self.equivalent(answer)
     current_study.seed_phase.for_same_component_as(answer).sample
+  end
+
+  # Returns a copy of this answer with the appropriate evaluation fields set.
+  def copy_for_eval(user)
+    self.class.create(meal_id: meal_id, user_id: user.id, food_groups: food_groups,
+      component_name: component_name, evaluating_id: id)
   end
 
   # Builds and returns answerlets for all ingredients in this answer
@@ -97,7 +107,7 @@ class MatchAnswer < ActiveRecord::Base
     return if food_groups_update.nil? || (food_groups.keys.length != food_groups_update.keys.length)
 
     food_groups.each do |item, group_arr|
-      self.changed_answer = true if food_groups_update[item].join(" ") != group_arr.join(" ")
+      self.changed_answer = true if food_groups_update[item].sort != group_arr.sort
     end
 
   end
@@ -156,16 +166,17 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   private
+
   def food_groups_exist
     if food_groups.nil?
       errors.add(:food_groups, "cannot be empty")
     else
-       errors.add(:food_groups, "must be accounted for") if items.sort != food_groups.keys.sort
+      errors.add(:food_groups, "must be accounted for") if items.sort != food_groups.keys.sort
     end
   end
 
   def food_groups_updated
-    return if (changed_answer.nil?) || condition == 2
+    return if changed_answer.nil? || condition == 2
     if food_groups_update.nil? || (food_groups.keys.length != food_groups_update.keys.length)
       # Since they messed up, reset the update value to the original.
       self.food_groups_update = food_groups
@@ -180,13 +191,15 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   def impact_when_updated
-    if user.condition == 4 && changed_answer == true && impact.nil?
+    if condition == 4 && changed_answer == true && impact.nil?
       errors.add(:impact, "is missing, please make a selection")
     end
   end
 
   def increment_task_num
-    if user.condition == 4 && evaluating_id
+    # User may be nil if this is a fake answer. In that case we don't need to assign a task_num
+    return true if user.nil?
+    if condition == 4 && evaluating_id
       self.task_type = "peer-assessment"
       self.task_num = user.num_tests
     else

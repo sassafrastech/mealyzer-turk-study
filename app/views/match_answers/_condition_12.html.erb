@@ -1,0 +1,4 @@
+<%= simple_form_for @match_answer do |f| %>
+  <div class="alert alert-success" role="alert">Thank you! Here is the next assessment.</div>
+  <%= render("correct_and_explain", f: f) %>
+<% end %>

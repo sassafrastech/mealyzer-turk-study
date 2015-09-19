@@ -1,12 +1,9 @@
 # Models a set of nutritient selections for one ingredient of one component.
 # Not persisted
-class Answerlet
-  attr_accessor :meal, :component_name, :ingredient, :nutrients
+class Answerlet < ActiveRecord::Base
+  belongs_to :meal
 
-  def initialize(attribs)
-    attribs.each{|k,v| instance_variable_set("@#{k}", v)}
-    self.nutrients = nutrients.sort
-  end
+  serialize :nutrients, JSON
 
   def ==(a)
     a.attribs == attribs

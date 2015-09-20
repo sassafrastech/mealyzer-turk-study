@@ -1,14 +1,12 @@
 # Models a set of nutritient selections for one ingredient of one component.
 class Answerlet < ActiveRecord::Base
-  belongs_to :meal
+  belongs_to :match_answer
 
   serialize :nutrients, JSON
 
-  scope :current_study, -> { where(study_id: Settings.study_id) }
+  scope :current_study, -> { includes(:match_answer).where("match_answers.study_id" => Settings.study_id) }
 
-  before_create do
-    self.study_id = Settings.study_id
-  end
+  delegate :meal, :meal_id, :component_name, to: :match_answer
 
   def self.for_phase(phase)
     User.complete_in_phase(phase).includes(match_answers: :meal).
@@ -40,7 +38,7 @@ class Answerlet < ActiveRecord::Base
   end
 
   def meal_comp_ing
-    @meal_comp_ing ||= [meal.id, component_name, ingredient]
+    @meal_comp_ing ||= [meal_id, component_name, ingredient]
   end
 
   def to_s
@@ -48,7 +46,7 @@ class Answerlet < ActiveRecord::Base
   end
 
   def correct_answerlet
-    self.class.new(meal: meal, component_name: component_name, ingredient: ingredient,
+    self.class.new(match_answer: match_answer, ingredient: ingredient,
       nutrients: meal.nutrients_for_ingredient(component_name, ingredient))
   end
 
@@ -63,6 +61,6 @@ class Answerlet < ActiveRecord::Base
   protected
 
   def attribs
-    @attribs ||= [meal, component_name, ingredient, nutrients]
+    @attribs ||= [meal_id, component_name, ingredient, nutrients]
   end
 end

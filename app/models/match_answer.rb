@@ -64,7 +64,7 @@ class MatchAnswer < ActiveRecord::Base
       answer.user = nil
       summarizer = AnswerletSummarizer.new
       answer.food_groups = Hash[*answer.meal.items_for_component(answer.component_name).map do |ingredient|
-        params = { meal: answer.meal, component_name: answer.component_name, ingredient: ingredient }
+        params = { meal_id: answer.meal_id, component_name: answer.component_name, ingredient: ingredient }
         nth_popular = summarizer.nth_most_popular_for_ingredient(user.subgroup, params)
         [ingredient, nth_popular]
       end.flatten(1)]
@@ -92,8 +92,7 @@ class MatchAnswer < ActiveRecord::Base
   # Builds and returns answerlets for all ingredients in this answer
   def as_answerlets
     (food_groups || {}).map do |ing, nutrients|
-      Answerlet.new(meal: meal, component_name: component_name, ingredient: ing,
-        nutrients: nutrients, study_id: Settings.study_id)
+      Answerlet.new(match_answer: self, ingredient: ing, nutrients: nutrients)
     end
   end
 

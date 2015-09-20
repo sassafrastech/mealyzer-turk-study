@@ -1,15 +1,13 @@
 # Finds most popular answerlets for data in seed phase
 class AnswerletSummarizer
 
-  def ensure_answerlets
-    if Answerlet.current_study.empty?
-      Answerlet.for_phase("seed").each(&:save)
-    end
-  end
-
   def nth_most_popular_for_ingredient(n, params)
-    rows = Answerlet.joins(:match_answer).current_study.where(params).
-      group("meal_id, component_name, ingredient, nutrients").
+    rows = Answerlet.joins(match_answer: :user).
+      where("users.study_id = ?", Settings.study_id).
+      where("users.study_phase = 'seed'").
+      where("users.complete = 't'").
+      where(params).
+      group("meal_id", "component_name", "ingredient", "nutrients").
       order("count_all DESC").count
 
     raise "No answerlets found for #{params}" if rows.empty?
@@ -21,8 +19,13 @@ class AnswerletSummarizer
     JSON.parse(rows.keys[n][3])
   end
 
+  # Returns top answerlets for all ingredients for current study seed phase
   def top_5_for_all_ingredients
-    result = Answerlet.joins(:match_answer).current_study.group("meal_id", "component_name", "ingredient", "nutrients").
+    result = Answerlet.joins(match_answer: :user).
+      where("users.study_id = ?", Settings.study_id).
+      where("users.study_phase = 'seed'").
+      where("users.complete = 't'").
+      group("meal_id", "component_name", "ingredient", "nutrients").
       order("meal_id, component_name, ingredient, count_all DESC").count
 
     result = result.map do |data, count|

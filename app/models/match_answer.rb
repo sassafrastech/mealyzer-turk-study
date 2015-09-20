@@ -11,6 +11,11 @@ class MatchAnswer < ActiveRecord::Base
     self.study_id = Settings.study_id
   end
 
+  # Create answerlets after create
+  after_create do
+    as_answerlets.each(&:save)
+  end
+
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
   serialize :food_groups_correct_all, JSON
@@ -64,7 +69,8 @@ class MatchAnswer < ActiveRecord::Base
       answer.user = nil
       summarizer = AnswerletSummarizer.new
       answer.food_groups = Hash[*answer.meal.items_for_component(answer.component_name).map do |ingredient|
-        params = { meal_id: answer.meal_id, component_name: answer.component_name, ingredient: ingredient }
+        params = { "match_answers.meal_id" => answer.meal_id,
+          "match_answers.component_name" => answer.component_name, "ingredient" => ingredient }
         nth_popular = summarizer.nth_most_popular_for_ingredient(user.subgroup, params)
         [ingredient, nth_popular]
       end.flatten(1)]

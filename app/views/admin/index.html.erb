@@ -61,6 +61,7 @@
     <th class="mci">Ingredient</th>
     <% 5.times do |i| %>
       <th class="ranked">#<%= i + 1 %></th>
+      <th>Ans</th>
     <% end %>
   </tr>
   <% AnswerletSummarizer.new.top_5_for_all_ingredients.each do |mci, data| %>
@@ -70,9 +71,8 @@
       <td><%= data.first[:ingredient] %></td>
       <% 5.times do |i| %>
         <td><%= data[i] ? data[i][:nutrients] : "" %></td>
+        <td><%= data[i] ? data[i][:count] : "" %></td>
       <% end %>
     </tr>
   <% end %>
 </table>
-
-

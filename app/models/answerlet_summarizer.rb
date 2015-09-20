@@ -16,6 +16,10 @@ class AnswerletSummarizer
 
     raise "No answerlets found for #{params}" if rows.empty?
 
-    rows[n]
+    # Make sure n is within array size
+    n -= 1 # Was 1-based
+    n = rand(rows.keys.size) if n >= rows.keys.size
+
+    JSON.parse(rows.keys[n][3])
   end
 end

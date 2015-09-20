@@ -59,7 +59,12 @@ class MatchAnswer < ActiveRecord::Base
     # answers for various ingredients
     if user.condition == 12
       answer.user = nil
-      answer.food_groups = meal.food_nutrition[test[1]]
+      summarizer = AnswerletSummarizer.new
+      answer.food_groups = Hash[*answer.meal.items_for_component(answer.component_name).map do |ingredient|
+        params = { meal: answer.meal, component_name: answer.component_name, ingredient: ingredient }
+        nth_popular = summarizer.nth_most_popular_for_ingredient(user.subgroup, params)
+        [ingredient, nth_popular]
+      end.flatten(1)]
     end
 
     answer

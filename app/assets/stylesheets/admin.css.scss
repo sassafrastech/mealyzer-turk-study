@@ -16,6 +16,17 @@ table.stats {
 
   td {
     text-align: left;
+  }
+
+  &.user-stats td {
     width: 50px;
+  }
+
+  th.ranked {
+    width: 65px;
+  }
+
+  th.mci {
+    width: 150px;
   }
 }

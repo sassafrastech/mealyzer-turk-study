@@ -22,4 +22,15 @@ class AnswerletSummarizer
 
     JSON.parse(rows.keys[n][3])
   end
+
+  def top_5_for_all_ingredients
+    result = Answerlet.current_study.group(:meal_id, :component_name, :ingredient, :nutrients).
+      order(:meal_id, :component_name, :ingredient, "count_all DESC").count
+
+    result = result.map do |data, count|
+      [Answerlet.new(meal_id: data[0], component_name: data[1], ingredient: data[2], nutrients: JSON.parse(data[3])), count]
+    end
+
+    result = result.group_by{ |r| r[0].meal_comp_ing }
+  end
 end

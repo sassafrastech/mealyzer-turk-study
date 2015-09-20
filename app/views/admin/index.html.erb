@@ -23,7 +23,7 @@
 </ul>
 
 <h4>User Stats</h4>
-<table class="stats">
+<table class="stats user-stats">
   <tr class="top">
     <th></th>
     <th colspan="<%= User::MAIN_CONDITIONS.size + 2 %>">Complete</th>
@@ -52,3 +52,28 @@
     </tr>
   <% end %>
 </table>
+
+<h4>Popular Answers &amp; Explanations</h4>
+<table class="stats">
+  <tr>
+    <th class="mci">Meal</th>
+    <th class="mci">Component</th>
+    <th class="mci">Ingredient</th>
+    <% 5.times do |i| %>
+      <th class="ranked">#<%= i + 1 %></th>
+    <% end %>
+  </tr>
+  <% AnswerletSummarizer.new.top_5_for_all_ingredients.each do |mci, pairs| %>
+    <% answerlet, count = pairs.first %>
+    <tr>
+      <td><%= answerlet.meal.name %></td>
+      <td><%= answerlet.component_name %></td>
+      <td><%= answerlet.ingredient %></td>
+      <% 5.times do |i| %>
+        <td><%= pairs[i] ? pairs[i][0].ntrnts : "" %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+
+

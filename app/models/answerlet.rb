@@ -15,6 +15,10 @@ class Answerlet < ActiveRecord::Base
       map{ |u| u.match_answers.as_answerlets }.flatten
   end
 
+  def nutrients=(arr)
+    write_attribute(:nutrients, arr.sort)
+  end
+
   def ==(a)
     a.attribs == attribs
   end

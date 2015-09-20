@@ -25,7 +25,7 @@ namespace :data do
   # Returns a list of answer popularity, grouped by meal, component, and ingredient
   task answerlet_popularity: :environment do
 
-    grouped = answerlets_for_phase("seed").group_by(&:identity)
+    grouped = Answerlet.for_phase("seed").group_by(&:identity)
 
     CSV.open(Rails.root.join("tmp", "csv", "answerlet_popularity.csv"), "wb") do |csv|
 
@@ -46,7 +46,7 @@ namespace :data do
   end
 
   task nutrient_popularity_by_ingredient: :environment do
-    grouped = answerlets_for_phase("seed").group_by(&:meal_comp_ing)
+    grouped = Answerlet.for_phase("seed").group_by(&:meal_comp_ing)
 
     CSV.open(Rails.root.join("tmp", "csv", "nutrient_popularity_by_ingredient.csv"), "wb") do |csv|
 
@@ -263,10 +263,5 @@ namespace :data do
 
       end
     end
-  end
-
-  def answerlets_for_phase(phase)
-    User.complete_in_phase(phase).includes(match_answers: :meal).
-      map{ |u| u.match_answers.as_answerlets }.flatten
   end
 end

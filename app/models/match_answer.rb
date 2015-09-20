@@ -84,7 +84,8 @@ class MatchAnswer < ActiveRecord::Base
   # Builds and returns answerlets for all ingredients in this answer
   def as_answerlets
     (food_groups || {}).map do |ing, nutrients|
-      Answerlet.new(meal: meal, component_name: component_name, ingredient: ing, nutrients: nutrients)
+      Answerlet.new(meal: meal, component_name: component_name, ingredient: ing,
+        nutrients: nutrients, study_id: Settings.study_id)
     end
   end
 
@@ -109,7 +110,6 @@ class MatchAnswer < ActiveRecord::Base
     food_groups.each do |item, group_arr|
       self.changed_answer = true if food_groups_update[item].sort != group_arr.sort
     end
-
   end
 
   # Copies food group answers to food_groups_update for use in review form,

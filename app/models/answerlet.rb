@@ -1,9 +1,15 @@
 # Models a set of nutritient selections for one ingredient of one component.
-# Not persisted
 class Answerlet < ActiveRecord::Base
   belongs_to :meal
 
   serialize :nutrients, JSON
+
+  scope :current_study, -> { where(study_id: Settings.study_id) }
+
+  def self.for_phase(phase)
+    User.complete_in_phase(phase).includes(match_answers: :meal).
+      map{ |u| u.match_answers.as_answerlets }.flatten
+  end
 
   def ==(a)
     a.attribs == attribs

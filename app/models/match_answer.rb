@@ -7,6 +7,9 @@ class MatchAnswer < ActiveRecord::Base
 
   before_create :increment_task_num
   before_save :evaluate_answers
+  before_create do
+    self.study_id = Settings.study_id
+  end
 
   serialize :food_groups, JSON
   serialize :food_groups_update, JSON
@@ -122,7 +125,6 @@ class MatchAnswer < ActiveRecord::Base
   def init_for_review
     self.food_groups_update ||= food_groups
   end
-
 
   def individual_answers(compare_food_groups)
     {}.tap do |correct_all|

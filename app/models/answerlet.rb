@@ -6,6 +6,10 @@ class Answerlet < ActiveRecord::Base
 
   scope :current_study, -> { where(study_id: Settings.study_id) }
 
+  before_create do
+    self.study_id = Settings.study_id
+  end
+
   def self.for_phase(phase)
     User.complete_in_phase(phase).includes(match_answers: :meal).
       map{ |u| u.match_answers.as_answerlets }.flatten

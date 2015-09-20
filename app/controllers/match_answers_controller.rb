@@ -28,6 +28,7 @@ class MatchAnswersController < ApplicationController
   def create
     answer_params = params.require(:match_answer).permit!
     answer_params[:user_id] = answer_params[:user_id].to_i
+    answer_params[:study_id] = Settings.study_id
     @match_answer = MatchAnswer.create(answer_params)
 
     @user = User.find(@match_answer.user_id)

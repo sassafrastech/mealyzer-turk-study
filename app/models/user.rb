@@ -1,24 +1,24 @@
 class User < ActiveRecord::Base
   CONDITION_NAMES = [
-    "No feedback",
-    "Compare with answer but can't revise",
-    "Can compare AND revise",
-    "Evaluate someone else's answer",
-    "Show ratings and explanations by other users, but can't change answer",
-    "Same as #5 but can change answer",
-    "Every N answers, review last N answers with option to revise",
-    "Same as #7 but with no option to revise",
-    "Same as #2, but with bar chart instead of most popular",
-    "Same as #3, but with bar chart instead of most popular",
-    "Same as #6, but with expert feedback",
-    "Explanation gathering"
+    "1: No feedback",
+    "2: Compare with answer but can't revise",
+    "3: Can compare AND revise",
+    "4: Evaluate someone else's answer",
+    "5: Show ratings and explanations by other users, but can't change answer",
+    "6: Same as #5 but can change answer",
+    "7: Every N answers, review last N answers with option to revise",
+    "8: Same as #7 but with no option to revise",
+    "9: Same as #2, but with bar chart instead of most popular",
+    "10: Same as #3, but with bar chart instead of most popular",
+    "11: Same as #6, but with expert feedback",
+    "12: Explanation gathering"
   ]
 
   REQUIRE_UNIQUE = true
 
   SEED_CONDITION = 1
   EXPLAIN_CONDITION = 12
-  MAIN_CONDITIONS = [1, 2, 3, 4, 5, 6, 9, 10, 11]
+  MAIN_CONDITIONS = [3, 6, 10, 11]
   SUBGROUPS = 5
 
   POST_TEST_OPTION_SETS = {

@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   CONDITION_NAMES = [
     "1: No feedback",
-    "2: Compare with answer but can't revise",
-    "3: Can compare AND revise",
+    "2: Can compare with most popular community answer but can't revise",
+    "3: Can compare with most popular community answer and revise",
     "4: Evaluate someone else's answer",
     "5: Show ratings and explanations by other users, but can't change answer",
     "6: Same as #5 but can change answer",

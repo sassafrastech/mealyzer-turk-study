@@ -71,8 +71,8 @@ class MatchAnswer < ActiveRecord::Base
       answer.food_groups = Hash[*answer.meal.items_for_component(answer.component_name).map do |ingredient|
         params = { "match_answers.meal_id" => answer.meal_id,
           "match_answers.component_name" => answer.component_name, "ingredient" => ingredient }
-        nth_popular = summarizer.nth_most_popular_for_ingredient(user.subgroup, params)
-        [ingredient, nth_popular]
+        least_explained = summarizer.least_explained_for_ingredient(5, params)
+        [ingredient, least_explained]
       end.flatten(1)]
     end
 

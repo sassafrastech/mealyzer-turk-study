@@ -1,22 +1,38 @@
 # Finds most popular answerlets for data in seed phase
 class AnswerletSummarizer
 
-  def nth_most_popular_for_ingredient(n, params)
-    rows = Answerlet.joins(match_answer: :user).
+  def least_explained_for_ingredient(max_rank, params)
+    # Get top N answerlets from seed phase.
+    ans_rows = Answerlet.joins(match_answer: :user).
       where("users.study_id = ?", Settings.study_id).
       where("users.study_phase = 'seed'").
       where("users.complete = 't'").
       where(params).
       group("meal_id", "component_name", "ingredient", "nutrients").
-      order("meal_id, component_name, ingredient, count_all DESC, nutrients").count
+      order("meal_id, component_name, ingredient, count_all DESC, nutrients").
+      limit(max_rank).count
 
-    raise "No answerlets found for #{params}" if rows.empty?
+    raise "No answerlets found for #{params}" if ans_rows.empty?
 
-    # Make sure n is within array size
-    n -= 1 # Was 1-based
-    n = rand(rows.keys.size) if n >= rows.keys.size
+    # Get explanation counts for each.
+    nutrients = ans_rows.map{ |r, _| r[3] }
 
-    JSON.parse(rows.keys[n][3])
+    exp_rows = Answerlet.joins(match_answer: :user).
+      select("meal_id, component_name, ingredient, nutrients").
+      select("SUM(CASE WHEN users.complete = 't' THEN 1 ELSE 0 END) AS comp_count").
+      select("SUM(CASE WHEN users.complete = 'f' THEN 1 ELSE 0 END) AS incomp_count").
+      where("users.study_id = ?", Settings.study_id).
+      where("users.study_phase = 'explain'").
+      where(params).
+      where(nutrients: nutrients).
+      group("meal_id", "component_name", "ingredient", "nutrients").
+      order("meal_id, component_name, ingredient, comp_count, incomp_count, nutrients").to_a
+
+    if exp_rows.empty?
+      JSON.parse(nutrients.first)
+    else
+      exp_rows.first.nutrients
+    end
   end
 
   # Returns top answerlets for all ingredients for current study seed phase

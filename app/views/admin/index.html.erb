@@ -71,7 +71,7 @@
       <td><%= data.first[:component_name] %></td>
       <td><%= data.first[:ingredient] %></td>
       <% 5.times do |i| %>
-        <td><%= data[i] ? data[i][:nutrients] : "" %></td>
+        <td><%= data[i] ? data[i][:nutrients].map{ |n| Meal::GRP_ABBRVS[n] }.join : "" %></td>
         <td class="ans-count"><%= data[i] ? data[i][:ans_count] : "" %></td>
         <td class="exp-count"><%= data[i] ? data[i][:exp_count] : "" %></td>
       <% end %>

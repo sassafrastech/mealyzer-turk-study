@@ -8,6 +8,10 @@ class Answerlet < ActiveRecord::Base
 
   delegate :meal, :meal_id, :component_name, to: :match_answer
 
+  before_save do
+    Meal::GROUPS.each{ |g| self[g.downcase] = nutrients.include?(g) }
+  end
+
   def self.for_phase(phase)
     User.complete_in_phase(phase).includes(match_answers: :meal).
       map{ |u| u.match_answers.as_answerlets }.flatten

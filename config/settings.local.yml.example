@@ -17,6 +17,9 @@ study_id: study_1
 # Number of users to assign to run through the seed phase before moving on to main phase.
 seed_phase_count: 20
 
+explain_phase_count: 30
+
+
 mail:
   address: example.com
   port: 587

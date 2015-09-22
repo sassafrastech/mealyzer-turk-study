@@ -132,7 +132,7 @@ class User < ActiveRecord::Base
   end
 
   def explain_phase_full?
-    false
+    self.class.complete_in_phase("explain").count >= Settings.explain_phase_count
   end
 
   def condition_full?(c)

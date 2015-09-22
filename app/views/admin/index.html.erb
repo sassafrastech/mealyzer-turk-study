@@ -59,7 +59,7 @@
     <th>Meal</th>
     <th class="mci">Component</th>
     <th class="mci">Ingredient</th>
-    <% 5.times do |i| %>
+    <% 10.times do |i| %>
       <th class="ranked">#<%= i + 1 %></th>
       <th>Ans</th>
       <th>Exp</th>
@@ -70,7 +70,7 @@
       <td><%= data.first[:meal_id] %></td>
       <td><%= data.first[:component_name] %></td>
       <td><%= data.first[:ingredient] %></td>
-      <% 5.times do |i| %>
+      <% 10.times do |i| %>
         <td><%= data[i] ? data[i][:nutrients].map{ |n| Meal::GRP_ABBRVS[n] }.join : "" %></td>
         <td class="ans-count"><%= data[i] ? data[i][:ans_count] : "" %></td>
         <td class="exp-count"><%= data[i] ? data[i][:exp_count] : "" %></td>

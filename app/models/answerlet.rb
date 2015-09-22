@@ -12,11 +12,6 @@ class Answerlet < ActiveRecord::Base
     Meal::GROUPS.each{ |g| self[g.downcase] = nutrients.include?(g) }
   end
 
-  def self.for_phase(phase)
-    User.complete_in_phase(phase).includes(match_answers: :meal).
-      map{ |u| u.match_answers.as_answerlets }.flatten
-  end
-
   def nutrients=(arr)
     write_attribute(:nutrients, arr.sort)
   end

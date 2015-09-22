@@ -11,22 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150921172444) do
+ActiveRecord::Schema.define(version: 20150922002253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answerlets", force: true do |t|
-    t.string   "ingredient",                      null: false
-    t.string   "nutrients",                       null: false
+    t.string   "ingredient",                           null: false
+    t.string   "nutrients",                            null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "match_answer_id",                 null: false
-    t.boolean  "protein",         default: false, null: false
-    t.boolean  "fat",             default: false, null: false
-    t.boolean  "carbohydrate",    default: false, null: false
-    t.boolean  "fiber",           default: false, null: false
+    t.integer  "match_answer_id",                      null: false
+    t.boolean  "protein",         default: false,      null: false
+    t.boolean  "fat",             default: false,      null: false
+    t.boolean  "carbohydrate",    default: false,      null: false
+    t.boolean  "fiber",           default: false,      null: false
+    t.string   "kind",            default: "original", null: false
   end
+
+  add_index "answerlets", ["kind"], name: "index_answerlets_on_kind", using: :btree
 
   create_table "match_answers", force: true do |t|
     t.integer  "meal_id"

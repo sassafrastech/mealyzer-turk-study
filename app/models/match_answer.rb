@@ -13,7 +13,13 @@ class MatchAnswer < ActiveRecord::Base
 
   # Create answerlets after create
   after_create do
-    as_answerlets.each(&:save)
+    as_answerlets(kind: 'original').each(&:save)
+  end
+
+  after_save do
+    if food_groups_update.is_a?(Hash) && answerlets.where(kind: 'update').empty?
+      as_answerlets(kind: 'update').each(&:save)
+    end
   end
 
   serialize :food_groups, JSON
@@ -29,6 +35,7 @@ class MatchAnswer < ActiveRecord::Base
 
   belongs_to :meal
   belongs_to :user
+  has_many :answerlets
 
   scope :current_study, -> { includes(:user).where("users.study_id" => Settings.study_id) }
   scope :seed_phase, -> { includes(:user).where("users.study_phase" => "seed") }
@@ -96,9 +103,9 @@ class MatchAnswer < ActiveRecord::Base
   end
 
   # Builds and returns answerlets for all ingredients in this answer
-  def as_answerlets
-    (food_groups || {}).map do |ing, nutrients|
-      Answerlet.new(match_answer: self, ingredient: ing, nutrients: nutrients)
+  def as_answerlets(options)
+    ((options[:kind] == "original" ? food_groups : food_groups_update) || {}).map do |ing, nutrients|
+      Answerlet.new(match_answer: self, ingredient: ing, nutrients: nutrients, kind: options[:kind])
     end
   end
 

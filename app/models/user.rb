@@ -30,11 +30,7 @@ class User < ActiveRecord::Base
     :learned => :answers_agree
   }
 
-  has_many :match_answers do
-    def as_answerlets
-      map{ |ma| ma.as_answerlets }.flatten
-    end
-  end
+  has_many :match_answers
 
   scope :in_phase, -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id) }
 

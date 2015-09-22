@@ -1,3 +1,19 @@
+<div class="alert alert-success" role="alert">Thank you! Now compare your answer with the most popular community choices.</div>
+
+<p>The most popular answers from other Turkers are shown below next to your answers. Please review them carefully.
+  <ul>
+    <li><strong class="same">GREEN</strong> indicates your answer matches the most popular.</li>
+    <li><strong class="diff">RED</strong> indicates your answer does not match the most popular.</li>
+    <li><strong class="tie">BLUE</strong> indicates there was a tie among the popular answers, and your answer matched one of them.</li>
+  </ul>
+</p>
+
+<% if current_user.condition == 14 %>
+  <p>The number of people who gave each answer is also shown.</p>
+<% end %>
+
+<p>Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
+
 <br/>
 <h4><%= @match_answer.component_name %></h4>
 <%= f.hidden_field :meal_id %>
@@ -16,7 +32,9 @@
         <td>
           <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
           <% decision = @most_popular[k][group][:decision] %>
-          <span class="community">
+          <% match = decision == "yes" && v.include?(group) || decision == "no" && !v.include?(group) %>
+          <% cls = decision == "tie" ? "tie" : (match ? "same" : "diff")  %>
+          <span class="community <%= cls %>">
             <% if decision == "tie" %>
               <i class="fa fa-question"></i>
             <% elsif decision == "yes" %>
@@ -25,7 +43,7 @@
             <% end %>
           </span>
           <% if current_user.condition == 14 %>
-            <span class="community-count">
+            <span class="community-count <%= cls %>">
               (<%= @most_popular[k][group][:count] %>/<%= @most_popular[k][group][:total] %>)
             </span>
           <% end %>

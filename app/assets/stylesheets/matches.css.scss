@@ -62,13 +62,12 @@ div.my_answer {
   background-color: #FFF8DA;
 
   span.community {
-    border: 1px solid green;
+    border: 1px solid;
     display: inline-block;
     width: 13px;
     height: 13px;
     vertical-align: middle;
     margin-left: 5px;
-    color: green;
 
     i {
       vertical-align: top;
@@ -76,9 +75,23 @@ div.my_answer {
   }
 
   span.community-count {
-    color: green;
     font-size: 90%;
   }
+}
+
+.same {
+  border-color: green;
+  color: green;
+}
+
+.diff {
+  border-color: red;
+  color: red;
+}
+
+.tie {
+  border-color: blue;
+  color: blue;
 }
 
 div.my_answer, div.other_answers {

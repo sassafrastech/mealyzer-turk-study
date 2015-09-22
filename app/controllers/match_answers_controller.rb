@@ -22,7 +22,7 @@ class MatchAnswersController < ApplicationController
 
   def edit
     @match_answer = MatchAnswer.find(params[:id])
-    build_summarizer
+    build_summarizers
   end
 
   def create
@@ -58,7 +58,7 @@ class MatchAnswersController < ApplicationController
       end
     else
       flash.now[:error] = @match_answer.errors.full_messages.to_sentence
-      build_summarizer
+      build_summarizers
       render :edit
     end
   end
@@ -67,7 +67,7 @@ class MatchAnswersController < ApplicationController
 
   def update_by_condition(params)
     case @match_answer.condition
-    when 3,4,6,10,11,12
+    when 3,4,6,10,11,12,13,14
       @match_answer.food_groups_update = params[:food_groups]
       @match_answer.explanation = params[:explanation]
       @match_answer.build_answers_changed!
@@ -91,7 +91,7 @@ class MatchAnswersController < ApplicationController
     # Special case redirects
     else
       case @user.condition
-      when 2,3,5,6,9,10,11
+      when 2,3,5,6,9,10,11,13,14
         return redirect_to edit_match_answer_path(@match_answer)
       when 4
         # Find a match answer for same meal/component from seed phase
@@ -117,7 +117,15 @@ class MatchAnswersController < ApplicationController
   end
 
   # Gets the summarizer object used by some conditions.
-  def build_summarizer
+  def build_summarizers
     @summarizer = MatchAnswerSummarizer.new(@match_answer, current_user)
+
+    if [13, 14].include?(current_user.condition)
+      summ = AnswerletSummarizer.new
+      @most_popular = Hash[*@match_answer.food_groups.keys.map do |ingredient|
+        [ingredient, summ.most_popular_per_nutrient(
+          meal_id: @match_answer.meal_id, component_name: @match_answer.component_name, ingredient: ingredient)]
+      end.flatten]
+    end
   end
 end

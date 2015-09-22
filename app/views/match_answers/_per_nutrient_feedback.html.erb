@@ -1,0 +1,50 @@
+<br/>
+<h4><%= @match_answer.component_name %></h4>
+<%= f.hidden_field :meal_id %>
+<%= f.hidden_field :component_name %>
+<%= f.hidden_field :user_id %>
+
+<div class="my_answer">
+  <table>
+    <tr><td class="community" colspan=4>Your Answer (With Community Feedback):</td></tr>
+    <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
+    <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+    <% current_food_groups = @match_answer.changed_answer ? @match_answer.food_groups_update : @match_answer.food_groups %>
+    <% current_food_groups.each do |k, v| %>
+      <tr><td></td><td><%= k %></td>
+      <% Meal::GROUPS.each do |group| %>
+        <td>
+          <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
+          <% decision = @most_popular[k][group][:decision] %>
+          <span class="community">
+            <% if decision == "tie" %>
+              <i class="fa fa-question"></i>
+            <% elsif decision == "yes" %>
+              <i class="fa fa-check"></i>
+            <% else %>
+            <% end %>
+          </span>
+          <% if current_user.condition == 14 %>
+            <span class="community-count">
+              (<%= @most_popular[k][group][:count] %>/<%= @most_popular[k][group][:total] %>)
+            </span>
+          <% end %>
+        </td>
+      <% end %>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan=6 class="community">
+        <p>Comments from the Dietitian:</p>
+        <%= simple_format(%Q{"#{@match_answer.expert_feedback}"}) %>
+      </td>
+    </tr>
+  </table>
+  <% unless @match_answer.food_groups_correct? %>
+    <h5>*If you changed your answer, please explain why:</h5>
+    <%= f.input :explanation, label: false %>
+  <% end %>
+</div>
+
+<br/>
+<%= f.submit "Next", class: "btn btn-primary" %>

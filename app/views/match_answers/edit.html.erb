@@ -9,7 +9,7 @@
     <div class="col-md-5">
       <%= meal_photo(@match_answer.meal) %>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
       <h3><%= @match_answer.meal.food_options unless @match_answer.condition == 7 %></h3>
       <%= render :partial => "condition_#{@match_answer.condition}" %>
     </div>

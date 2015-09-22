@@ -11,7 +11,7 @@
     <div class="col-md-5">
       <%= meal_photo(@match_answer.meal) %>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
       <h3>(<%= @match_answer.num_tests + 1 %>/<%= User.max_tests %>) <%= @match_answer.meal.food_options %></h3>
 
       <%= simple_form_for @match_answer do |f| %>

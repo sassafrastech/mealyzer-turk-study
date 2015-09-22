@@ -2,6 +2,7 @@ class Meal < ActiveRecord::Base
   %w(food_locations food_options food_nutrition food_components).each {|column| serialize column, JSON}
 
   GROUPS = ["Protein", "Fat", "Carbohydrate", "Fiber"]
+  LC_GROUPS = GROUPS.map(&:downcase)
   VOWELS = %w(a e i o u)
   GRP_ABBRVS = ActiveSupport::OrderedHash[*GROUPS.sort.map{ |g| [g, (g.split(//) - VOWELS)[0,2].join] }.flatten]
 

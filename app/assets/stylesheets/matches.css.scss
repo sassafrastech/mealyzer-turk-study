@@ -61,16 +61,23 @@ form, table {
 div.my_answer {
   background-color: #FFF8DA;
 
-  .fa {
-    width: 15px;
-  }
-
-  .fa-check {
+  span.community {
+    border: 1px solid green;
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    margin-left: 5px;
     color: green;
+
+    i {
+      vertical-align: top;
+    }
   }
 
-  .fa-close {
-    color: red;
+  span.community-count {
+    color: green;
+    font-size: 90%;
   }
 }
 
@@ -79,7 +86,7 @@ div.my_answer, div.other_answers {
 
   table {
     td {
-      width: 90px;
+      width: 100px;
 
       &:first-child {
         width: 20px;
@@ -163,4 +170,8 @@ div.tally-bar {
   background-color: #888;
   display: inline-block;
   vertical-align: bottom;
+}
+
+strong.grn {
+  color: green;
 }

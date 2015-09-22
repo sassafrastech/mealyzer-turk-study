@@ -1,6 +1,8 @@
 # Finds most popular answerlets for data in seed phase
 class AnswerletSummarizer
 
+  DECISIONS = %w(no tie yes)
+
   def least_explained_for_ingredient(max_rank, params)
     # Get top N answerlets from seed phase.
     ans_rows = Answerlet.joins(match_answer: :user).
@@ -49,5 +51,33 @@ class AnswerletSummarizer
 
     result.map{ |r| r.attributes.with_indifferent_access }.
       group_by{ |h| h.slice(:meal_id, :component_name, :ingredient) }
+  end
+
+  # For a given meal_id, component_name, and ingredient, returns a hash of form:
+  # {
+  #   "Carbohydrate" => { decision: "yes", count: 14, total: 21 },
+  #   "Fat" => { decision: "tie", count: 10, total: 20 },
+  #   ...
+  # }
+  def most_popular_per_nutrient(params)
+    params["match_answers.meal_id"] = params.delete(:meal_id) if params[:meal_id]
+    params["match_answers.component_name"] = params.delete(:component_name) if params[:component_name]
+
+    result = Answerlet.joins(match_answer: :user)
+    Meal::LC_GROUPS.each do |g|
+      result = result.select("SUM(CASE WHEN #{g} = 't' THEN 1 ELSE 0 END) AS #{g}_yes")
+    end
+    result = result.select('COUNT(*) AS total')
+
+    result = result.where(params).
+      where("users.study_id = ?", Settings.study_id).
+      where("users.study_phase = 'seed'").
+      where("users.complete = 't'").to_a.first.attributes
+
+    Hash[*Meal::LC_GROUPS.map do |g|
+      decision = DECISIONS[(result["#{g}_yes"] <=> result["total"].to_f / 2) + 1]
+      count = decision == "yes" ? result["#{g}_yes"] : result["total"] - result["#{g}_yes"]
+      [g.capitalize, { decision: decision, count: count, total: result["total"] }]
+    end.flatten]
   end
 end

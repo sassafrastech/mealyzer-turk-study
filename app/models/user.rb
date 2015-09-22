@@ -11,14 +11,16 @@ class User < ActiveRecord::Base
     "9: Same as #2, but with bar chart instead of most popular",
     "10: Same as #3, but with bar chart instead of most popular",
     "11: Same as #6, but with expert feedback",
-    "12: Explanation gathering"
+    "12: Explanation gathering",
+    "13: Per-nutrient comparison to most popular answers",
+    "14: Per-nutrient comparison to most popular answers, with tallies"
   ]
 
   REQUIRE_UNIQUE = true
 
   SEED_CONDITION = 1
   EXPLAIN_CONDITION = 12
-  MAIN_CONDITIONS = [3, 6, 10, 11]
+  MAIN_CONDITIONS = [3, 10, 11, 13, 14]
   SUBGROUPS = 5
 
   POST_TEST_OPTION_SETS = {

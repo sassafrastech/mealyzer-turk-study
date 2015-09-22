@@ -1,6 +1,13 @@
 <%= simple_form_for @match_answer do |f| %>
   <div class="alert alert-success" role="alert">Thank you! We asked our dietitian whether your answer was correct or not (and if not, why).</div>
-  <p>Below you can see their feedback. Please review it carefully.</p>
+  <p>Below you can see their answers and comments. Please review it carefully.</p>
+
+  <p>
+    <ul>
+      <li><strong class="same">GREEN</strong> indicates your answer matches the dietitian's.</li>
+      <li><strong class="diff">RED</strong> indicates your answer does not match the dietitian's.</li>
+    </ul>
+  </p>
 
   <% unless @match_answer.food_groups_correct? %>
     <p>Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
@@ -23,11 +30,13 @@
         <% Meal::GROUPS.each do |group| %>
           <td>
             <%= check_box_tag "match_answer[food_groups][#{k}][]", group, v.include?(group) %>
-            <% if @match_answer.correct_for(ingredient: k, nutrient: group) %>
-              <i class="fa fa-check"></i>
-            <% else %>
-              <i class="fa fa-close"></i>
-            <% end %>
+            <% correct = @match_answer.correct_for(ingredient: k, nutrient: group) %>
+            <% cls = correct ? "same" : "diff" %>
+            <span class="community <%= cls %>">
+              <% if correct && v.include?(group) || !correct && !v.include?(group) %>
+                <i class="fa fa-check"></i>
+              <% end %>
+            </span>
           </td>
         <% end %>
         </tr>

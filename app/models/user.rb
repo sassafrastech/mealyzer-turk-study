@@ -77,8 +77,7 @@ class User < ActiveRecord::Base
   end
 
   def condition_progress
-    done = self.class.complete_in_phase_and_condition(study_phase, condition).count
-    "#{done}/#{Settings.max_subj_per_condition}"
+    self.class.complete_in_phase_and_condition(study_phase, condition).count
   end
 
   def max_tests?
@@ -133,10 +132,6 @@ class User < ActiveRecord::Base
 
   def explain_phase_full?
     self.class.complete_in_phase("explain").count >= Settings.explain_phase_count
-  end
-
-  def condition_full?(c)
-    self.class.complete_in_phase_and_condition(study_phase, c).count < Settings.min_subj_per_condition
   end
 
   def choose_condition

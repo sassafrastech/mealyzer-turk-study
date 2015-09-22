@@ -6,10 +6,17 @@ class Answerlet < ActiveRecord::Base
 
   scope :current_study, -> { includes(:match_answer).where("match_answers.study_id" => Settings.study_id) }
 
-  delegate :meal, :meal_id, :component_name, to: :match_answer
+  delegate :meal, :meal_id, :component_name, :explanation, to: :match_answer
 
   before_save do
     Meal::GROUPS.each{ |g| self[g.downcase] = nutrients.include?(g) }
+  end
+
+  def self.complete_in_phase(phase)
+    joins(match_answer: :user).
+      where("users.study_id = ?", Settings.study_id).
+      where("users.study_phase = '#{phase}'").
+      where("users.complete = 't'")
   end
 
   def nutrients=(arr)

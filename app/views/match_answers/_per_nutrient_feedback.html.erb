@@ -35,8 +35,14 @@
     <% end %>
     <tr>
       <td colspan=6 class="community">
-        <p>Comments from the Dietitian:</p>
-        <%= simple_format(%Q{"#{@match_answer.expert_feedback}"}) %>
+        <% if @explanations.any? %>
+          <p>Comments from the Community:</p>
+          <ul>
+            <% @explanations.each do |e| %>
+              <li><%= simple_format(e) %></li>
+            <% end %>
+          </ul>
+        <% end %>
       </td>
     </tr>
   </table>

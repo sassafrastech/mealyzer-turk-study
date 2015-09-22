@@ -105,7 +105,8 @@ class MatchAnswer < ActiveRecord::Base
   # Builds and returns answerlets for all ingredients in this answer
   def as_answerlets(options)
     ((options[:kind] == "original" ? food_groups : food_groups_update) || {}).map do |ing, nutrients|
-      Answerlet.new(match_answer: self, ingredient: ing, nutrients: nutrients, kind: options[:kind])
+      Answerlet.new(match_answer: self, ingredient: ing, nutrients: nutrients, kind: options[:kind],
+        modified: options[:kind] == "update" && nutrients.sort != food_groups[ing].sort)
     end
   end
 

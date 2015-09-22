@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150922002253) do
+ActiveRecord::Schema.define(version: 20150922172147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,9 +27,11 @@ ActiveRecord::Schema.define(version: 20150922002253) do
     t.boolean  "carbohydrate",    default: false,      null: false
     t.boolean  "fiber",           default: false,      null: false
     t.string   "kind",            default: "original", null: false
+    t.boolean  "modified"
   end
 
   add_index "answerlets", ["kind"], name: "index_answerlets_on_kind", using: :btree
+  add_index "answerlets", ["modified"], name: "index_answerlets_on_modified", using: :btree
 
   create_table "match_answers", force: true do |t|
     t.integer  "meal_id"

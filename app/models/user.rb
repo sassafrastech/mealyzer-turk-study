@@ -67,7 +67,14 @@ class User < ActiveRecord::Base
     stats = User.select("#{field}, COUNT(*) AS ttl").
       in_phase(options[:phase]).where(field => options[:all]).group(field).order("ttl", field)
     with_no_users = options[:all] - stats.map(&field)
-    with_no_users.first || stats.first.send(field)
+
+    if options[:max]
+      full = stats.select{ |s| s.ttl >= options[:max] }.map(&field)
+    else
+      full = []
+    end
+
+    with_no_users.first || (stats.map(&field) - full).first
   end
 
   def phase_progress
@@ -144,7 +151,8 @@ class User < ActiveRecord::Base
       self.condition = EXPLAIN_CONDITION
       self.subgroup = self.class.choose_best(:subgroup, phase: "explain", all: (1..SUBGROUPS).to_a)
     else
-      self.condition = self.class.choose_best(:condition, phase: "main", all: MAIN_CONDITIONS)
+      self.condition = self.class.choose_best(:condition, phase: "main",
+        all: MAIN_CONDITIONS, max: Settings.max_subj_per_condition)
     end
 
     self.study_id = Settings.study_id

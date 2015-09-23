@@ -1,3 +1,6 @@
+# Max number of subjects to run through each condition
+max_subj_per_condition: 40
+
 # How many pre- and post-control trails each user should take.
 pre_post_control_count: 5
 

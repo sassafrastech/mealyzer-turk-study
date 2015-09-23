@@ -9,13 +9,19 @@ class UsersController < ApplicationController
       # If user is present, they must have zero tests, otherwise they are not unique.
       if @user.present?
         if @user.num_tests > 0
-          @disabled = true
+          @hidden = true
           flash[:error] = "Oops! We are unable to offer you this HIT because we need unique Turkers. Thank you for your interest!"
         else
           @disabled = false
         end
       else
         @user = User.create(params.permit(:assignmentId, :workerId, :hitId, :force_condition, :force_study_phase))
+        if @user.condition.nil?
+          @hidden = true
+          flash[:error] = "We apologize, but the study is now full. The HIT will be removed from Turk shortly. Thanks for your interest!"
+        else
+          @disabled = false
+        end
       end
     # Else just build a new user for showing the preview
     else

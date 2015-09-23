@@ -1,28 +1,30 @@
 <%= render partial: "shared/flash_messages", flash: flash %>
 
-<%= render('shared/instructions') %>
+<% unless @hidden %>
+  <%= render('shared/instructions') %>
 
-<%= image_tag("sample.png", class: "sample") %>
+  <%= image_tag("sample.png", class: "sample") %>
 
-<h2>Before we start...</h2>
+  <h2>Before we start...</h2>
 
-<%= simple_form_for @user, method: 'put' do |f| %>
-  <%# f.hidden_field :user_id => @user.id %>
-  <ol>
-    <li>
-      <%= f.error :first, :class => 'baseError' %>
-      <label><%= I18n.t("survey.pre_test_questions.first") %></label>
-      <%= f.collection_radio_buttons(:pre_test_1, t("survey.answers_knowledge"), :first, :last, {:item_wrapper_class => 'radio'}, {:disabled => @disabled}) %>
+  <%= simple_form_for @user, method: 'put' do |f| %>
+    <%# f.hidden_field :user_id => @user.id %>
+    <ol>
+      <li>
+        <%= f.error :first, :class => 'baseError' %>
+        <label><%= I18n.t("survey.pre_test_questions.first") %></label>
+        <%= f.collection_radio_buttons(:pre_test_1, t("survey.answers_knowledge"), :first, :last, {:item_wrapper_class => 'radio'}, {:disabled => @disabled}) %>
 
-    </li>
+      </li>
 
-    <li>
-      <%= f.error :first, :class => 'baseError' %>
-      <label><%= I18n.t("survey.pre_test_questions.second") %></label>
-      <%= f.collection_radio_buttons(:pre_test_2, t("survey.answers_confidence"), :first, :last, {:item_wrapper_class => 'radio'}, {:disabled => @disabled}) %>
-    </li>
-  </ol>
+      <li>
+        <%= f.error :first, :class => 'baseError' %>
+        <label><%= I18n.t("survey.pre_test_questions.second") %></label>
+        <%= f.collection_radio_buttons(:pre_test_2, t("survey.answers_confidence"), :first, :last, {:item_wrapper_class => 'radio'}, {:disabled => @disabled}) %>
+      </li>
+    </ol>
 
-  <%= f.submit "Start", :class => "btn btn-primary", :disabled => @disabled %>
+    <%= f.submit "Start", :class => "btn btn-primary", :disabled => @disabled %>
 
+  <% end %>
 <% end %>

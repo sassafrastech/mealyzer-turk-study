@@ -64,8 +64,8 @@ class User < ActiveRecord::Base
   # Select the field value with the least number of complete users
   # (if tie, use fewest incomplete users; if still tie, use field number).
   def self.choose_best(field, options)
-    stats = User.select("#{field}, SUM(complete::int) AS complete, SUM(1 - complete::int) AS incomplete").
-      in_phase(options[:phase]).where(field => options[:all]).group(field).order("complete", "incomplete", field)
+    stats = User.select("#{field}, COUNT(*) AS ttl").
+      in_phase(options[:phase]).where(field => options[:all]).group(field).order("ttl", field)
     with_no_users = options[:all] - stats.map(&field)
     with_no_users.first || stats.first.send(field)
   end

@@ -61,7 +61,7 @@ class AnswerletSummarizer
   #   "Fat" => { decision: "tie", count: 10, total: 20 },
   #   ...
   # }
-  def stats_per_nutrient(params)
+  def correction_stats_per_nutrient(params)
     params["match_answers.meal_id"] = params.delete(:meal_id) if params[:meal_id]
     params["match_answers.component_name"] = params.delete(:component_name) if params[:component_name]
 
@@ -88,8 +88,8 @@ class AnswerletSummarizer
     end.flatten]
   end
 
-  def most_popular_nutrients(params)
-    stats_per_nutrient(params).reject{ |k, v| v[:decision] == "no" }.keys.sort
+  def most_popular_corrections(params)
+    correction_stats_per_nutrient(params).reject{ |k, v| v[:decision] == "no" }.keys.sort
   end
 
   # For each answerlet in the given MatchAnswer that does not match the most popular answerlet,
@@ -102,7 +102,7 @@ class AnswerletSummarizer
           "match_answers.component_name" => submitted.component_name,
           "ingredient" => submitted.ingredient}
 
-        popular_nutrients = most_popular_nutrients(params.merge(nutrients: submitted.nutrients.sort.to_json))
+        popular_nutrients = most_popular_corrections(params.merge(nutrients: submitted.nutrients.sort.to_json))
 
         next if popular_nutrients.empty?
 

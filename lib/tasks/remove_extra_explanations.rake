@@ -11,10 +11,11 @@ namespace :data do
         # Else keep first 5
         p mci
         p d[:exp_ids]
-        to_remove.concat(d[:ans_count] == 0 || i >= 5 ? d[:exp_ids] : (d[:exp_ids][5..-1] || []))
+        extra = d[:ans_count] == 0 || i >= 5 ? d[:exp_ids] : (d[:exp_ids][5..-1] || [])
+
+        Answerlet.where(match_answer_id: extra, ingredient: mci["ingredient"],
+          nutrients: d["nutrients"].to_json).delete_all
       end
     end
-
-    Answerlet.where(id: to_remove).delete_all
   end
 end

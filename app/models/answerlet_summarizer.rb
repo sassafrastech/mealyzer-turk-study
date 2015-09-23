@@ -43,10 +43,11 @@ class AnswerletSummarizer
       select("meal_id, component_name, ingredient, nutrients").
       select("SUM(CASE WHEN users.study_phase = 'seed' THEN 1 ELSE 0 END) AS ans_count").
       select("SUM(CASE WHEN users.study_phase = 'explain' THEN 1 ELSE 0 END) AS exp_count").
-      select("ARRAY_AGG(CASE WHEN users.study_phase = 'explain' THEN answerlets.id ELSE NULL END) AS exp_ids").
+      select("ARRAY_AGG(CASE WHEN users.study_phase = 'explain' THEN match_answers.id ELSE NULL END) AS exp_ids").
       where("users.study_id = ?", Settings.study_id).
       where("users.study_phase = 'seed' OR users.study_phase = 'explain'").
       where("users.complete = 't'").
+      where("answerlets.kind = 'original'").
       group("meal_id", "component_name", "ingredient", "nutrients").
       order("meal_id, component_name, ingredient, ans_count DESC, nutrients")
 

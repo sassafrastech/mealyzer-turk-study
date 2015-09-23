@@ -119,4 +119,22 @@ class AnswerletSummarizer
       end
     end.uniq
   end
+
+  def most_popular_nutrients_seed_phase(params)
+    params["match_answers.meal_id"] = params.delete(:meal_id) if params[:meal_id]
+    params["match_answers.component_name"] = params.delete(:component_name) if params[:component_name]
+
+    result = Answerlet
+    Meal::LC_GROUPS.each do |g|
+      result = result.select("SUM(CASE WHEN #{g} = 't' THEN 1 ELSE 0 END) AS #{g}_yes")
+    end
+    result = result.select("COUNT(*) AS total")
+    result = result.where(params).complete_in_phase("seed").to_a.first.attributes
+
+    Hash[*Meal::LC_GROUPS.map do |g|
+      decision = DECISIONS[(result["#{g}_yes"] <=> result["total"].to_f / 2) + 1]
+      count = decision == "yes" ? result["#{g}_yes"] : result["total"] - result["#{g}_yes"]
+      [g.capitalize, { decision: decision, count: count, total: result["total"]  }]
+    end.flatten]
+  end
 end

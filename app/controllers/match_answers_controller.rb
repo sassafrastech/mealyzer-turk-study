@@ -129,6 +129,13 @@ class MatchAnswersController < ApplicationController
       end.flatten]
 
       @explanations = summ.explanations_for(@match_answer)
+    elsif current_user.condition == 3
+      summ = AnswerletSummarizer.new
+      @most_popular = Hash[*@match_answer.food_groups.keys.map do |ingredient|
+        [ingredient, summ.most_popular_nutrients_seed_phase(
+          meal_id: @match_answer.meal_id, component_name: @match_answer.component_name,
+            ingredient: ingredient)]
+      end.flatten]
     end
   end
 end

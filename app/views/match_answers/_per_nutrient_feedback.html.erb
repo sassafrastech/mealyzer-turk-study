@@ -52,7 +52,7 @@
     <% end %>
     <tr>
       <td colspan=6 class="community">
-        <% if @explanations.any? %>
+        <% if @explanations.present? %>
           <p>Comments from the Community:</p>
           <ul>
             <% @explanations.each do |e| %>

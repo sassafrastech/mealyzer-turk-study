@@ -22,37 +22,29 @@
         <% end %>
         </tr>
       <% end %>
-      <tr><td colspan=8 class="community <%= @summarizer.base_is_most_popular? ? "popular" : "" %>">
-      <strong><%= @summarizer.base_is_most_popular? ? 'Most popular: ' : nil %></strong>
-      Other turkers who suggested this answer: <%= @summarizer.num_matches %></td></tr>
     </table>
     <h5>*If you changed your answer, please explain why:</h5>
     <%= f.input :explanation, :label => false %>
   </div>
 
-  <% if !@summarizer.base_is_most_popular? && @summarizer.most_popular.present? %>
-    <div class="other_answers">
-      <table>
-        <tr><td class="community" colspan=4>Alternative Answer:</td></tr>
-        <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
-        <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
-        <% @summarizer.most_popular[0].each do |k, v| %>
-          <tr><td></td><td><%= k %></td>
-          <% Meal::GROUPS.each do |group| %>
-            <td>
-              <% if v.include?(group) %>
-                <span class='glyphicon glyphicon-ok'></span>
-              <% end %>
-            </td>
-          <% end %>
-          </tr>
+  <div class="other_answers">
+    <table>
+      <tr><td class="community" colspan=4>Most Popular Answer:</td></tr>
+      <tr><td></td><td>What is it made of?</td><td colspan="4">What food group does it belong to?</td></tr>
+      <tr class="groups"><td></td><td></td><% Meal::GROUPS.each do |h| %><td><%= h %></td><% end %></tr>
+      <% @most_popular.each do |ingredient, data| %>
+        <tr><td></td><td><%= ingredient %></td>
+        <% Meal::GROUPS.each do |group| %>
+          <td>
+            <% if data[group][:decision] != "no" %>
+              <span class='glyphicon glyphicon-ok'></span>
+            <% end %>
+          </td>
         <% end %>
-        <tr><td colspan=6 class="community popular">
-            Most popular: Other turkers who suggested this answer: <%= @summarizer.most_popular[1] %></td></tr>
-      </table>
-    </div>
-  <% end %>
-
+        </tr>
+      <% end %>
+    </table>
+  </div>
 
   <br/>
   <%= f.submit "Next", :class => "btn btn-primary" %>

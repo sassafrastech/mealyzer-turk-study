@@ -55,7 +55,7 @@ class AnswerletSummarizer
       group_by{ |h| h.slice(:meal_id, :component_name, :ingredient) }
   end
 
-  # For a given meal_id, component_name, and ingredient, returns a hash of form:
+  # For a given meal_id, component_name, ingredient, and nutrients, returns a hash of form:
   # {
   #   "Carbohydrate" => { decision: "yes", count: 14, total: 21 },
   #   "Fat" => { decision: "tie", count: 10, total: 20 },
@@ -65,16 +65,25 @@ class AnswerletSummarizer
     params["match_answers.meal_id"] = params.delete(:meal_id) if params[:meal_id]
     params["match_answers.component_name"] = params.delete(:component_name) if params[:component_name]
 
+    ma_ids = Answerlet.where(params).complete_in_phase("explain").where(kind: "original").map(&:match_answer_id)
+
     result = Answerlet
     Meal::LC_GROUPS.each do |g|
       result = result.select("SUM(CASE WHEN #{g} = 't' THEN 1 ELSE 0 END) AS #{g}_yes")
     end
     result = result.select("COUNT(*) AS total")
-    result = result.where(params).complete_in_phase("seed").to_a.first.attributes
+    result = result.where(params.except(:nutrients)).
+      where(match_answer_id: ma_ids).
+      complete_in_phase("explain").where(kind: "update").to_a.first.attributes
 
     Hash[*Meal::LC_GROUPS.map do |g|
-      decision = DECISIONS[(result["#{g}_yes"] <=> result["total"].to_f / 2) + 1]
-      count = decision == "yes" ? result["#{g}_yes"] : result["total"] - result["#{g}_yes"]
+      if result["total"] == 0
+        decision = "tie"
+        count = 0
+      else
+        decision = DECISIONS[(result["#{g}_yes"] <=> result["total"].to_f / 2) + 1]
+        count = decision == "yes" ? result["#{g}_yes"] : result["total"] - result["#{g}_yes"]
+      end
       [g.capitalize, { decision: decision, count: count, total: result["total"] }]
     end.flatten]
   end
@@ -93,12 +102,15 @@ class AnswerletSummarizer
           "match_answers.component_name" => submitted.component_name,
           "ingredient" => submitted.ingredient}
 
-        popular_nutrients = most_popular_nutrients(params)
+        popular_nutrients = most_popular_nutrients(params.merge(nutrients: submitted.nutrients.sort.to_json))
+
+        next if popular_nutrients.empty?
 
         if submitted.nutrients.sort != popular_nutrients.sort
           explainers = Answerlet.complete_in_phase("explain").where(params).where(kind: "update").
             where(modified: true).where(nutrients: popular_nutrients.to_json)
           explainers.reject! do |explainer|
+            # Reject any explaining answerlets that do not have an original answer matching the user's answer.
             explainer.match_answer.answerlets.where(kind: "original", ingredient: submitted.ingredient,
               nutrients: submitted.nutrients.to_json).empty?
           end

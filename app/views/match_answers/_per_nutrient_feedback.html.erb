@@ -1,10 +1,16 @@
-<div class="alert alert-success" role="alert">Thank you! Now compare your answer with the most popular community choices.</div>
+<div class="alert alert-success" role="alert">
+  Thank you! Now take a look at what other Turkers thought of your answer!
+</div>
 
-<p>The most popular answers from other Turkers are shown below next to your answers. Please review them carefully.
+<p>
+  We asked other Turkers to evaluate some of the answers submitted with this HIT on their accuracy. If your answer was evaluated, you will see the results of their evaluation below. Please take time to examine the evaluations.
+</p>
+
+<p>
   <ul>
-    <li><strong class="same">GREEN</strong> indicates your answer matches the most popular.</li>
-    <li><strong class="diff">RED</strong> indicates your answer does not match the most popular.</li>
-    <li><strong class="tie">BLUE</strong> indicates your answer was not reviewed, or there was a tie among the popular answers, and your answer matched one of them.</li>
+    <li><strong class="same">GREEN</strong> indicates most Turkers evaluated your answer as "correct.</li>
+    <li><strong class="diff">RED</strong> indicates most Turkers evaluated your answer as "incorrect".</li>
+    <li><strong class="tie">BLUE</strong> indicates that your answer was not evaluated, or that it received an equal number of "correct" and "incorrect" evaluations.</li>
   </ul>
 </p>
 
@@ -12,7 +18,9 @@
   <p>The number of people who gave each answer is also shown.</p>
 <% end %>
 
-<p>Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is. If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
+<p>We don’t know if these evaluations are correct, and are including
+<%= current_user.condition = 13 ? "the most popular" : "frequencies of the most common assessment" %>
+for each ingredient and macronutrient. We are also including explanations for where others disagreed with you so that you may form your own judgment.  Remember, the best answer should list ALL food groups for each of the ingredients. If you still think your answer is correct, feel free to submit it as is.  If you decide to change your answer, please explain <strong>what you think was incorrect</strong> in your original solution.</p>
 
 <br/>
 <h4><%= @match_answer.component_name %></h4>

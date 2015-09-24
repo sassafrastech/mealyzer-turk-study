@@ -69,7 +69,10 @@ class User < ActiveRecord::Base
     with_no_users = options[:all] - stats.map(&field)
 
     if options[:max]
-      full = stats.select{ |s| s.ttl >= options[:max] }.map(&field)
+      full = User.select("#{field}, COUNT(*) AS ttl").
+        in_phase(options[:phase]).where(field => options[:all]).
+        where(complete: true).
+        group(field).order("ttl", field).having("COUNT(*) >= ?", options[:max]).map(&:field)
     else
       full = []
     end

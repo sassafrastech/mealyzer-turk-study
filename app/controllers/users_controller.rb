@@ -18,6 +18,7 @@ class UsersController < ApplicationController
         @user = User.create(params.permit(:assignmentId, :workerId, :hitId, :force_condition, :force_study_phase))
         if @user.condition.nil?
           @hidden = true
+          @user.destroy
           flash[:error] = "We apologize, but the study is now full. The HIT will be removed from Turk shortly. Thanks for your interest!"
         else
           @disabled = false
@@ -30,7 +31,7 @@ class UsersController < ApplicationController
     end
 
     # Save in session
-    session[:current_user_id] = @user.id if @user.workerId.present?
+    session[:current_user_id] = @user.id if @user.persisted? && @user.workerId.present?
 
     get_meal_and_component_counts
   end

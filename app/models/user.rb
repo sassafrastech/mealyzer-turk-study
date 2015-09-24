@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
       full = User.select("#{field}, COUNT(*) AS ttl").
         in_phase(options[:phase]).where(field => options[:all]).
         where(complete: true).
-        group(field).order("ttl", field).having("COUNT(*) >= ?", options[:max]).map(&:field)
+        group(field).order("ttl", field).having("COUNT(*) >= ?", options[:max]).map(&field)
     else
       full = []
     end

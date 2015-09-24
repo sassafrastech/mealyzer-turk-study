@@ -71,7 +71,7 @@ class AnswerletSummarizer
     Meal::LC_GROUPS.each do |g|
       result = result.select("SUM(CASE WHEN #{g} = 't' THEN 1 ELSE 0 END) AS #{g}_yes")
     end
-    result = result.select("COUNT(*) AS total")
+    result = result.select("COUNT(*) AS total, array_agg(answerlets.id) as aggz")
     result = result.where(params.except(:nutrients)).
       where(match_answer_id: ma_ids).
       complete_in_phase("explain").where(kind: "update").to_a.first.attributes
@@ -135,6 +135,22 @@ class AnswerletSummarizer
       decision = DECISIONS[(result["#{g}_yes"] <=> result["total"].to_f / 2) + 1]
       count = decision == "yes" ? result["#{g}_yes"] : result["total"] - result["#{g}_yes"]
       [g.capitalize, { decision: decision, count: count, total: result["total"]  }]
+    end.flatten]
+  end
+
+  def correction_stats_for_all_ingredients(match_answer)
+    Hash[*match_answer.food_groups.map do |ingredient, nutrients|
+      [ingredient, correction_stats_per_nutrient(
+        meal_id: match_answer.meal_id, component_name: match_answer.component_name,
+          ingredient: ingredient, nutrients: nutrients.sort.to_json)]
+    end.flatten]
+  end
+
+  def most_popular_nutrients_seed_phase_for_all_ingredients(match_answer)
+    Hash[*match_answer.food_groups.keys.map do |ingredient|
+      [ingredient, most_popular_nutrients_seed_phase(
+        meal_id: match_answer.meal_id, component_name: match_answer.component_name,
+          ingredient: ingredient)]
     end.flatten]
   end
 end

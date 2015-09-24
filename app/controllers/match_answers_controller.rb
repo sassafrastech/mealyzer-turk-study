@@ -122,20 +122,11 @@ class MatchAnswersController < ApplicationController
 
     if [13, 14].include?(current_user.condition)
       summ = AnswerletSummarizer.new
-      @most_popular = Hash[*@match_answer.food_groups.map do |ingredient, nutrients|
-        [ingredient, summ.correction_stats_per_nutrient(
-          meal_id: @match_answer.meal_id, component_name: @match_answer.component_name,
-            ingredient: ingredient, nutrients: nutrients.sort.to_json)]
-      end.flatten]
-
+      @most_popular = summ.correction_stats_for_all_ingredients(@match_answer)
       @explanations = summ.explanations_for(@match_answer)
     elsif current_user.condition == 3
       summ = AnswerletSummarizer.new
-      @most_popular = Hash[*@match_answer.food_groups.keys.map do |ingredient|
-        [ingredient, summ.most_popular_nutrients_seed_phase(
-          meal_id: @match_answer.meal_id, component_name: @match_answer.component_name,
-            ingredient: ingredient)]
-      end.flatten]
+      @most_popular = summ.most_popular_nutrients_seed_phase_for_all_ingredients(@match_answer)
     end
   end
 end

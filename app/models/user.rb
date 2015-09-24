@@ -34,12 +34,14 @@ class User < ActiveRecord::Base
 
   has_many :match_answers
 
-  scope :in_phase, -> (phase) { where(study_phase: phase).where(study_id: Settings.study_id) }
+  scope :in_cur_study, -> { where(study_id: Settings.study_id) }
+  scope :in_phase, -> (phase) { where(study_phase: phase).in_cur_study }
+  scope :complete, -> { where(complete: true) }
 
   # Users that have at least one trial for the current study and given study phase
   scope :complete_in_phase, -> (phase) { in_phase(phase).where(complete: true) }
 
-  scope :complete_in_cur_study, -> { where(complete: true).where(study_id: Settings.study_id) }
+  scope :complete_in_cur_study, -> { where(complete: true).in_cur_study }
 
   # Users that have at least one trial for the current study and given condition
   scope :complete_in_phase_and_condition,

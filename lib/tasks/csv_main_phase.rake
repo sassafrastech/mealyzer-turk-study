@@ -70,7 +70,7 @@ namespace :data do
   def overall_feedback_correctness(user)
     summarizer = AnswerletSummarizer.new
     answers = user.match_answers.where(task_type: "primary")
-    if [3,13,14].include?(user.condition)
+    if [3,10,11,13,14].include?(user.condition)
       scores = answers.map{ |a| feedback_correctness(user.condition, a) }
       scores.sum{ |s| s[0] }.to_f / scores.sum{ |s| s[1] } * 100
     else
@@ -79,8 +79,12 @@ namespace :data do
   end
 
   def key_ingredient_feedback_correctness_array(user, ing_set)
-    correctness = key_ingredient_feedback_correctness(user, ing_set)
-    Meal::GROUPS.sort.map{ |nutrient| correctness[nutrient] }
+    if user.condition == 1
+      [nil, nil, nil, nil]
+    else
+      correctness = key_ingredient_feedback_correctness(user, ing_set)
+      Meal::GROUPS.sort.map{ |nutrient| correctness[nutrient] }
+    end
   end
 
   def key_ingredient_feedback_correctness(user, ing_set)
@@ -99,10 +103,18 @@ namespace :data do
       summarizer = AnswerletSummarizer.new
       correct = match_answer.meal.food_nutrition[match_answer.component_name]
 
-      if condition == 3
+      if [3,10].include?(condition)
         feedback = summarizer.most_popular_nutrients_seed_phase_for_all_ingredients(match_answer)
-      else
+      elsif [13,14].include?(condition)
         feedback = summarizer.correction_stats_for_all_ingredients(match_answer)
+      elsif condition == 11
+        feedback = Hash[*correct.map do |ingredient, nutrients|
+          [ingredient, Hash[*Meal::GROUPS.map{ |g| [g, {decision: nutrients.include?(g) ? "yes" : "no" }] }.flatten]]
+        end.flatten(1)]
+        p feedback
+        feedback
+      else
+        raise "Feedback correctness makes no sense in condition #{condition}"
       end
 
       score, boxes, per_nutrient = 0, 0, {}
@@ -111,8 +123,9 @@ namespace :data do
         corr_nutrients = correct[ingredient]
         fbk_nutrients = stats.each do |nutrient, info|
           if info[:decision] == "tie"
-            score += 0.5
-            per_nutrient[nutrient] = 0.5
+            points = [13,14].include?(condition) ? 0.5 : 1
+            score += points
+            per_nutrient[nutrient] = points
           elsif info[:decision] == "yes" && corr_nutrients.include?(nutrient)
             score += 1
             per_nutrient[nutrient] = 1
@@ -141,6 +154,8 @@ namespace :data do
   end
 
   def key_ingredient_learning_gain(user, ing_set, options)
+    return nil if user.condition == 1
+
     pre_incorrect = key_ingredient_result_with_task_type(user, ing_set, 'pre-control', 'incorrect')
 
     # Get feedback correctness for primary phase. Get all nutrients with correct feedback.
